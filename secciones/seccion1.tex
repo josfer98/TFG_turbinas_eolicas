@@ -2,7 +2,7 @@
 
 Para comenzar se deben establecer unos parámetros para con la pala, ya que lo más básico de este trabajo empieza por determinar los efectos que produce la torsión en nuestra obtención de energía.
 
-Es por ello que se determina que la pala de la turbina eólica es un trapecio cuya representación simplificada la vemos en la figura \ref{fig:pala_simp}
+Es por ello que se determina que la pala de la turbina eólica es un trapecio cuya representación simplificada la vemos en la Figura \ref{fig:pala_simp}
 
 \begin{figure}[H]
     \centering
@@ -12,7 +12,7 @@ Es por ello que se determina que la pala de la turbina eólica es un trapecio cu
 \end{figure}
 
 
-Lo siguiente que se debe hacer es dividir la pala de la figura \ref{fig:pala_simp} en un número de segmentos de igual largo, como se puede observar en la figura \ref{fig:pala_dividida}.
+Lo siguiente que se debe hacer es dividir la pala de la Figura \ref{fig:pala_simp} en un número de segmentos de igual largo, como se puede observar en la Figura \ref{fig:pala_dividida}.
     \textbf{}
     \begin{figure}[H]
     \centering
@@ -23,16 +23,16 @@ Lo siguiente que se debe hacer es dividir la pala de la figura \ref{fig:pala_sim
 
 Por simplicidad, la pala se dividirá únicamente en $N$ segmentos, en este caso 5. Aunque se mantenga este valor durante el trabajo y es probable que no cambie, se asociará a una variable en caso de que se quieran hacer pruebas mediante MATLAB más adelante.
     
-La longitud $L$ vista en la figura \ref{fig:pala_simp} es con la que se va a trabajar, por ello cada uno de los segmentos de la figura \ref{fig:pala_dividida} tendrá el siguiente largo $\dfrac{L}{N} = \dfrac{L}{5}$ ya que se dividió $N$ número de veces.
+La longitud $L$ vista en la Figura \ref{fig:pala_simp} es con la que se va a trabajar, por ello cada uno de los segmentos de la Figura \ref{fig:pala_dividida} tendrá el siguiente largo $\dfrac{L}{N} = \dfrac{L}{5}$ ya que se dividió $N$ número de veces.
 
 
-Como se puede observar en la figura \ref{fig:pala_dividida} cada segmento tiene una altura variable, esto se debe a la forma real de las palas, cuanto más cerca de la turbina mayor es el tamaño del segmento.\\\\
+Como se puede observar en la Figura \ref{fig:pala_dividida} cada segmento tiene una altura variable, esto se debe a la forma real de las palas, cuanto más cerca de la turbina mayor es el tamaño del segmento.\\\\
 
 {\color{blue} La altura de estos segmentos depende del valor de una variable, conocida como longitud de cuerda, $c$, que varía dependiendo del segmento, cuanto más alejados del rotor menor será su valor.} \\\\
 
 Se determina el área de los segmentos con la siguiente fórmula:
 
-$$ area_{i} = \dfrac{L \cdot c_i}{N} $$
+$$ área_{i} = \dfrac{L \cdot c_i}{N} $$
 donde:
 $$ i \in segmento $$
 $$ segmento = \{1, ..., N\}$$
@@ -40,9 +40,9 @@ $$ segmento = \{1, ..., N\}$$
 A continuación, se supone que los segmentos están separados los unos de los otros y ensartados por una línea imaginaria que ayudará al estudio de la torsión mediante giros de los segmentos alrededor suya.
 
 
-\subsection{Estudio de los segmentos con giro inicial}
+\subsection{Estudio del torque con giro inicial}
 
-El ángulo $ \theta_1 $ se define como el giro inicial que sufrirán todos y cada uno de los segmentos que son paralelos al plano horizontal, desde el cual se presenta el viento que incidirá en nuestra pala.
+El ángulo $ \theta_1 $ se define como el giro inicial que sufrirán todos y cada uno de los segmentos que son paralelos al plano horizontal, desde el cual se presenta el viento que incidirá en nuestra pala.\\
 
 
 El ángulo de torsión de cada segmento se define con la siguiente fórmula:
@@ -52,3 +52,68 @@ $$\theta_i =
     \theta_1 \text{\hspace{77} si \hspace{1}} i=1 \\
     \sum_{k=1}^{i} \theta_k + \Delta_\theta \text{\hspace{20} si \hspace{2}} i>1 \\
     \end{matrix}$$
+ $$ i \in segmento$$
+
+Como se menciona en el primer párrafo de esta sección, el viento con el que se trabajará se presenta en el plano horizontal sobre el que también está posada la pala que estamos estudiando.\\
+
+
+Al haber inclinado todos los segmentos un ángulo $ \theta_1 $ se genera la situación en la que el viento incide en el centro del segmento con el mismo ángulo con el que se inclina la pala. \\
+
+La fuerza del viento que incide en la pala se puede descomponer en 2, la tangencial y la normal. \\
+
+ INSERTAR DIBUJO DE LAS FUERZAS \\
+ 
+ La fuerza normal genera un ángulo de:
+ $$ ángulo \text{ } normal_i = \dfrac{\pi}{2} - \theta_i $$
+ $$ i \in segmento$$
+ Su fuerza se define como:
+ \begin{definicion}
+  $$ f \text{ } normal_i = F \cdot \sin{\theta_i}$$
+  \label{def:fuerza_normal}
+ \end{definicion}
+
+ 
+ 
+
+ La fuerza $F$ será definida más adelante.
+ 
+ La componente paralela a la pala, que se ha definido como tangencial se obviará debido a que no genera momento de giro o torque. 
+ 
+ \begin{definicion}
+El momento de giro o torque se define como:
+ $$ torque_i = F \text{ } perpendicular_i \times brazo_i$$
+ $$ i \in segmento$$
+ \label{def:torque} %para poder referenciarlo fuera
+ \textcolor{red}{Brazo := distancia entre el inicio de la pala y el centro del segmento, o radio del segmento.} \\
+ \end{definicion}
+
+ La mejor forma de comprender qué se entiende por brazo es mediante la Figura \ref{fig:exp_brazo} en la cual se señalan los segmentos de la pala en distintos colores.
+ 
+     \textbf{}
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/explicación brazo.png}
+    \caption{Representación gráfica del brazo de la pala}
+    \label{fig:exp_brazo}
+    \textit{Fuente: Elaboración propia}
+\end{figure}
+
+ 
+ En la Definición \ref{def:torque} se encuentra un producto vectorial entre la $fuerza  \text{ }perpendicular \text{ } o \text{ } normal$ y el $brazo$. Pero estas dos variables son perpendiculares la una a la otra. Esto se puede ver ya que $brazo$ es completamente paralelo a la $fuerza \text{ } tangencial$. Esto demuestra la perpendicularidad y hace que la Definición \ref{def:torque} que contenía un producto vectorial de dos parámetros perpendiculares sea definitivamente un producto algebraico, dando lugar a:
+ 
+  \begin{definicion}
+  El torque termina siendo un producto vectorial.
+ $$ torque_i = f \text{ } normal_i \cdot brazo_i$$
+ $$ i \in segmento$$
+ \label{def:torquevectorial}
+ \end{definicion}
+ 
+ 
+ \subsubsection{Fuerza del viento}
+ 
+ \begin{definicion}
+ La fuerza del viento con el que se trabajará viene definida por:
+ 
+ $$ F \text{ } viento = \dfrac{1}{2} \text{ } \rho \cdot a \cdot u^2$$
+ \label{def:fuerza_viento}
+ \end{definicion}
