@@ -45,17 +45,14 @@ A continuación, se supone que los segmentos están separados los unos de los ot
 
 \subsection{Estudio del torque con giro inicial}
 
-El ángulo $ \theta_1 $ se define como el giro inicial que sufrirán todos y cada uno de los segmentos que son paralelos al plano horizontal, desde el cual se presenta el viento que incidirá en nuestra pala.\\
+El ángulo $ \theta_1 $ es la constante que se define como el giro inicial que sufrirán todos y cada uno de los segmentos que son paralelos al plano horizontal, desde el cual se presenta el viento que incidirá en nuestra pala.\\
 
 \begin{definicion}
-El ángulo de torsión de cada segmento se define con:
-$$\theta_i =
-\left\{\begin{matrix}
-    \theta_1 \text{\hspace{77} si \hspace{1}} i=1 \\
-    \sum_{k=1}^{i} \theta_k + \Delta_\theta \text{\hspace{20} si \hspace{2}} i>1 \\
-    \end{matrix}$$
+Dados el ángulo inicial de giro $\theta_1 $ y una variación constante de giro $\Delta_\theta$ se define el ángulo de torsión de cada segmento como:
+$$\theta_i = \theta_{i-1} + \Delta_\theta$$ 
+
     donde:
- $$ i \in segmento$$
+ $$i \in segmento \wedge (i > 1)$$
 \end{definicion}
 
 
@@ -106,12 +103,10 @@ El momento de giro o torque se define como:
 Ahora que visualmente se conoce qué se define por $brazo$, podemos pasar a definirlo.
 
 \begin{definicion}
-El  brazo o radio de la pala viene definido por la siguiente fórmula:
-$$ brazo_i = \dfrac{L}{2} + \sum_{k=1}^{i} L \cdot (k-1)$$
+El  brazo o radio de un segmento $i$ viene definido por la siguiente fórmula:
+$$ brazo_i  =  i \cdot \dfrac{L}{2 \cdot N}$$
     donde:
  $$ i \in segmento$$
- \centering
- L := longitud de los segmentos. 
 
 \end{definicion}
 
@@ -126,8 +121,8 @@ $$ brazo_i = \dfrac{L}{2} + \sum_{k=1}^{i} L \cdot (k-1)$$
  \end{definicion}
  
 \begin{definicion}
- La suma de los torques se conoce como torque global.
- $$ torque_{global}__1 \text{ } = \sum_{i=1}^{N} torque_i $$
+ La suma de los torques con un giro inicial se conoce como torque global.
+ $$ torque \text{ } global_1 \text{ } = \sum_{i=1}^{N} torque_i $$
  donde:
  $$ i \in segmento$$
  \label{def:torque_global}
@@ -137,12 +132,12 @@ $$ brazo_i = \dfrac{L}{2} + \sum_{k=1}^{i} L \cdot (k-1)$$
  Ahora se introduce otro concepto, se trata de la fuerza del viento. Gracias a este parámetro, podremos conocer la fuerza normal que se está produciendo en cada uno de los segmentos mediante la definición \ref{def:fuerza_normal}, ya que la fuerza $F$ es su equivalente.
  
  \begin{definicion}
- La fuerza del viento con el que se trabajará viene definida por:
+ La fuerza del viento para un segmento viene definida por:
  
- $$ F \text{ } viento = \dfrac{1}{2} \text{ } \rho \cdot a_i \cdot u^2$$
+ $$ F \text{ } viento_i = \dfrac{1}{2} \text{ } \rho \cdot a_i \cdot u^2$$
  donde:
  
-  \centering $i \in segmento$,  $\rho = 1.225 \text{ } \dfrac{Kg}{m^3}$, $a$ := área del segmento i y \\ $u$ := Velocidad del viento.
+  \centering $i \in segmento$,  $\rho = 1.225 \text{ } \dfrac{Kg}{m^3}$, $a$ := área del segmento i y \\ $u$ := velocidad del viento.
  \label{def:fuerza_viento}
  \end{definicion}
  
@@ -153,12 +148,12 @@ $$ brazo_i = \dfrac{L}{2} + \sum_{k=1}^{i} L \cdot (k-1)$$
  
   \begin{definicion}
  La potencia del sistema con un giro inicial se define como:
- $$ potencia_1 = torque_{global}__1 \cdot W_1 $$ 
- 
- %Esta fórmula se ve fatal
+ $$ potencia_1 = torque \text{ } global_1 \cdot W_1 $$ 
  
  donde:
-  \centering $i \in segmento$, $W_1$ := Velocidad de giro o angular de las palas.
+ 
+ 
+  \centering $W_1$ := velocidad de giro o angular de las palas.
  \label{def:fuerza_viento}
  \end{definicion}
  
