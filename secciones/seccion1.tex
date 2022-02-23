@@ -2,7 +2,7 @@
 
 Para comenzar se deben establecer unos parámetros para con la pala, ya que lo más básico de este trabajo empieza por determinar los efectos que produce la torsión en nuestra obtención de energía.
 
-Es por ello que se determina que la pala de la turbina eólica es un trapecio cuya representación simplificada la vemos en la Figura \ref{fig:pala_simp}
+Es por ello que se determina que la pala de la turbina eólica es un trazoide cuya representación simplificada la vemos en la Figura \ref{fig:pala_simp}
 
 \begin{figure}[H]
     \centering
@@ -21,15 +21,17 @@ Lo siguiente que se debe hacer es dividir la pala de la Figura \ref{fig:pala_sim
     \label{fig:pala_dividida}
 \end{figure}
 
-Por simplicidad, la pala se dividirá únicamente en $N$ segmentos, en este caso 5. Aunque se mantenga este valor durante el trabajo y es probable que no cambie, se asociará a una variable en caso de que se quieran hacer pruebas mediante MATLAB más adelante.
+Por simplicidad, la pala se dividirá únicamente en $N$ segmentos, en este caso 5. Aunque se mantenga este valor durante el trabajo y es probable que no cambie, se asociará a una variable en caso de que se quieran hacer pruebas mediante MATLAB más adelante. \\\\
     
-La longitud $L$ vista en la Figura \ref{fig:pala_simp} es con la que se va a trabajar, por ello cada uno de los segmentos de la Figura \ref{fig:pala_dividida} tendrá el siguiente largo $\dfrac{L}{N} = \dfrac{L}{5}$ ya que se dividió $N$ número de veces.
 
 
-Como se puede observar en la Figura \ref{fig:pala_dividida} cada segmento tiene una altura variable, esto se debe a la forma real de las palas, cuanto más cerca de la turbina mayor es el tamaño del segmento.\\\\
+La longitud $L$ o longitud de pala, vista en la Figura \ref{fig:pala_simp} es con la que se va a trabajar, por ello cada uno de los segmentos de la Figura \ref{fig:pala_dividida} tendrá el siguiente largo $\dfrac{L}{N} = \dfrac{L}{5}$ ya que se dividió $N$ número de veces. \\
 
 
-{\color{blue} La altura de estos segmentos depende del valor de una variable, conocida como longitud de cuerda, $c$, que varía dependiendo del segmento, cuanto más alejados del rotor menor será su valor.} \\\\
+Como se puede observar en la Figura \ref{fig:pala_dividida} cada segmento tiene una altura variable, esto se debe a la forma real de las palas, cuanto más cerca de la turbina mayor es el tamaño del segmento. \\\\
+
+
+La altura de estos segmentos depende del valor de una variable, conocida como longitud de cuerda, $c$, que varía dependiendo del segmento en base a un ángulo $\varPhi$, cuanto más alejado del rotor menor será su valor. \\
 
 
 \begin{definicion}
@@ -42,23 +44,66 @@ $$ segmento = \{1, ..., N\}$$
 
 A continuación, se supone que los segmentos están separados los unos de los otros y ensartados por una línea imaginaria que ayudará al estudio de la torsión mediante giros de los segmentos alrededor suya.
 
-
 \subsection{Estudio del torque con giro inicial}
 
-El ángulo $ \theta_1 $ es la constante que se define como el giro inicial que sufrirán todos y cada uno de los segmentos que son paralelos al plano horizontal, desde el cual se presenta el viento que incidirá en nuestra pala.\\
+Se han presentado algunos de los conceptos básicos, ahora se introduce el ángulo $ \theta_1 $, que es la constante definida como el giro inicial que sufrirán todos y cada uno de los segmentos que son paralelos al plano horizontal, desde el cual se presenta el viento que incidirá en nuestra pala.\\
+
+En esta primera sección se estudiará qué ocurre en término de fuerzas, torque y momento cuando se gira toda nuestra pala únicamente el ángulo de giro inicial $ \theta_1 $, sin necesidad de segmentarla, tal y como se aprecia en la figura \ref{fig:pala_simp}. \\
+
+
+Es cierto que se podría no girar la pala este giro inicial $ \theta_1 $, pero por comodidad de cálculo y para establecer un ángulo de ataque del viento paralelo a la horizontal se realizará de esta manera.\\
+
+
+Al haber inclinado todos los segmentos un ángulo $ \theta_1 $ se genera la situación en la que el viento incide en el centro del segmento con el mismo ángulo con el que se inclina la pala. \\
+
+HACER DIBUJO PARA DEMOSTRARLO \\
+
+La fuerza del viento que incide en la pala se puede descomponer en 2, la tangencial y la normal. \\
+
+INSERTAR DIBUJO DE LAS FUERZAS 1 \\ %{fig:dibujo_fuerzas}
+
+Como se puede ver en la figura \ref{fig:dibujo_fuerzas} el vector fuerza normal es perpendicular al ángulo de ataque del viento, mientras que el vector fuerza tangencial recorre de manera paralela la línea central de la pala.
+
+ \begin{definicion}
+ La fuerza normal genera un ángulo definido por:
+ $$ ángulo \text{ } normal = \dfrac{\pi}{2} - \theta_1 $$
+ 
+ \end{definicion}
+
+ \begin{definicion}
+ La fuerza normal viene definida por la siguiente expresión:
+  $$ f \text{ } normal = F \cdot \sin{\theta_1}$$
+   La fuerza $F$ será explicada más adelante.
+  \label{def:fuerza_normal}
+ \end{definicion}
+
+
+
+\subsection{Estudio del torque con giro inicial y torsión de la pala}
+
+
 
 \begin{definicion}
-Dados el ángulo inicial de giro $\theta_1 $ y una variación constante de giro $\Delta_\theta$ se define el ángulo de torsión de cada segmento como:
+Dados el ángulo inicial de giro $\theta_1 $ y una variación de giro constante (o no) $\Delta_\theta$ se define el ángulo de torsión de cada segmento como:
 $$\theta_i = \theta_{i-1} + \Delta_\theta$$ 
 
     donde:
  $$i \in segmento \wedge (i > 1)$$
+ 
+\label{def:theta_cte}
 \end{definicion}
 
 
-Como se menciona en el primer párrafo de esta sección, el viento con el que se trabajará se presenta en el plano horizontal sobre el que también está posada la pala que estamos estudiando.\\
 
-Al haber inclinado todos los segmentos un ángulo $ \theta_1 $ se genera la situación en la que el viento incide en el centro del segmento con el mismo ángulo con el que se inclina la pala. \\
+\begin{definicion}
+Como se menciona, la variación $\Delta_\theta$ puede que no sea constante por conveniencia a la hora de calcular resultados futuros, por ello la definición también puede darse de la siguiente forma:
+$$\theta_i = \theta_{i-1} + \Delta_{\theta_{i}}$$ 
+
+    donde:
+ $$i \in segmento \wedge (i > 1)$$
+\label{def:theta_nocte}
+\end{definicion}
+
 
 La fuerza del viento que incide en la pala se puede descomponer en 2, la tangencial y la normal. \\
 
@@ -79,7 +124,7 @@ La fuerza del viento que incide en la pala se puede descomponer en 2, la tangenc
  \end{definicion}
 
  
- La componente paralela a la pala, que se ha definido como tangencial se obviará debido a que no genera momento de giro o torque. 
+ La componente paralela a la pala, que se ha definido como tangencial se obviará debido a que no genera momento de TORSIÓN (o giro o que) o torque. 
  
  \begin{definicion}
 El momento de giro o torque se define como:
@@ -148,12 +193,11 @@ $$ brazo_i  =  i \cdot \dfrac{L}{2 \cdot N}$$
  
   \begin{definicion}
  La potencia del sistema con un giro inicial se define como:
- $$ potencia_1 = torque \text{ } global_1 \cdot W_1 $$ 
+ $$ potencia_1 = torque \text{ } global_1 \cdot \Omega_1 $$ 
  
  donde:
  
- 
-  \centering $W_1$ := velocidad de giro o angular de las palas.
+  \centering $\Omega_1$ := velocidad de giro o angular de las palas.
  \label{def:fuerza_viento}
  \end{definicion}
  
