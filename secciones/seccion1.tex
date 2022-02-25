@@ -2,7 +2,7 @@
 
 Para comenzar se deben establecer unos parámetros para con la pala, ya que lo más básico de este trabajo empieza por determinar los efectos que produce la torsión en nuestra obtención de energía.
 
-Es por ello que se determina que la pala de la turbina eólica es un trazoide cuya representación simplificada la vemos en la Figura \ref{fig:pala_simp}
+Es por ello que se determina que la pala de la turbina eólica es un \textbf{trapecio} cuya representación simplificada la vemos en la Figura \ref{fig:pala_simp}
 
 \begin{figure}[H]
     \centering
@@ -24,7 +24,6 @@ Lo siguiente que se debe hacer es dividir la pala de la Figura \ref{fig:pala_sim
 Por simplicidad, la pala se dividirá únicamente en $N$ segmentos, en este caso 5. Aunque se mantenga este valor durante el trabajo y es probable que no cambie, se asociará a una variable en caso de que se quieran hacer pruebas mediante MATLAB más adelante. \\\\
     
 
-
 La longitud $L$ o longitud de pala, vista en la Figura \ref{fig:pala_simp} es con la que se va a trabajar, por ello cada uno de los segmentos de la Figura \ref{fig:pala_dividida} tendrá el siguiente largo $\dfrac{L}{N} = \dfrac{L}{5}$ ya que se dividió $N$ número de veces. \\
 
 
@@ -34,15 +33,17 @@ Como se puede observar en la Figura \ref{fig:pala_dividida} cada segmento tiene 
 La altura de estos segmentos depende del valor de una variable, conocida como longitud de cuerda, $c$, que varía dependiendo del segmento en base a un ángulo $\varPhi$, cuanto más alejado del rotor menor será su valor. \\
 
 
+FÓRMULA ERRÓNEA, NO SE PUEDE CALCULAR ASÍ EL ÁREA.
 \begin{definicion}
 Se determina el área de los segmentos:
-$$ área_{i} = \dfrac{L \cdot c_i}{N} $$
+$$ área \text{ } segmento_{i} = \dfrac{L \cdot c_i}{N} $$
 donde:
 $$ i \in segmento $$
 $$ segmento = \{1, ..., N\}$$
 \end{definicion}
 
-A continuación, se supone que los segmentos están separados los unos de los otros y ensartados por una línea imaginaria que ayudará al estudio de la torsión mediante giros de los segmentos alrededor suya.
+A continuación, se supone que los segmentos están ensartados por una línea imaginaria que ayudará al estudio de la torsión mediante giros de los segmentos alrededor suya.
+
 
 \subsection{Estudio del torque con giro inicial}
 
@@ -74,11 +75,66 @@ Como se puede ver en la figura \ref{fig:dibujo_fuerzas} el vector fuerza normal 
  La fuerza normal viene definida por la siguiente expresión:
   $$ f \text{ } normal = F \cdot \sin{\theta_1}$$
    La fuerza $F$ será explicada más adelante.
-  \label{def:fuerza_normal}
+  \label{def:fuerza_normal_inicial}
  \end{definicion}
+ 
+  La componente paralela a la pala, que se ha definido como tangencial se obviará debido a que no genera momento de TORSIÓN (o giro o que) o torque. 
+  
+  \begin{definicion}
+El momento de giro o torque se define como:
+ $$ torque_0 = F \text{ } perpendicular \times brazo \text{ } inicial$$
+ \label{def:torque_inicial}
+ Brazo inicial := distancia entre el inicio de la pala y su centro geométrico. \\
+ \end{definicion}
+ 
+
+     \textbf{}
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/explicación brazo inicial.drawio.png}
+    \caption{Representación gráfica del brazo de la pala}
+    \label{fig:exp_brazo_inicial}
+    \textit{Fuente: Elaboración propia}
+\end{figure}
+ PUEDE QUE LA IMAGEN ESTÉ MAL, YA QUE CREO QUE SE DEBE TENER EN CUENTA EL ÁNGULO INICIAL Y QUE EL BRAZO VAYA AL CENTRO GEOMÉTRICO DE LA IMAGEN, DESCONOZCO POR AHORA.
+ 
+
+Para entender visualmente qué es el $brazo \text{ } inicial$ se ha realizado la figura \ref{fig:exp_brazo_inicial}. Ahora es posible pasar a definirlo.
+
+\begin{definicion}
+El  brazo inicial viene definido por la siguiente fórmula:
+$$ brazo \text{ } inicial = \dfrac{L}{2}$$
+\end{definicion}
+ 
+ En la Definición \ref{def:torque_inicial} se encuentra un producto vectorial entre la $fuerza  \text{ }perpendicular \text{ } o \text{ } normal$ y el $brazo$. Pero estas dos variables son perpendiculares la una a la otra. Esto se puede ver ya que $brazo \text{ } inicial$ es completamente paralelo a la $fuerza \text{ } tangencial$. Esto demuestra la perpendicularidad y hace que la Definición \ref{def:torque_inicial} que contenía un producto vectorial de dos parámetros perpendiculares sea definitivamente un producto algebraico, dando lugar a:
+ 
+  \begin{definicion}
+  El torque termina siendo un producto algebraico.
+ $$ torque_0 = f \text{ } normal \cdot brazo \text{ } inicial$$
+ \label{def:torque_algebraico_inicial}
+ \end{definicion}
+ 
+   \begin{definicion}
+Debido a la geometría del brazo inicial, no es necesario el cálculo de un torque global, ya se obtiene con el cálculo natural del propio torque, es por ello que:
+ $$ torque \text{ } global_0 = torque$$
+ \label{def:torque_global_inicial}
+ \end{definicion}
+ 
+ 
+ ...\vspace{400}
+ 
 
 
 
+
+
+
+
+
+
+
+
+...
 \subsection{Estudio del torque con giro inicial y torsión de la pala}
 
 
@@ -173,7 +229,7 @@ $$ brazo_i  =  i \cdot \dfrac{L}{2 \cdot N}$$
  \label{def:torque_global}
 \end{definicion}
 
-%Se ve muy pequeña la definición de toque_global
+
  Ahora se introduce otro concepto, se trata de la fuerza del viento. Gracias a este parámetro, podremos conocer la fuerza normal que se está produciendo en cada uno de los segmentos mediante la definición \ref{def:fuerza_normal}, ya que la fuerza $F$ es su equivalente.
  
  \begin{definicion}
