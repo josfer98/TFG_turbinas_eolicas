@@ -52,6 +52,7 @@ A continuación, se supone que los segmentos están ensartados por una línea im
 
 
 \subsection{Estudio del torque con giro inicial}
+\label{section:torque_giro_inicial}
 
 Se han presentado algunos de los conceptos básicos, ahora se introduce el ángulo $ \theta_1 $, que es la constante definida como el \textit{giro inicial} que sufrirán todos y cada uno de los segmentos que son paralelos al plano horizontal, desde el cual se presenta el viento que incidirá en nuestra pala.\\
 
@@ -67,15 +68,22 @@ Al haber inclinado todos los segmentos un ángulo $ \theta_1 $ se genera la situ
     \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/dibujo angulo ataque.drawio.png}
-    \caption{Representación de una pala de turbina eólica en segmentos}
+    \caption{Ángulo de ataque del viento con respecto a la pala}
     \textit{Fuente: Elaboración propia}
-    \label{fig:pala_dividida}
+    \label{fig:dibujo_angulo_ataque}
 \end{figure}
 
 La fuerza del viento que incide en la pala se puede descomponer en 2, la tangencial y la normal. \\
 
-INSERTAR DIBUJO DE LAS FUERZAS 1 \\ 
-%CAMBIAR EL ÁNGULO NORMAL FEO QUE HAY, POR UN CUADRADO CON UN PUNTO, YA QUE ES UN ÁNGULO RECTO.
+    \textbf{}
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/dibujo fuerzas.drawio.png}
+    \caption{Descomposición de vectores de fuerzas}
+    \textit{Fuente: Elaboración propia}
+    \label{fig:dibujo_fuerzas}
+\end{figure}
+
 
 Como se puede ver en la figura \ref{fig:dibujo_fuerzas} el vector fuerza normal es perpendicular al ángulo de ataque del viento, mientras que el vector fuerza tangencial recorre de manera paralela la línea central de la pala.
 
@@ -164,7 +172,7 @@ Debido a la geometría de la pala y el brazo inicial, no es necesario el cálcul
 
 ...
 \subsection{Estudio del torque con giro inicial y torsión de la pala}
-
+\label{section:torque_giro_torsion}
 
 
 \begin{definicion}
@@ -295,6 +303,33 @@ $$ brazo_i  =  i \cdot \dfrac{L}{2 \cdot N}$$
  
  donde:
  
-  \centering $\Omega$ := velocidad de giro o angular de la pala, $torque \text{ } global_1$ := Suma de torque de los N segmentos.
+  \centering $\Omega$ := velocidad de giro o angular de la pala,\hspace{7} $torque \text{ } global_1$ := Suma de torque de los N segmentos.
  \label{def:potencia_giro_segmentos}
  \end{definicion}
+ 
+ Como se puede observar, se calculó dos veces la potencia, una por cada apartado estudiado. La definición \ref{def:potencia_giro_inicial} corresponde a la sección \ref{section:torque_giro_inicial} que se referencia con un $0$ ya que es la situación inicial y más básica. Mientras que la definición \ref{def:potencia_giro_segmentos} corresponde a la sección \ref{section:torque_giro_torsion} que se ha referenciado con un $1$ ya que nace de la primera.
+ 
+ 
+ \subsection{Rendimiento de las potencias}
+ \label{section:rendimiento}
+ 
+ Una vez se ha realizado la definición de cada una de las fórmulas necesarias para el cálculo de la potencia, se pasa a la comparación de estas. La comparación de potencias nos da como resultado un rendimiento, con este seremos capaces de dictaminar si la torsión de la pala genera una variación en la potencia obtenida.
+ 
+   \begin{definicion}
+El rendimiento del sistema viene definido por:
+ $$ \eta = \dfrac{potencia_1}{potencia_0} $$ 
+ 
+ donde:
+ 
+  \centering $potencia_0$ := Energía del sistema unicamente con un giro inicial, \hspace{4} $potencia_1$ := Energía del sistema con giro inicial y segmentos torsionados
+ \label{def:rendimiento_potencias}
+ \end{definicion}
+ 
+ Una vez se ha definido el rendimiento y se calcula en base a los resultados obtenidos mediante asignación de valores a variables estándar y aplicando estos a las definiciones relacionadas, se pueden dar 3 escenarios:
+ 
+  \begin{enumerate}
+    \item $\eta < 0$ \label{enum:menor_cero}
+    \item $\eta = 0$ \label{enum:igual_cero}
+    \item $\eta > 0$ \label{enum:mayor_cero}
+\end{enumerate}
+ 
