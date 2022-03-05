@@ -35,16 +35,39 @@ La $L$ o \textit{longitud de pala}, vista en la Figura \ref{fig:pala_simp} es co
 Como se puede observar en la Figura \ref{fig:pala_dividida} cada segmento tiene una altura variable, esto se debe a la forma real de las palas, cuanto más cerca de la turbina mayor es el tamaño del segmento. \\\\
 
 %SUJETO A CAMBIOS, DEPENDE DE LA RESPUESTA AL CORREO
-La altura de estos segmentos depende del valor de una variable, conocida como longitud de cuerda, $c$, que varía dependiendo del segmento en base a un ángulo $\varPhi$, cuanto más alejado del rotor menor será su valor. \\
+La altura de estos segmentos depende del valor de una variable, conocida como longitud de cuerda, $c$, que en el artículo \cite[pág 56]{armenta2021predictive} esta varía dependiendo del segmento en base a un ángulo $\varPhi$, cuanto más alejado del rotor menor será su valor. \\
+
+%METEMOS AQUÍ LA FIGURA DEL ARTÍCULO 
+\iffalse
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/segmento pala articulo carlos.png}
+    \caption{Representación esquemática de un segmento de una pala de una turbina eólica}
+    \textit{Fuente: \cite{armenta2021predictive}}
+    \label{fig:pala_simp}
+\end{figure}
+\fi
 
 
-%FÓRMULA ERRÓNEA, NO SE PUEDE CALCULAR ASÍ EL ÁREA
+%Esto probablemente haya que justificar como se hicieron los cálculos.
+
+\begin{definicion}
+En base a esta representación esquemática y mediante relaciones trigonométricas obtuvieron:
+$$ c_{left} = c_i + (\dfrac{L_i}{2}) \tan \varPhi$$
+$$ c_{right} = c_i - (\dfrac{L_i}{2}) \tan \varPhi$$
+Donde,
+\centering $i$ \in segmento, \hspace{7} $L_i$ := longitud del segmento.
+$$ segmento = \{1, ..., N\}$$
+\label{def:laterales_segmento}
+\end{definicion}
+
+
 \begin{definicion}
 Se determina el área de los segmentos:
-$$ área \text{ } segmento_{i} = \dfrac{L \cdot c_i}{N} $$
-donde:
-$$ i \in segmento $$
-$$ segmento = \{1, ..., N\}$$
+$$ S_{i} = \dfrac{(c_{left} + c_{right})}{2N} \cdot L_i $$
+Donde,
+\centering $i$ \in segmento, \hspace{7} $L_i$ := longitud del segmento.
+\label{def:area_segmentos}
 \end{definicion}
 
 %SUJETO A CAMBIOS, DEPENDE DE LA RESPUESTA AL CORREO
@@ -123,6 +146,8 @@ El momento de giro o torque se define como:
 
 Para entender visualmente qué es el $brazo \text{ } inicial$ se ha realizado la figura \ref{fig:exp_brazo_inicial}. Ahora es posible pasar a definirlo.
 
+
+%ESTA FÓRMULA TAMBIÉN ESTÁ MAL, EL BRAZO VA AL CENTRO GEOMETRÍCO
 \begin{definicion}
 El  brazo inicial viene definido por la siguiente fórmula:
 $$ brazo \text{ } inicial = \dfrac{L}{2}$$
@@ -145,6 +170,8 @@ Debido a la geometría de la pala y el brazo inicial, no es necesario el cálcul
  
  Ahora se introduce otro concepto, se trata de la \textit{fuerza del viento}. Gracias a este parámetro, se podrá conocer la fuerza normal que se está produciendo en toda la pala mediante la definición \ref{def:fuerza_normal_inicial}.
  
+ 
+ %FÓRMULA DEL ÁREA DE LA PALA????
  \begin{definicion}
  La fuerza del viento para la pala viene dada por:
  
@@ -154,6 +181,28 @@ Debido a la geometría de la pala y el brazo inicial, no es necesario el cálcul
   \centering  $\rho = 1.225 \text{ } \dfrac{Kg}{m^3}$, $a$ := área de la pala, $u$ := velocidad del viento.
  \label{def:fuerza_viento_inicial}
  \end{definicion}
+ 
+ 
+
+ 
+%No sé si es correcta, quizás la tangente del ángulo debería ser diferente, para que al final de la misma desviación. 
+ \begin{definicion}
+Si se extrapola la definición \ref{def:laterales_segmento} para la pala completa se obtiene:
+$$ c.left \text{ } pala = c + (\dfrac{L}{2}) \tan \varPhi$$
+$$ c.right \text{ } pala = c - (\dfrac{L}{2}) \tan \varPhi$$
+\centering 
+Donde, $i$ \in segmento, \hspace{7pt} $L$ := longitud de la pala, \hspace{7pt} segmento = \{1, ..., N\}
+\label{def:laterales_pala}
+\end{definicion}
+
+%EL FORMATO ANDA UN POCO MAL, TENGO QUE MEJORARLO
+
+\begin{definicion}
+Se determina el área de la pala
+$$ a = \dfrac{(c_{left pala} + c_{right pala})}{2} \cdot L $$
+\centering Donde, $i$ \in segmento, \hspace{7} $L$ := longitud de la pala.
+\label{def:area_pala}
+\end{definicion}
  
  
  
@@ -174,6 +223,7 @@ Debido a la geometría de la pala y el brazo inicial, no es necesario el cálcul
 \subsection{Estudio del torque con giro inicial y torsión de la pala}
 \label{section:torque_giro_torsion}
 
+En este segundo apartado, se definirá la torsión que se va a investigar y cual es la manera en la que se realizará. Esto permitirá una mejor comparación futura mediante el uso de programas como MATLAB para el cálculo y comparación de resultados teóricos.
 
 \begin{definicion}
 Dados el ángulo inicial de giro $\theta_1 $ y una variación de giro constante (o no) $\Delta_\theta$ se define el ángulo de torsión de cada segmento como:
@@ -275,10 +325,10 @@ $$ brazo_i  =  i \cdot \dfrac{L}{2 \cdot N}$$
  \begin{definicion}
  La fuerza del viento para un segmento viene definida por:
  
- $$ F \text{ } viento_i = \dfrac{1}{2} \text{ } \rho \cdot a_i \cdot u^2$$
+ $$ F \text{ } viento_i = \dfrac{1}{2} \text{ } \rho \cdot S_i \cdot u^2$$
  donde:
  
-  \centering $i \in segmento$,  $\rho = 1.225 \text{ } \dfrac{Kg}{m^3}$, $a$ := área del segmento i y \\ $u$ := velocidad del viento.
+  \centering $i \in segmento$,  $\rho = 1.225 \text{ } \dfrac{Kg}{m^3}$, $S_i$ := área del segmento i y \\ $u$ := velocidad del viento.
  \label{def:fuerza_viento}
  \end{definicion}
  
@@ -310,6 +360,18 @@ $$ brazo_i  =  i \cdot \dfrac{L}{2 \cdot N}$$
  Como se puede observar, se calculó dos veces la potencia, una por cada apartado estudiado. La definición \ref{def:potencia_giro_inicial} corresponde a la sección \ref{section:torque_giro_inicial} que se referencia con un $0$ ya que es la situación inicial y más básica. Mientras que la definición \ref{def:potencia_giro_segmentos} corresponde a la sección \ref{section:torque_giro_torsion} que se ha referenciado con un $1$ ya que nace de la primera.
  
  
+ 
+\subsubsection{EXPLICACIÓN DE LA VELOCIDAD ANGULAR}
+ 
+ 
+ %Para entender este apartado, página 174 del libro de Alonso Finn
+ 
+ AAAAAA \vspace{400}
+ 
+ 
+ AAAAAA
+ 
+ 
  \subsection{Rendimiento de las potencias}
  \label{section:rendimiento}
  
@@ -327,9 +389,35 @@ El rendimiento del sistema viene definido por:
  
  Una vez se ha definido el rendimiento y se calcula en base a los resultados obtenidos mediante asignación de valores a variables estándar y aplicando estos a las definiciones relacionadas, se pueden dar 3 escenarios:
  
-  \begin{enumerate}
-    \item $\eta < 0$ \label{enum:menor_cero}
-    \item $\eta = 0$ \label{enum:igual_cero}
-    \item $\eta > 0$ \label{enum:mayor_cero}
-\end{enumerate}
  
+%ELABORAR CORRECTAMENTE
+\begin{enumerate}
+    \item $\eta < 1$
+        \begin{itemize}
+            \item En caso de obtener un valor por debajo de 1, quiere decir que la torsión que se aplicó en el caso estudiado, ha reducido la obtención de energía con respecto al caso base. 
+        \end{itemize}
+    \item $\eta ~= 1$
+        \begin{itemize}
+            \item Si el valor obtenido es muy próximo a 1, entonces el caso base y el estudiado proporcionan valores similares de obtención de energía.
+        \end{itemize}
+    \item $\eta > 1$
+        \begin{itemize}
+            \item Este es el valor buscado y el objetivo del estudio, que una pala con torsión obtenga más energía que una sin ello.
+        \end{itemize}
+\end{enumerate}
+
+Cabe recalcar que se deberán hacer numerosas pruebas con diferentes configuraciones de CONTINUARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRCONTINUA RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRCONTINUARR
+RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+RCONTINUARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRCONTINUARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+ 
+\subsection{Primeras pruebas en MATLAB}
+
+Una vez se ha desarrollado todo el fundamento teórico detrás del estudio que se está realizando y con el que se está tratando de conocer si mediante torsión de las palas de una turbina eólica se obtiene más energía, menos o la misma que si no se torsionasen, se debe avanzar y comenzar a hacer cálculos empíricos. \\
+
+Estos cálculos y representaciones se realizarán mediante MATLAB, de la manera más ordenada y arbitraria posible. Con esto se busca la manera más simple de poder modificar las variables más sencillas que envuelven a los cálculos, para así poder cambiarlas a placer. \\
+
+Algunas variables como, $L$ y $\Theta_1$ deben ser establecidas por el propio estudiante, dando así un mayor juego a la amplitud de resultados posibles. \\
