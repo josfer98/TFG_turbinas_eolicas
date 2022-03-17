@@ -7,7 +7,7 @@ Es por ello que se determina que la pala de la turbina eólica es un \textbf{tra
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{images/pala turbina paint.png}
+    \includegraphics[width=0.7\textwidth]{images/pala simple.png}
     \caption{Representación de una pala de turbina eólica}
     \textit{Fuente: Elaboración propia}
     \label{fig:pala_simp}
@@ -20,8 +20,8 @@ Lo siguiente que se debe tener presente es que se necesita también una represen
     \textbf{}
     \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{images/pala dividida.png}
-    \caption{Representación de una pala de turbina eólica en segmentos}
+    \includegraphics[width=0.7\textwidth]{images/pala simple segmentada.png}
+    \caption{Representación de una pala de turbina eólica dividida en segmentos}
     \textit{Fuente: Elaboración propia}
     \label{fig:pala_dividida}
 \end{figure}
@@ -113,7 +113,7 @@ Primero se obtiene la diferencia mediante Pitágoras entre la base mayor y la me
 
 $$ x_i = \sqrt{diagonal_i^{2} - altura_i^{2}}$$
 
-$$ c_i = c_{left} - x_i $$
+$$ c_i = c_{left_i} - x_i $$
 
 Donde,
 \centering
@@ -121,4 +121,85 @@ $L$ := longitud de la pala, $H_{bf}$ := borde de fuga de la pala, $altura_i$ := 
 \label{def_chord_line}
 \end{definicion}
 
-% Ahora, debería determinar los c_right y c_left de todos y cada uno de los segmentos para poder calcular su área mediante el desarrollo de nuestro amigo y vecino carlos. De esa manera se podrá usar en la ristra de fórmulas que tengo en el otro lado.
+La siguiente figura, ilustra el ejemplo en el que para las definiciones \ref{def_variables_fragmentadas} y \ref{def_chord_line} el valor de $i$ es igual a 3. Obteniendo así $c_3$. En verde el trapecio y en magenta el triángulo del que restamos el cateto a la base mayor del trapecio.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/Trapecio calculo x.png}
+    \caption{Pala de la turbina en amarillo y triángulo usado para el cálculo de $\Phi$ en azul}
+    \textit{Fuente: Elaboración propia}
+    \label{fig:pala_calculo_phi}
+\end{figure}
+
+
+Una vez se ha obtenido el valor buscado $c_i$, se deberá definir todos los laterales de los segmentos de la pala, para así poder operar con ellos en pos de conseguir el área de cada uno de ellos. Esto ya fue desarrollado en el artículo \cite{armenta2021predictive}, pero en aquel caso fue usado para comprobar el error que suponía usar un rectángulo en vez de una pala simplificada. En este caso se parte directamente de la pala simplificada para evitar correcciones de errores mas adelante y porque el cálculo que se debe realizar con respecto a la obtención de energía no es tan profundo y complicado como en el artículo \cite{armenta2021predictive}. Además remarcar que para las deducciones y cálculos anteriores se bebió de este desarrollo.
+
+
+\begin{definicion}
+En base a esta representación esquemática y mediante relaciones trigonométricas obtuvieron:
+$$ c_{left_i} = c_i + (\dfrac{L_i}{2}) \tan \varPhi$$
+$$ c_{right_i} = c_i - (\dfrac{L_i}{2}) \tan \varPhi$$
+Donde,
+\centering
+$i \in segmento$ y $segmento = \{1, ..., N\}$
+\label{def:laterales_segmento}
+\end{definicion}
+
+Al igual que se deduce en el artículo \cite{armenta2021predictive}, con los datos obtenidos de los laterales de cada segmento, se puede trabajar con una forma de trapecio y encontrar el área de los segmentos que se definieron en la Figura \ref{fig:pala_dividida}.\\
+
+Aparte, con esta definición se ve que en la Figura \ref{fig:pala_desarrollo_chord} los valores de $c_{leftt_i}$ y de $c_{right_i}$ que se observan, realmente serían equivalentes a $c_{left_1}$ y a $c_{right_5}$, respectivamente. Estos son definidos a priori debido a su importancia para caracterizar la pala de manera correcta y con las dimensiones que el usuario desee.
+
+\begin{definicion}
+Se determina el área de los segmentos:
+$$ S_{i} = \dfrac{(c_{left_i} + c_{right_i})}{2N} \cdot L_i $$
+Donde,
+\centering $i \in segmento$, $segmento = \{1, ..., N\}$ y $S_i$ := Área del segmento.
+\label{def:area_segmentos}
+\end{definicion}
+
+
+
+
+
+
+
+%Sujeto a cambios todo lo que va a continuación
+A continuación, se supone que los segmentos están ensartados por una línea imaginaria que ayudará al estudio de la torsión mediante giros de los segmentos alrededor suya.
+
+
+\subsection{Estudio del torque con giro inicial}
+\label{section:torque_giro_inicial}
+
+Se han presentado algunos de los conceptos básicos, ahora se introduce el ángulo $ \theta_1 $, que es la constante definida como el \textit{giro inicial} que sufrirán todos y cada uno de los segmentos que son paralelos al plano horizontal, desde el cual se presenta el viento que incidirá en nuestra pala.\\
+
+En esta primera sección se estudiará qué ocurre en término de fuerzas, torque y momento cuando se gira toda nuestra pala únicamente el ángulo de giro inicial $ \theta_1 $, sin necesidad de segmentarla, tal y como se aprecia en la figura \ref{fig:pala_simp}. \\
+
+
+Es cierto que se podría no girar la pala este giro inicial $ \theta_1 $, pero por comodidad de cálculo y para establecer un ángulo de ataque del viento paralelo a la horizontal se realizará de esta manera.\\
+
+
+Al haber inclinado todos los segmentos un ángulo $ \theta_1 $ se genera la situación en la que el viento incide en el centro del segmento con el mismo ángulo con el que se inclina la pala. \\
+
+    \textbf{}
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/dibujo angulo ataque.drawio.png}
+    \caption{Ángulo de ataque del viento con respecto a la pala}
+    \textit{Fuente: Elaboración propia}
+    \label{fig:dibujo_angulo_ataque}
+\end{figure}
+
+La fuerza del viento que incide en la pala se puede descomponer en 2, la tangencial y la normal. \\
+
+    \textbf{}
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/dibujo fuerzas.drawio.png}
+    \caption{Descomposición de vectores de fuerzas}
+    \textit{Fuente: Elaboración propia}
+    \label{fig:dibujo_fuerzas}
+\end{figure}
+
+
+Como se puede ver en la figura \ref{fig:dibujo_fuerzas} el vector fuerza normal es perpendicular al ángulo de ataque del viento, mientras que el vector fuerza tangencial recorre de manera paralela la línea central de la pala.
+
