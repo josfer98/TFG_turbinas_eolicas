@@ -9,14 +9,14 @@
        Ro = 1.225; %Kg/m^3
 
     % Longitud de la pala
-        L = 55; %m
+        L = 46; %m
 
     % Número de segmentos en los que se divide la pala
         N = 5;
         i = 1:N;
 
     % Ángulo inicial de giro
-        theta_1 = 150; %Grados [º]
+        theta_1 = 2; %Grados [º]
 
     % Variación de Theta_i
         Delta_theta = 0.05; %Grados [º]
@@ -52,8 +52,9 @@
  
   % Establecemos el buje y la punta
     Buje = 3; %m
-    Punta = 1; %m
+    Punta = 0.6; %m
     L_i = L/N;
+
   % Se calcula la hipotenusa de borde de fuga
     H_bf = sqrt(((Buje - Punta)^2) + L^2);
   % Ahora el ángulo Phi, con el que decrece la chord line a lo largo de L
@@ -72,19 +73,17 @@
         c_left_i = c_i + (L_i/2) * tan(Phi);
     % Lado final de la pala
         c_right_i = c_i - (L_i/2) * tan(Phi);
-    % Área de la pala
-        S_i = ((c_left_i + c_right_i) * L) / 2;
+    % Área de cada segmento de la pala
+        S_i = ((c_left_i + c_right_i) / 2) * L_i;
 
     %Definición del brazo
         cateto_buje = (Buje/2) - (Punta/2);
         R_brazo = sqrt(cateto_buje.^2 + L.^2);
         brazo_i = (((2*i) -1) .* R_brazo) / (2*N);
-    % Momento de inercia de un rectángulo
+    % Masa de cada segmento de la pala
         S_pala = sum(S_i); 
         m_i = (S_i/S_pala) * masa_pala;
 
-
-        
     % Momento inercia del área de un trapecio
         I_area = (L_i^3).*((c_right_i.^2) + (4.*c_right_i.*c_left_i) + (c_left_i.^2)) ./ (36 .* (c_right_i + c_left_i));
         steiner_theorem = m_i .* (brazo_i.^2);
@@ -113,7 +112,7 @@
 
 
     % Aceleración angular
-        alpha_ang_0 = torque_global_0 ./ I;
+        alpha_ang_0 = torque_0 ./ I;
     % Velocidad angular
         Omega_0 = alpha_ang_0 .* intervalo_tiempo;
     % Potencia de la pala
@@ -134,7 +133,7 @@
                 else
                        %AQUÍ TMB SE ME PRESENTA UN PROBLEMA, SE ME HACE LA
                        %MEDIDA MUY ENORME, ALGO PASA.
-                    torque_1(j) = F_normal_i_torsion(j) .* brazo_i(j) ./ cos(Delta_theta);
+                    torque_1(j) = F_normal_i_torsion(j) .* brazo_i(j) .* cos(Delta_theta);
                 end
             end
 
