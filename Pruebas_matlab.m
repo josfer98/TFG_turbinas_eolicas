@@ -36,9 +36,6 @@
         Delta_theta = (Delta_theta * pi) / 180; %Rad
         theta_i = (theta_i .* pi) / 180; %Rad
         
-    % Velocidad del viento
-        u = 1:1:100; %m/s
-        v = 15;
     % Densidad del material de la pala
         CFRP = 1410; %kg/m^3
         GFRP = 1500; %kg/m^3
@@ -93,12 +90,10 @@
     % Momento de inercia general
         I = dens_pala(3) .* I_eje_paralelo;
 
-
-
     % Calculamos el tiempo, lo que tarda el viento para diferentes velocidades en atravesar el
     % segmento
         %intervalo_tiempo = c_i ./ u(v);
-        u_viento = [2 5 9 12 15]
+        u_viento = 10:20;
         M = length(u_viento);
         intervalo_tiempo = zeros(M,N);
         for j = 1:M
@@ -127,9 +122,9 @@
     % Aceleración angular
         alpha_ang_0 = torque_0 ./ I;
     % Velocidad angular
-        Omega_0 = alpha_ang_0 .* intervalo_tiempo;
+        Omega_0 = intervalo_tiempo .* alpha_ang_0 
     % Potencia de la pala
-        potencia_0 = torque_global_0 .* Omega_0
+        potencia_0 = torque_0 .* Omega_0
 
 %% Cuando presenta ángulo de cabeceo y torsión de los segmentos
 
@@ -153,26 +148,33 @@
             end
 
     % Torque global
-        torque_global_1 = sum(torque_1);
+        torque_global_1 = sum(torque_1,2);
 
     % Aceleración angular
         alpha_ang_1 = torque_1 ./ I;
     % Velocidad angular
         Omega_1 = alpha_ang_1 .* intervalo_tiempo;
     % Potencia de la pala
-        potencia_1 = torque_global_1 .* Omega_1
+        potencia_1 = torque_1 .* Omega_1
 
 
         
  %% Representaciones
 
-
-    
-
-    figure('Name','Potencia en cada segmento de la pala con u fija','NumberTitle','off');
-        plot(i,potencia_1);
+ %Potencia obtenida dependiendo de la velocidad del viento
+    %Primero tenemos que sumar todos los valores de potencia
+    %correspondientes a una velocidad de viento para representarlos
+    %dependiendo de esta.
+    x = u_viento;
+    y0 = sum(potencia_0,2);
+    y1 = sum(potencia_1,2);
+    %Transponemos las matrices
+    y0 = y0.';
+    y1 = y1.';
+    figure('Name','título y eso','NumberTitle','off');
+        plot(x,y0);
         hold on;
-        plot(i,potencia_0);
-        xlabel('Intervalo de tiempo (s)');
+        plot(x,y1);
+        xlabel('cosa');
         ylabel('Potencia (W)');
-        legend('Potencia de torsión','Potencia básica')
+        legend('ejemplo0','ejemplo1')
