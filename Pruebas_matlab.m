@@ -16,10 +16,10 @@
         i = 1:N;
 
     % Ángulo inicial de giro
-        theta_1 = 2; %Grados [º]
+        theta_1 = 1; %Grados [º]
 
     % Variación de Theta_i
-        Delta_theta = 0.02; %Grados [º]
+        Delta_theta = 0.01; %Grados [º]
 
         %Creamos el ángulo de torsión
         theta_i = zeros(1,N);
@@ -32,9 +32,9 @@
                 end
             end
     
-        theta_1 = (theta_1 * pi) / 180; %Rad
+        theta_1 =     (theta_1 * pi)     / 180; %Rad
         Delta_theta = (Delta_theta * pi) / 180; %Rad
-        theta_i = (theta_i .* pi) / 180; %Rad
+        theta_i =     (theta_i .* pi)    / 180; %Rad
         
     % Densidad del material de la pala
         CFRP = 1410; %kg/m^3
@@ -93,7 +93,7 @@
     % Calculamos el tiempo, lo que tarda el viento para diferentes velocidades en atravesar el
     % segmento
         %intervalo_tiempo = c_i ./ u(v);
-        u_viento = 10:20;
+        u_viento = 1:0.2:20;
         M = length(u_viento);
         intervalo_tiempo = zeros(M,N);
         for j = 1:M
@@ -120,11 +120,12 @@
 
 
     % Aceleración angular
-        alpha_ang_0 = torque_0 ./ I;
+
+        alpha_ang_0 = torque_global_1 ./ I;
     % Velocidad angular
         Omega_0 = intervalo_tiempo .* alpha_ang_0 
     % Potencia de la pala
-        potencia_0 = torque_0 .* Omega_0
+        potencia_0 = torque_global_0 .* Omega_0
 
 %% Cuando presenta ángulo de cabeceo y torsión de los segmentos
 
@@ -139,8 +140,8 @@
         %TENGO QUE CAMBIAR ESTA PARTE, POR CULPA DE LA F NORMAL DE TORSION
             for j = 1:M
                 for j2 = 1:N
-                    if j < 2
-                        torque_1(j,j2) = F_normal_i_torsion(j,j2) .* brazo_i(1);
+                    if j2 < 2
+                        torque_1(j,j2) = F_normal_i_torsion(j,j2) .* brazo_i(j2);
                     else
                         torque_1(j,j2) = F_normal_i_torsion(j,j2) .* brazo_i(j2) .* cos(Delta_theta);
                     end
@@ -151,11 +152,11 @@
         torque_global_1 = sum(torque_1,2);
 
     % Aceleración angular
-        alpha_ang_1 = torque_1 ./ I;
+        alpha_ang_1 = torque_global_1 ./ I;
     % Velocidad angular
         Omega_1 = alpha_ang_1 .* intervalo_tiempo;
     % Potencia de la pala
-        potencia_1 = torque_1 .* Omega_1
+        potencia_1 = torque_global_1 .* Omega_1
 
 
         
@@ -171,10 +172,10 @@
     %Transponemos las matrices
     y0 = y0.';
     y1 = y1.';
-    figure('Name','título y eso','NumberTitle','off');
+    figure('Name','ejemplo gráfica','NumberTitle','off');
         plot(x,y0);
         hold on;
         plot(x,y1);
-        xlabel('cosa');
+        xlabel('Velocidad del viento (m/s)');
         ylabel('Potencia (W)');
-        legend('ejemplo0','ejemplo1')
+        legend('Potencia sin torsión','Potencia CON torsión')
