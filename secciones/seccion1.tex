@@ -179,10 +179,19 @@ Donde, $cateto \text{ } buje$ := Medida de buje o $J_{left}$ reducida para su ut
 
 \subsection{Estudio del torque sin ángulo de cabeceo}
 \label{section:torque_pala_horizontal}
+En este apartado y tomando la pala con una forma real y no una simplificada como con la que se trabaja, se puede observar un primer caso en el cual ya se produce un giro de las palas del aerogenerador. \\
 
+Esta situación es en la cual no se presenta cabeceo, es decir, el viento tiene un ángulo de ataque paralelo para con la pala de la turbina eólica. \\
+
+Pero, al tomar una pala real, la cual está más redondeada por la parte superior y teniendo mayor volumen que la parte inferior. Por ello mediante el principio Bernoulli, se ve que esta parte superior presenta un mayor recorrido y con ello una velocidad de viento mayor por tanto una menor presión. \\
+
+Este efecto produce un gradiente de presión y por ello una fuerza de sustentación. Todo ello por la no simetría de las palas del aerogenerador. \\
+
+Debido a este fenómeno, se produce una situación de estudio poco favorable. Es por esto y otros motivos por lo cual se trabaja con una pala simplificada que ayuda al trabajo y posteriores cálculos y por lo que los siguientes apartados son aquellos con mayor peso técnico y explicativo. \\
 %Minuto 30 de la parte 1
-\textcolor{red}{Va a haber giro porque la pala por la parte de arriba está mas redondeada por la parte de arriba que por la de abajo, entonces por Bernouilli tienes mas recorrido por arriba  que por abajo, lo que obliga que la velocidad por arriba sea mayor por tanto la presión sea menor, haciendo que tengamos un gradiente de presión y por ello una fuerza de sustentación. Simplemente porque la pala no es simétrica. Esta no es la situación mas favorable, la más favorable es la de la siguiente sección. \\\\
-{\Large DEFINIR CON PALABRAS DECENTES, ES LITERALMENTE LA TRANSCRIPCIÓN QUE DIJO}}
+
+% \textcolor{red}{Va a haber giro porque la pala por la parte de arriba está mas redondeada por la parte de arriba que por la de abajo, entonces por Bernouilli tienes mas recorrido por arriba  que por abajo, lo que obliga que la velocidad por arriba sea mayor por tanto la presión sea menor, haciendo que tengamos un gradiente de presión y por ello una fuerza de sustentación. Simplemente porque la pala no es simétrica. Esta no es la situación mas favorable, la más favorable es la de la siguiente sección. \\\\
+% {\Large DEFINIR CON PALABRAS DECENTES, ES LITERALMENTE LA TRANSCRIPCIÓN QUE DIJO}}
 
 
 
@@ -352,10 +361,10 @@ Esto provoca que algunas de las definiciones anteriores se vean alteradas por el
 El resto de fórmulas no varían debido a que no dependen del ángulo $\theta_i$, tienen exactamente la misma definición. Pero en el caso del \textit{torque global} si que cambia, ya que la suma de torques nos aportará un conjunto de valores diferentes y que servirán como estudio. \\\\
 
 
-{\Large TERMINAR DE DEFINIRLO}
+{\Large TERMINAR DE DEFINIRLO, aunque si se le añade el cos, es como si nada por lo pequeño que es el ángulo}
   \begin{definicion}
   El torque termina siendo un producto algebraico.
- $$ torque_0_{i} = f \text{ } normal_i \cdot brazo_i \cdot \sin{\Delta_{\theta_{i}}}$$
+ $$ torque_1_{i} = f \text{ } normal_i \cdot brazo_i \cdot \cos{\Delta_{\theta_{i}}}$$
  Donde,
  \centering $\sin{\Delta_{\theta_{i}}}$ := 
  \label{def:torque_algebraico_torsion}

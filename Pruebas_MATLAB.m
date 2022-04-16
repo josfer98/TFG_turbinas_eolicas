@@ -19,7 +19,7 @@
         theta_1 = 2; %Grados [º]
 
     % Variación de Theta_i
-        Delta_theta = 0.02; %Grados [º]
+        Delta_theta = 0.01; %Grados [º]
 
         %Creamos el ángulo de torsión
         theta_i = zeros(1,N);
@@ -32,13 +32,10 @@
                 end
             end
     
-        theta_1 = (theta_1 * pi) / 180; %Rad
+        theta_1 =     (theta_1 * pi)     / 180; %Rad
         Delta_theta = (Delta_theta * pi) / 180; %Rad
-        theta_i = (theta_i .* pi) / 180; %Rad
+        theta_i =     (theta_i .* pi)    / 180; %Rad
         
-    % Velocidad del viento
-        u = 1:1:100; %m/s
-        v = 15;
     % Densidad del material de la pala
         CFRP = 1410; %kg/m^3
         GFRP = 1500; %kg/m^3
@@ -86,30 +83,32 @@
 
     % Momento inercia del área de un trapecio
         I_area = (L_i^3).*((c_right_i.^2) + (4.*c_right_i.*c_left_i) + (c_left_i.^2)) ./ (36 .* (c_right_i + c_left_i));
+        I_general = dens_pala(1) .* I_area;
         steiner_theorem = m_i .* (brazo_i.^2);
 
-        I_eje_paralelo = I_area + steiner_theorem;
+        I = I_general + steiner_theorem;
 
     % Momento de inercia general
-        I = dens_pala(3) .* I_eje_paralelo;
-
-
+        
 
     % Calculamos el tiempo, lo que tarda el viento para diferentes velocidades en atravesar el
     % segmento
         %intervalo_tiempo = c_i ./ u(v);
-        intervalo_tiempo = zeros(N,N);
-        u_viento = [2 5 9 12 15]
-        for j = 1:N
+        u_viento = 1:0.2:20;
+        M = length(u_viento);
+        intervalo_tiempo = zeros(M,N);
+        for j = 1:M
             for j2 = 1:N
                 intervalo_tiempo(j,j2) = c_i(j2) ./ u_viento(j)
             end
         end
+    % Tiempo de análisis de potencia
+        tiempo_analisis = 60; %segundos
 %% Cuando solo presenta ángulo de cabeceo
     % Fuerza del viento
         %F_viento_i = (1/2) .* Ro .* S_i .* (u(v).^2);
-        F_viento_i = zeros(N,N);
-        for j = 1:N
+        F_viento_i = zeros(M,N);
+        for j = 1:M
             for j2 = 1:N
                 F_viento_i(j,j2) = (1/2) .* Ro .* S_i(j2) .* u_viento(j);
             end 
@@ -119,58 +118,62 @@
     % Momento de torsión
         torque_0 = F_normal_i .* brazo_i;
     % Torque global
-        torque_global_0 = sum(torque_0);
+        torque_global_0 = sum(torque_0,2)
 
 
 
     % Aceleración angular
+
         alpha_ang_0 = torque_0 ./ I;
     % Velocidad angular
-        Omega_0 = alpha_ang_0 .* intervalo_tiempo;
+        Omega_0 = tiempo_analisis .* alpha_ang_0;
+        Omega_0 = sum(Omega_0,2);
     % Potencia de la pala
-        potencia_0 = torque_global_0 * Omega_0
+        potencia_0 = torque_global_0 .* Omega_0
 
 %% Cuando presenta ángulo de cabeceo y torsión de los segmentos
 
     % Fuerza normal
         F_normal_i_torsion = F_viento_i .* sin(theta_i);
+        
     % Momento de torsión
         %Se necesita multiplicar por el seno del ángulo de torsión para
         %sacar el torque del área efectiva
-        torque_1 = zeros(1,N);
-      
-
+        torque_1 = zeros(M,N);
         %TENGO QUE CAMBIAR ESTA PARTE, POR CULPA DE LA F NORMAL DE TORSION
-            for j = 1:5
-                if j < 2
-                    torque_1(1) = F_normal_i_torsion(1) .* brazo_i(1);
-                else
-                    torque_1(j) = F_normal_i_torsion(j) .* brazo_i(j) .* cos(Delta_theta);
+            for j = 1:M
+                for j2 = 1:N
+                    if j2 < 2
+                        torque_1(j,j2) = F_normal_i_torsion(j,j2) .* brazo_i(j2);
+                    else
+                        torque_1(j,j2) = F_normal_i_torsion(j,j2) .* brazo_i(j2) .* cos(Delta_theta);
+                    end
                 end
             end
 
     % Torque global
-        torque_global_1 = sum(torque_1);
+        torque_global_1 = sum(torque_1,2);
 
     % Aceleración angular
         alpha_ang_1 = torque_1 ./ I;
     % Velocidad angular
-        Omega_1 = alpha_ang_1 .* intervalo_tiempo;
+        Omega_1 = tiempo_analisis .* alpha_ang_1;
+        Omega_1 = sum(Omega_1,2)
     % Potencia de la pala
-        potencia_1 = torque_global_1 * Omega_1
+        potencia_1 = torque_global_1 .* Omega_1
 
 
         
  %% Representaciones
 
-
-    
-
-    figure('Name','Potencia en cada segmento de la pala con u fija','NumberTitle','off');
-        plot(i,potencia_1);
+ %Potencia obtenida dependiendo de la velocidad del viento
+    x = u_viento;
+    y0 = potencia_0.';
+    y1 = potencia_1.';
+    figure('Name','ejemplo gráfica','NumberTitle','off');
+        plot(x,y0);
         hold on;
-        plot(i,potencia_0);
-        xlabel('Intervalo de tiempo (s)');
+        plot(x,y1);
+        xlabel('Velocidad del viento (m/s)');
         ylabel('Potencia (W)');
-        legend('Potencia de torsión','Potencia básica')
-
+        legend('Potencia SIN torsión','Potencia CON torsión')
