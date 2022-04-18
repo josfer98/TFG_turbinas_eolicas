@@ -7,23 +7,19 @@
 
     % Densidad del aire
        Ro = 1.225; %Kg/m^3
-
     % Longitud de la pala
         L = 34; %m
-
     % Número de segmentos en los que se divide la pala
         N = 5;
         i = 1:N;
-
     % Ángulo inicial de giro
-        theta_1 = 2; %Grados [º]
+        theta_1 = 1; %Grados [º]
 
     % Variación de Theta_i
-        Delta_theta = 0.01; %Grados [º]
+        Delta_theta = 0.03; %Grados [º]
 
         %Creamos el ángulo de torsión
         theta_i = zeros(1,N);
-    
             for j = 1:N
                 if j < 2
                     theta_i(1) = theta_1;
@@ -77,7 +73,11 @@
         cateto_buje = (Buje/2) - (Punta/2);
         R_brazo = sqrt(cateto_buje.^2 + L.^2);
         brazo_i = (((2*i) -1) .* R_brazo) / (2*N);
+
     % Masa de cada segmento de la pala
+        
+        %¿Cómo hago para calcular la masa en base a las densidades de cada
+        %uno de los materiales, me salen ~20000kg
         S_pala = sum(S_i); 
         m_i = (S_i/S_pala) * masa_pala;
 
@@ -86,27 +86,28 @@
         I_general = dens_pala(1) .* I_area;
         steiner_theorem = m_i .* (brazo_i.^2);
 
+    % Momento de inercia general
         I = I_general + steiner_theorem;
 
-    % Momento de inercia general
-        
-
+    
     % Calculamos el tiempo, lo que tarda el viento para diferentes velocidades en atravesar el
     % segmento
         %intervalo_tiempo = c_i ./ u(v);
-        u_viento = 1:0.2:20;
+        u_viento = 1:0.5:20;
         M = length(u_viento);
         intervalo_tiempo = zeros(M,N);
         for j = 1:M
             for j2 = 1:N
-                intervalo_tiempo(j,j2) = c_i(j2) ./ u_viento(j)
+                intervalo_tiempo(j,j2) = c_i(j2) ./ u_viento(j);
             end
         end
+
     % Tiempo de análisis de potencia
         tiempo_analisis = 60; %segundos
 %% Cuando solo presenta ángulo de cabeceo
     % Fuerza del viento
         %F_viento_i = (1/2) .* Ro .* S_i .* (u(v).^2);
+
         F_viento_i = zeros(M,N);
         for j = 1:M
             for j2 = 1:N
@@ -118,18 +119,19 @@
     % Momento de torsión
         torque_0 = F_normal_i .* brazo_i;
     % Torque global
-        torque_global_0 = sum(torque_0,2)
+        torque_global_0 = sum(torque_0,2);
 
 
 
     % Aceleración angular
-
         alpha_ang_0 = torque_0 ./ I;
     % Velocidad angular
         Omega_0 = tiempo_analisis .* alpha_ang_0;
-        Omega_0 = sum(Omega_0,2);
+        %Desconozco si hay que realizar la suma o la obtención del mayor
+        %valor de esta
+        Omega_0_max = max(Omega_0,[],2);
     % Potencia de la pala
-        potencia_0 = torque_global_0 .* Omega_0
+        potencia_0 = torque_global_0 .* Omega_0_max;
 
 %% Cuando presenta ángulo de cabeceo y torsión de los segmentos
 
@@ -137,10 +139,9 @@
         F_normal_i_torsion = F_viento_i .* sin(theta_i);
         
     % Momento de torsión
-        %Se necesita multiplicar por el seno del ángulo de torsión para
+        %Se necesita multiplicar por el seno???? del ángulo de torsión para
         %sacar el torque del área efectiva
         torque_1 = zeros(M,N);
-        %TENGO QUE CAMBIAR ESTA PARTE, POR CULPA DE LA F NORMAL DE TORSION
             for j = 1:M
                 for j2 = 1:N
                     if j2 < 2
@@ -153,27 +154,33 @@
 
     % Torque global
         torque_global_1 = sum(torque_1,2);
-
     % Aceleración angular
         alpha_ang_1 = torque_1 ./ I;
     % Velocidad angular
         Omega_1 = tiempo_analisis .* alpha_ang_1;
-        Omega_1 = sum(Omega_1,2)
+        %Es con el max del segmento?, creo que sí.
+        Omega_1_max = max(Omega_1,[],2);
     % Potencia de la pala
-        potencia_1 = torque_global_1 .* Omega_1
+        potencia_1 = torque_global_1 .* Omega_1_max;
 
+%% Eficiencia
+
+    % Se calcula el % de mejora o empeoramiento mediante la torsión de los
+    % segmentos de la pala
+
+        eta = potencia_1 ./ potencia_0
 
         
- %% Representaciones
+%% Representaciones
 
  %Potencia obtenida dependiendo de la velocidad del viento
     x = u_viento;
     y0 = potencia_0.';
     y1 = potencia_1.';
-    figure('Name','ejemplo gráfica','NumberTitle','off');
         plot(x,y0);
         hold on;
         plot(x,y1);
+        title('Potencia obtenida en 60 segundos en base a la velocidad del viento');
         xlabel('Velocidad del viento (m/s)');
         ylabel('Potencia (W)');
         legend('Potencia SIN torsión','Potencia CON torsión')
