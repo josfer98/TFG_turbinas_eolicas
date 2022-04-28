@@ -94,10 +94,18 @@ cateto_buje = (Buje/2) - (Punta/2);
 R_brazo = sqrt(cateto_buje.^2 + L.^2);
 brazo_i = (((2*i) -1) .* R_brazo) / (2*N);
 
-% Masa de cada segmento de la pala
 
-%¿Cómo hago para calcular la masa en base a las densidades de cada
-%uno de los materiales, me salen ~20000kg
+% Cálculo del volumen del frustum piramidal irregular
+
+%Me falla que estas también van variando dependiendo del segmento!!!!
+ancho_buje = 2; %m
+ancho_punta = 0.25; %m
+
+area_base_menor = ancho_punta .* c_right_i;
+area_base_mayor = ancho_buje .* c_left_i;
+v_frustum = (L_i/3) .* (area_base_mayor + area_base_menor + sqrt(area_base_menor .* area_base_mayor));
+
+% Masa de cada segmento de la pala
 S_pala = sum(S_i); 
 m_i = (S_i/S_pala) * masa_pala;
 
