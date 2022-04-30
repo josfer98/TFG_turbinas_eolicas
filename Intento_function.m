@@ -96,14 +96,32 @@ brazo_i = (((2*i) -1) .* R_brazo) / (2*N);
 
 
 % Cálculo del volumen del frustum piramidal irregular
+    ancho_buje = 2; %m
+    ancho_punta = 0.25; %m
+    recta_decrecimiento = sqrt((L^2) + (ancho_punta - ancho_buje)^2);
+    recta_decrecimiento_i = (i * recta_decrecimiento) / N;
+% Siendo z_i la variable auxiliar para conocer el espesor de cada uno de
+% los segmentos y así poder calcular su volumen
+    z_i = sqrt(recta_decrecimiento_i.^2 - (L_i*i).^2);
+    b_i = zeros(1,N);
+    for i = i
+        if (i<2)
+            b_i(i) = 0;
+        else 
+            b_i(i) = z_i(i-1);
+        end
+    end
+% Ya se puede obtener la línea de cuerda de cada segmento
+    ancho_bases_menores = ancho_buje - z_i;
+    ancho_bases_mayores = ancho_buje - b_i;
 
-%Me falla que estas también van variando dependiendo del segmento!!!!
-ancho_buje = 2; %m
-ancho_punta = 0.25; %m
+    
 
-area_base_menor = ancho_punta .* c_right_i;
-area_base_mayor = ancho_buje .* c_left_i;
-v_frustum = (L_i/3) .* (area_base_mayor + area_base_menor + sqrt(area_base_menor .* area_base_mayor));
+    area_base_menor = ancho_bases_menores .* c_right_i;
+    area_base_mayor = ancho_bases_mayores .* c_left_i;
+    v_frustum = (L_i/3) .* (area_base_mayor + area_base_menor + sqrt(area_base_menor .* area_base_mayor));
+    % V_frustum = (L/3) * (6 + 0.15 + sqrt(6*0.15)) Esto es del volumen
+    % completo, pero da 80.45 y lo de arriba 80.73, tengo que revisarlo.
 
 % Masa de cada segmento de la pala
 S_pala = sum(S_i); 
