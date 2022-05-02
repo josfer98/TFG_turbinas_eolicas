@@ -10,11 +10,9 @@
         %theta_1 = 1; %Grados [º]
     % Variación de Theta_i para la torsión
         %Delta_theta = 0.03; %Grados [º]
-    % Masa de la pala
-        masa_pala = 5200; %Kg
     % Tamañós del buje y la punta
-        Buje = 3; %metros
-        Punta = 0.6; %metros
+        Buje = 3; % m
+        Punta = 0.6; % m
     % Velocidades del viento
         u_viento = 1:0.5:20;
     % Tiempo de análisis del sistema
@@ -23,19 +21,19 @@
 figure(1)
 Delta_theta = 0.03;
 for theta_1 = 1:0.2:2
-calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, masa_pala, u_viento, tiempo_analisis);
+calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, u_viento, tiempo_analisis);
 end
 
 figure(2)
 theta_1 = 1;
 for Delta_theta = 0.01:0.01:0.06
-calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, masa_pala, u_viento, tiempo_analisis);
+calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, u_viento, tiempo_analisis);
 end
 
 
 
 
-function calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, masa_pala, u_viento, tiempo_analisis)
+function calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, u_viento, tiempo_analisis)
 %% Setup
 
 % Densidad del aire
@@ -43,7 +41,7 @@ Ro = 1.225; %Kg/m^3
 % Iteraciones de cálculo iguales al número de segmentos
 i = 1:N;
 % Longitud de los segmentos
-L_i = L/N;
+L_i = L/N; % m
 %Creación del ángulo de torsión
 theta_i = zeros(1,N);
 for j = 1:N
@@ -69,67 +67,79 @@ dens_pala = [CFRP GFRP GFEpoxi];
 %% Fórmulas para el cálculo inicial y completo de la pala de la turbina eólica.
 
 % Se calcula la hipotenusa de borde de fuga
-H_bf = sqrt(((Buje - Punta)^2) + L^2);
+h_bf = sqrt(((Buje - Punta)^2) + L^2); % m
 % Ahora el ángulo Phi, con el que decrece la chord line a lo largo de L
-Phi = asin( (Buje - Punta) / H_bf );
+Phi = asin( (Buje - Punta) / h_bf ); % [º]
 Phi_deg = (Phi * 180) / pi;
 % Variables necesarias para el cálculo de la chord line
-altura_i = (((2*i) -1) * L) / (2*N);
-diagonal_i = (((2*i) -1) * H_bf) / (2*N);
+altura_i = (((2*i)-1) * L) / (2*N);
+diagonal_i = (((2*i) -1) * h_bf) / (2*N);
 x_i = sqrt(diagonal_i.^2 - altura_i.^2);
 % Ya se puede obtener la línea de cuerda de cada segmento
-c_i = Buje - x_i;
+c_i = Buje - x_i; % m
 
 % Usando algunas fórmulas del desarrollo de Carlos Armenta Deu,
 % referenciado en mi trabajo.
 % Lado inicial de la pala
-c_left_i = c_i + (L_i/2) * tan(Phi);
+c_left_i = c_i + (L_i/2) * tan(Phi); % m 
 % Lado final de la pala
-c_right_i = c_i - (L_i/2) * tan(Phi);
+c_right_i = c_i - (L_i/2) * tan(Phi); % m
 % Área de cada segmento de la pala
-S_i = ((c_left_i + c_right_i) / 2) * L_i;
+S_i = ((c_left_i + c_right_i) / 2) * L_i; % m^2
 
 %Definición del brazo
 cateto_buje = (Buje/2) - (Punta/2);
 R_brazo = sqrt(cateto_buje.^2 + L.^2);
-brazo_i = (((2*i) -1) .* R_brazo) / (2*N);
+brazo_i = (((2*i) -1) .* R_brazo) / (2*N); %m
 
 
 % Cálculo del volumen del frustum piramidal irregular
     ancho_buje = 2; %m
     ancho_punta = 0.25; %m
     recta_decrecimiento = sqrt((L^2) + (ancho_punta - ancho_buje)^2);
-    recta_decrecimiento_i = (i * recta_decrecimiento) / N;
+    recta_decrecimiento_i = (i * recta_decrecimiento) / N; % m
 % Siendo z_i la variable auxiliar para conocer el espesor de cada uno de
 % los segmentos y así poder calcular su volumen
     z_i = sqrt(recta_decrecimiento_i.^2 - (L_i*i).^2);
     b_i = zeros(1,N);
-    for i = i
-        if (i<2)
-            b_i(i) = 0;
+    for i_for = 1:N
+        if (i_for<2)
+            %Establezco que sea 0 para poder rellenar el array, pero b_i
+            %es la auxiliar para calcular el area de las bases mayores por
+            %lo cual no puede restar ningún valor al primer ancho, ya que
+            %es la primera base para los cálculos de nuestro tronco
+            b_i(1) = 0;
         else 
-            b_i(i) = z_i(i-1);
+            b_i(i_for) = z_i(i_for-1);
         end
     end
 % Ya se puede obtener la línea de cuerda de cada segmento
-    ancho_bases_menores = ancho_buje - z_i;
-    ancho_bases_mayores = ancho_buje - b_i;
+    ancho_bases_menores = ancho_buje - z_i; % m
+    ancho_bases_mayores = ancho_buje - b_i; % m
 
-    
+% Con el ancho de las bases y el largo de los segmentos se puede obtener el
+% área de cada uno de los segmentos de la pala
+    area_base_menor = ancho_bases_menores .* c_right_i; % m^2
+    area_base_mayor = ancho_bases_mayores .* c_left_i; % m^2
 
-    area_base_menor = ancho_bases_menores .* c_right_i;
-    area_base_mayor = ancho_bases_mayores .* c_left_i;
+% Se calcula el volumen del tronco de pirámide mediante las fórmulas del
+% papiro de Moscú
     v_frustum = (L_i/3) .* (area_base_mayor + area_base_menor + sqrt(area_base_menor .* area_base_mayor));
-    % V_frustum = (L/3) * (6 + 0.15 + sqrt(6*0.15)) Esto es del volumen
-    % completo, pero da 80.45 y lo de arriba 80.73, tengo que revisarlo.
+    v_frustum = sum(v_frustum); % Kg * m^3
+    % V_frustum = (L/3) * (6 + 0.15 + sqrt(6*0.15)) 
+    %Esto es del volumen completo, pero da 80.45 y lo de arriba 80.73, tengo que revisarlo.
+
+% Una vez se obtiene el volumen de la figura, se puede calcular el espesor
+    espesor = (v_frustum*0.2) ./ S_i;
 
 % Masa de cada segmento de la pala
-S_pala = sum(S_i); 
-m_i = (S_i/S_pala) * masa_pala;
+S_pala = sum(S_i); % Área de la pala [m]
+masa_pala = dens_pala(1) * (v_frustum*0.2); %Kg
+m_i = (S_i/S_pala) * masa_pala; %Kg de cada segmento
 
 % Momento inercia del área de un trapecio
 I_area = (L_i^3).*((c_right_i.^2) + (4.*c_right_i.*c_left_i) + (c_left_i.^2)) ./ (36 .* (c_right_i + c_left_i));
-I_general = dens_pala(1) .* I_area;
+I_general = espesor .* I_area;
 steiner_theorem = m_i .* (brazo_i.^2);
 
 % Momento de inercia general
