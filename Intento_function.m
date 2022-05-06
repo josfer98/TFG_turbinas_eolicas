@@ -19,15 +19,15 @@
         tiempo_analisis = 60; %segundos
 
 figure(1)
-Delta_theta = 0.03;
+delta_theta = 0.03;
     for theta_1 = 1:0.2:2
-        calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, u_viento, tiempo_analisis);
+        calculo_potencias(N, L, theta_1, delta_theta, Buje, Punta, u_viento, tiempo_analisis);
     end
 
 figure(2)
 theta_1 = 1;
-    for Delta_theta = 0.01:0.01:0.06
-        calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, u_viento, tiempo_analisis);
+    for delta_theta = 0.01:0.01:0.06
+        calculo_potencias(N, L, theta_1, delta_theta, Buje, Punta, u_viento, tiempo_analisis);
     end
 
 
