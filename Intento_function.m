@@ -19,21 +19,21 @@
         tiempo_analisis = 60; %segundos
 
 figure(1)
-delta_theta = 0.03;
-    for theta_1 = 1:0.2:2
-        calculo_potencias(N, L, theta_1, delta_theta, Buje, Punta, u_viento, tiempo_analisis);
+Delta_theta = 0.03;
+    for Theta_1 = 1:0.2:2
+        calculo_potencias(N, L, Theta_1, Delta_theta, Buje, Punta, u_viento, tiempo_analisis);
     end
 
 figure(2)
-theta_1 = 1;
-    for delta_theta = 0.01:0.01:0.06
-        calculo_potencias(N, L, theta_1, delta_theta, Buje, Punta, u_viento, tiempo_analisis);
+Theta_1 = 1;
+    for Delta_theta = 0.01:0.02:0.06
+        calculo_potencias(N, L, Theta_1, Delta_theta, Buje, Punta, u_viento, tiempo_analisis);
     end
 
 
 
 
-function calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, u_viento, tiempo_analisis)
+function calculo_potencias(N, L, Theta_1, Delta_theta, Buje, Punta, u_viento, tiempo_analisis)
 %% Setup
 
     % Densidad del aire
@@ -46,13 +46,13 @@ function calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, u_viento, ti
         theta_i = zeros(1,N);
         for j = 1:N
             if j < 2
-                theta_i(1) = theta_1;
+                theta_i(1) = Theta_1;
             else
                 theta_i(j) = theta_i(j-1) + Delta_theta;
             end
         end
     
-        theta_1 =     (theta_1 * pi)     / 180; %Rad
+        Theta_1 =     (Theta_1 * pi)     / 180; %Rad
         Delta_theta = (Delta_theta * pi) / 180; %Rad
         theta_i =     (theta_i .* pi)    / 180; %Rad
     
@@ -88,7 +88,7 @@ function calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, u_viento, ti
         % Área de cada segmento de la pala
             S_i = ((c_left_i + c_right_i) / 2) * L_i; % m^2
     
-    %Definición del brazo
+    % Definición del brazo
         cateto_buje = (Buje/2) - (Punta/2);
         R_brazo = sqrt(cateto_buje.^2 + L.^2);
         brazo_i = (((2*i) -1) .* R_brazo) / (2*N); %m
@@ -173,7 +173,7 @@ function calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, u_viento, ti
             end 
         end
     % Fuerza normal
-        F_normal_i = F_viento_i .* sin(theta_1);
+        F_normal_i = F_viento_i .* sin(Theta_1);
     % Momento de torsión
         torque_0 = F_normal_i .* brazo_i;
     % Torque global
@@ -189,6 +189,7 @@ function calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, u_viento, ti
     % Recordar calcular la otra forma!!!!!!!!!!!!!!!!!!!!!!!
     % Potencia de la pala
         potencia_0 = torque_global_0 .* Omega_0;
+        potencia_0 = sum(potencia_0,2);
     
 %% Cuando presenta ángulo de cabeceo y torsión de los segmentos
     
@@ -219,6 +220,7 @@ function calculo_potencias(N, L, theta_1, Delta_theta, Buje, Punta, u_viento, ti
     % Recordar calcular la otra forma!!!!!!!!!!!!!!!!!!!!!!!
     % Potencia de la pala
         potencia_1 = torque_global_1 .* Omega_1;
+        potencia_1 = sum(potencia_1,2);
 
 %% Eficiencia
 
