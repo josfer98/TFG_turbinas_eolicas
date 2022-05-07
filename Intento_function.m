@@ -32,40 +32,63 @@
         RHO = 1.225; %Kg/m^3
 
 %% Main
-    figure(1)
-    DELTA_THETA = 0.03;
-        for THETA_1 = 1:0.2:2
-          [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA);
-        end
-    
-    figure(2)
-    THETA_1 = 1;
-        for DELTA_THETA = 0.01:0.02:0.06
-            [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA);
-        end
-    
-    
-    
-    [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
-        
-    [v_frustum_i, v_frustum_total] = volumen_pala(L, i, N, L_i, c_right_i, c_left_i);
-        
-    I = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
-    
-    F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
-     
-    [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
-    
-    [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
-    
-    [potencia_0, potencia_1] = potencia_y_eficiencia(torque_0, I, torque_1, TIEMPO_ANALISIS, torque_global_0, torque_global_1);
-    
-    plots(U_VIENTO, potencia_0, potencia_1);
 
+     figure(1)
+         for THETA_1_SETUP = 1:0.2:2
+
+            DELTA_THETA = 0.03;
+
+            [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1_SETUP, DELTA_THETA);
+
+            [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
+                
+            [v_frustum_i, v_frustum_total] = volumen_pala(L, i, N, L_i, c_right_i, c_left_i);
+                
+            [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
+            
+            F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
+             
+            [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
+            
+            [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
+            
+            [potencia_0, potencia_1] = potencia_y_eficiencia(torque_0, I, torque_1, TIEMPO_ANALISIS, torque_global_0, torque_global_1);
+            
+            plots(U_VIENTO, potencia_0, potencia_1);
+            
+            clear -regexp \d
+         end
+    
+
+    figure(2)
+        for DELTA_THETA_SETUP = 0.01:0.02:0.06
+
+            THETA_1 = 1;
+
+            [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA_SETUP);
+
+            [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
+                
+            [v_frustum_i, v_frustum_total] = volumen_pala(L, i, N, L_i, c_right_i, c_left_i);
+                
+            [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
+            
+            F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
+             
+            [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
+            
+            [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
+            
+            [potencia_0, potencia_1] = potencia_y_eficiencia(torque_0, I, torque_1, TIEMPO_ANALISIS, torque_global_0, torque_global_1);
+            
+            plots(U_VIENTO, potencia_0, potencia_1);
+            
+            clear -regexp \d
+        end
+    
 
 
 %% Funciones
-
 
 
     function [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA)
@@ -151,7 +174,7 @@
     %Esto es del volumen completo, pero da 80.45 y lo de arriba 80.73, tengo que revisarlo.
     end
     
-    function I = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i)
+    function [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i)
     %%  Momento inercia general de los segmentos de la pala
     
     % Una vez se obtiene el volumen de la figura, se puede calcular el espesor,
@@ -208,7 +231,7 @@
     torque_global_0 = sum(torque_0,2);
     end
     
-    function [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA)
+    function [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA_prueba)
     %% Torque para ángulo de cabeceo y torsión
     
     % Fuerza normal
@@ -221,7 +244,7 @@
             if j2 < 2
                 torque_1(j,j2) = F_normal_i_torsion(j,j2) .* brazo_i(j2);
             else
-                torque_1(j,j2) = F_normal_i_torsion(j,j2) .* brazo_i(j2) .* cos(DELTA_THETA);
+                torque_1(j,j2) = F_normal_i_torsion(j,j2) .* brazo_i(j2) .* cos(DELTA_THETA_prueba);
             end
         end
     end
