@@ -33,8 +33,11 @@
 
 %% Main
 
+ contador0 = 1;
+ contador1 = 1;
+
      figure
-         for THETA_1_SETUP = 200:20:320
+         for THETA_1_SETUP = 0:0.4:3.2
 
             DELTA_THETA = 0.04;
 
@@ -54,39 +57,47 @@
             
             [potencia_0, potencia_1] = potencia_y_eficiencia(torque_0, I, torque_1, TIEMPO_ANALISIS, torque_global_0, torque_global_1);
             
-            plots(U_VIENTO, potencia_0, potencia_1);
+            [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
             
 
          end
-    
+         hold off;
+         legend show;
+         legend('Location','best')
 
-%     figure
-%         for DELTA_THETA_SETUP = 0.01:0.02:0.06
-% 
-%             THETA_1 = 1;
-% 
-%             [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA_SETUP);
-% 
-%             [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
-%                 
-%             [v_frustum_i, v_frustum_total] = volumen_pala(L, i, N, L_i, c_right_i, c_left_i);
-%                 
-%             [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
-%             
-%             F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
-%              
-%             [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
-%             
-%             [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
-%             
-%             [potencia_0, potencia_1] = potencia_y_eficiencia(torque_0, I, torque_1, TIEMPO_ANALISIS, torque_global_0, torque_global_1);
-%             
-%             plots(U_VIENTO, potencia_0, potencia_1);
-%             
-% 
-%         end
-    
 
+ contador0 = 1;
+ contador1 = 1;
+    figure
+        for DELTA_THETA_SETUP = 0.01:0.02:0.06
+
+            THETA_1 = 1;
+
+            [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA_SETUP);
+
+            [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
+                
+            [v_frustum_i, v_frustum_total] = volumen_pala(L, i, N, L_i, c_right_i, c_left_i);
+                
+            [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
+            
+            F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
+             
+            [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
+            
+            [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
+            
+            [potencia_0, potencia_1] = potencia_y_eficiencia(torque_0, I, torque_1, TIEMPO_ANALISIS, torque_global_0, torque_global_1);
+            
+            [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
+        end
+    
+         hold off;
+         legend show;
+         legend('Location','best')
+         
+ contador0 = 1;
+ contador1 = 1;
 
 %% Funciones
 
@@ -274,23 +285,20 @@
     eta = potencia_1 ./ potencia_0;
     end
     
-    function plots(U_VIENTO, potencia_0, potencia_1)
+    function  [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1)
 %% Representaciones
 
 %Potencia obtenida dependiendo de la velocidad del viento
 x = U_VIENTO;
 y0 = potencia_0.';
 y1 = potencia_1.';
+leyenda0 = ['Potencia SIN torsión ', num2str(contador0)]; contador0 = 1 + contador0;
+leyenda1 = ['Potencia CON torsión ', num2str(contador1)]; contador1 = 1 + contador1;
 
-plot(x,y0);hold on;plot(x,y1);
-
+plot(x, y0, 'DisplayName', leyenda0); hold on;
+plot(x, y1, 'DisplayName', leyenda1);
 title('Potencia obtenida en 60 segundos en base a la velocidad del viento');
 xlabel('Velocidad del viento (m/s)');
 ylabel('Potencia (W)');
-legend('Potencia SIN torsión 1','Potencia CON torsión 1', ...
-    'Potencia SIN torsión 2','Potencia CON torsión 2', ...
-    'Potencia SIN torsión 3','Potencia CON torsión 3', ...
-    'Potencia SIN torsión 4','Potencia CON torsión 4', ...
-    'Potencia SIN torsión 5','Potencia CON torsión 5', ...
-    'Potencia SIN torsión 6','Potencia CON torsión 6','Location','best');
+
 end
