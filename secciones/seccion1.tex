@@ -31,7 +31,7 @@ Lo siguiente que se debe tener presente es que se necesita también una represen
 Por simplicidad, la pala se dividirá únicamente en $N$ segmentos, en este caso 5. Aunque se mantenga este valor durante el trabajo y es probable que no cambie, se asociará a una variable en caso de que se quieran hacer pruebas mediante simulación en MATLAB más adelante. \\\\
     
 
-La $L$ o \textit{longitud de pala}, vista en la Figura \ref{fig:pala_simp} es con la que se va a trabajar, por ello cada uno de los segmentos de la Figura \ref{fig:pala_dividida} tendrá el siguiente largo $\dfrac{L}{N} = \dfrac{L}{5} = L_i$  ya que se dividió $N$ número de veces. \\
+La $L$ o \textit{longitud de pala}, vista en la Figura \ref{fig:pala_simp} es con la que se va a trabajar, por ello cada uno de los segmentos de la Figura \ref{fig:pala_dividida} tendrá el siguiente largo $\dfrac{L}{N} = \dfrac{L}{5} = L_i (m)$ , ya que se dividió $N$ número de veces. \\
 
 Como se puede observar en la Figura \ref{fig:pala_dividida} cada segmento tiene una altura variable, esto se debe a la forma real de las palas, cuanto más cerca del buje de la turbina, mayor es el área del segmento. La altura en el centro de estos segmentos, conocida como $chord \text{ } line$ o $línea \text{ } de \text{ } cuerda$ se determinará mediante el preestablecimiento de una serie de datos y su desarrollo matemático relacionados con la pala completa.\\
 
@@ -49,17 +49,18 @@ Para el cálculo de la $línea \text{ } de \text{ } cuerda$ se requiere la reali
 
 \begin{definicion}
 En base a esta representación esquemática se puede deducir que:
-$$ J_{left} = J$$
-$$ J_{right} = J/D$$
+$$ J_{left} (m)$$
+$$ J_{rigth} = J_{leftt}/D$$
 $$ L_i = L/N$$
 Donde,
 \centering
-J y D $\in \mathbb{Q+}$, \hspace{2pt} $J > D$, \hspace{2pt} $L_i$ := longitud del segmento,  $J_{left}$ := longitud simplificada del buje o hub de la pala y $J_{right}$ := longitud simplificada de la punta o tip de la pala, $i \in segmento$ y $segmento = \{1, ..., N\}$ 
+D $\in \mathbb{Q+}$, \hspace{2pt} $J_{left} > D$, $D$ := factor de reducción de alto de pala,  \hspace{2pt} $L_i$ := longitud del segmento,  $J_{left}$ := anchura de la pala en el buje o hub (m) y $J_{right}$ := anchura de la pala en la punta o tip, $i \in segmento$ y $segmento = \{1, ..., N\}$ 
 \label{def_laterales_pala}
 \end{definicion}
 
+Es cierto que se ha dicho que mediante la representación de la Figura \ref{fig:pala_desarrollo_chord} se podían deducir ciertas definiciones, pero se ha introducido una $D$ que no se puede observar en la imagen. Este valor ya tiene una definición aunque se puede mejorar mediante una explicación. Que este factor reductor exista procede de la naturaleza del análisis y como se ha afrontado el estudio simplificado de una pala de aerogenerador, si bien es cierto que se pudo hacer de una manera totalmente mas simple, haciendo que nuestra pala fuese un simple rectángulo, se prefirió abordar como una forma trapezoidal. Pero para el estudio y desarrollo mediante el método que se eligió se debía tener 3 parámetros de la pala. Estos parámetros fueron $J_{left}, J_{rigth} y L$ pero para mayor juego se dejó la segunda a merced del valor $D$. Esto permite hacer los cálculos con una relación entre los tamaños del $Buje$ y la $Punta$ de las palas de la turbina eólica, además de hacer que el problema sea aún mas escalable. \\
 
-Ahora, una vez se tienen las variables básicas para conocer el resto de parámetros, se comienza con los cálculos.
+Ahora, una vez se tienen las variables básicas para conocer el resto de parámetros, se comienza con los cálculos. \\
 
 \begin{definicion}
 Con las variables formalizadas en la anterior definición, se define el valor $H_{bf}$ mediante el teorema de Pitágoras ya que el triángulo es rectángulo.
@@ -143,9 +144,9 @@ Aparte, con esta definición se ve que en la Figura \ref{fig:pala_desarrollo_cho
 
 \begin{definicion}
 Se determina el área de los segmentos:
-$$ S_{i} = \dfrac{(c_{left_i} + c_{right_i})}{2N} \cdot L_i $$
+$$ s_{i} = \dfrac{(c_{left_i} + c_{right_i})}{2N} \cdot L_i $$
 Donde,
-\centering $S_i$ := Área del segmento.
+\centering $s_i$ := Área del segmento.
 \label{def:area_segmentos}
 \end{definicion}
 
@@ -177,13 +178,87 @@ Donde, $cateto \text{ } buje$ := Medida de buje o $J_{left}$ reducida para su ut
 \label{def:brazo}
 \end{definicion}
 
+
+\subsection{Análisis del volumen de la pala}
+\label{section:volumen_pala}
+
+Cuando ya se ha definido la geometría de dos dimensiones de la pala del aerogenerador se puede añadir una nueva dimensión para que el análisis sea aún mas completo. Si se limitara a las dos dimensiones, las simplificación sería tal, que se perdería criterio a la hora de analizar los datos obtenidos.
+
+\colorbox{Orange}{ \Huge Aquí va una figura, esta de 3d de la pala} \\\\\\\\
+
+Mediante la observación de la figura \ref{fig:analisis_volumen} se puede averiguar lo siguiente: \\\\\\\\
+
+\colorbox{Orange}{ \Huge Aquí va un desarrollo con otra figura, la del ancho}
+
+\begin{definicion}
+Aplicando el desarrollo explicado justo encima:
+$$ recta \text{ } decrecimiento_i = \dfrac{( i \cdot \sqrt{L^2 + (ancho \text{ } punta - ancho \text{ } buje)^2)}}{N}$$
+ 
+$$ancho \text{ } buje, ancho  \text{ } punta \in \mathbb{Q+}$$
+$$ ancho \text{ } buje > ancho \text{ } punta $$
+
+Donde,
+\centering $recta \text{ } decrecimiento_i $ := línea de disminución de la parte superior ancho de la pala dividida para cada segmento,  $ancho \text{ } punta$ := amplitud de la pala del aerogenerador en la zona más estrecha o punta y $ancho \text{ } buje$ := amplitud de la pala del aerogenerador en la zona más ancha o buje.
+\label{def:ancho_buje_punta}
+\end{definicion}
+
+
+Tal y como se presentó en la Figura \ref{fig:pala_calculo_phi}, la variable $x_i$ sirvió de apoyo para calcular las reducciones de tamaño de las líneas de cuerda al ir restando el resultado a la variable $c_left_{i}$. Esto mismo ocurre para el ancho de la pala mediante el uso de la Definición \ref{def:ancho_buje_punta} y el Teorema de Pitágoras. En esta ocasión además, se necesitará una segunda variable que se explicará mas adelante, debido a la forma en tres dimensiones de la pala. 
+
+
+
+\begin{definicion}
+Las variables de apoyo son las siguientes:
+$$ z_i = \sqrt{ recta \text{ } decrecimiento_i^2 - (L_i \cdot i )^2 }$$
+$$ b_i =  \left\{\begin{matrix}
+0 \hspace{33pt} Sí \hspace{7pt} i = 1\\ 
+z_i  \hspace{30pt} Sí \hspace{7pt}  i > 1
+\end{matrix}\right$$
+Donde,
+$z_i$ := variable de apoyo para el cálculo del área de las secciones trapezoides correspondientes al corte de los segmentos, en este caso de las bases menores,  $b_i$ := segunda variable de apoyo pero en este caso sirve para las bases mayores.
+\centering 
+\label{def:variables_apoyo}
+\end{definicion}
+
+¿Por qué en las descripciones se habla de bases mayores y menores? Es sencillo, debido a la geometría de la pala, como se puede vislumbrar en la Figura \ref{fig:analisis_volumen} y los cortes hechos para dividir la pala en $N$ segmentos crean una forma de tronco de pirámide trapezoidal. Tanto si se divide como si no, el volumen se analizará exactamente de la misma manera, mediante las fórmulas deducidas y posteriormente expandidas a otros casos de uso como el nuestro que se encuentran en el \textit{Moscow Mathematical Papyrus} \cite{gunn1929four}.
+
+
+\begin{definicion}
+Se obtiene el ancho de las bases de los troncos trapezoidales y en consecuencia se calculan las áreas de las bases:
+$$ ancho \text{ } bases_{menores} ancho \text{ } buje - z_i $$
+$$ ancho \text{ } bases_{mayores} = ancho \text{ } buje - b_i $$
+
+$$ area \text{ } base_{menor} = ancho \text{ } bases_{menores} \cdot c_{right}_i $$ 
+$$ area \text{ } base_{mayor} = ancho \text{ } bases_{mayores} \cdot c_{left}_i $$
+Donde,
+\centering $ancho bases_{mayores}$ := Ancho de las bases trapezoidales de mayor tamaño con las que se calculará el volumen del tronco o frustum de cada uno de los segmentos,  $ancho bases_{menores}$ := Ancho de las bases trapezoidales de menor tamaño con las que se calculará el volumen del tronco o frustum de cada uno de los segmentos.
+\label{def:area_bases}
+\end{definicion}
+
+
+Con todo lo necesario para el cálculo del volumen de la pala del aerogenerador se procede a ello. Añadir que se va a realizar de dos maneras; completo y segmentado. El segmentado es necesario debido al desarrollo que se ha ido realizando y que se va a seguir durante todo el trabajo y el completo lo usamos para comparación y demostrar que segmentado o no, es correcto.
+
+
+\begin{definicion}
+
+\colorbox{Orange}{ Falta explicación }
+
+$$ volumen \text{ } frustum_i = \dfrac{L_i}{3} \cdot (area \text{ } base_{mayor} + area \text{ } base_{menor} + \sqrt{area \text{ } base_{mayor} \cdot area \text{ } base_{menor}}) $$ 
+$$ volumen \text{ } frustum_{total} = \sum_{i}^{N}volumen \text{ } frustum_i  $$
+Donde,
+\centering \colorbox{Orange}{ Falta definir}
+\label{def:volumen_tronco_frustum}
+\end{definicion}
+
+
+
 \subsection{Estudio del torque sin ángulo de cabeceo}
 \label{section:torque_pala_horizontal}
 En este apartado y tomando la pala con una forma real y no una simplificada como con la que se trabaja, se puede observar un primer caso en el cual ya se produce un giro de las palas del aerogenerador. \\
 
 Esta situación es en la cual no se presenta cabeceo, es decir, el viento tiene un ángulo de ataque paralelo para con la pala de la turbina eólica. \\
 
-Pero, al tomar una pala real, la cual está más redondeada por la parte superior y teniendo mayor volumen que la parte inferior. Por ello mediante el principio Bernoulli, se ve que esta parte superior presenta un mayor recorrido y con ello una velocidad de viento mayor por tanto una menor presión. \\
+Pero, al tomar una pala real, la cual está más redondeada por la parte superior y teniendo mayor volumen que la parte inferior. Por ello mediante el principio Bernoulli, se ve que esta parte superior presenta un mayor recorrido que la inferior y con ello una velocidad de viento mayor por tanto una menor presión. \\
 
 Este efecto produce un gradiente de presión y por ello una fuerza de sustentación. Todo ello por la no simetría de las palas del aerogenerador. \\
 
@@ -366,7 +441,7 @@ El resto de fórmulas no varían debido a que no dependen del ángulo $\theta_i$
   El torque termina siendo un producto algebraico.
  $$ torque_1_{i} = f \text{ } normal_i \cdot brazo_i \cdot \cos{\Delta_{\theta_{i}}}$$
  Donde,
- \centering $\sin{\Delta_{\theta_{i}}}$ := 
+ \centering $\cos{\Delta_{\theta_{i}}}$ := 
  \label{def:torque_algebraico_torsion}
  \end{definicion}
  
@@ -401,36 +476,38 @@ Donde,
 
 
 \subsubsection{Cálculo de la potencia del sistema}
+\label{section:pot_sistema}
  
- Una vez se tiene todo lo necesario para el cálculo del torque, se puede pasar al siguiente escalón que sería la potencia. Esta es una unidad de medida que permitirá conocer si el estudio que se está realizando está siendo fructífero, cuanta mayor cantidad de energía se genere, mejor.
+ Una vez se tiene todo lo necesario para el cálculo del torque, se puede pasar al siguiente escalón que sería la potencia. Esta es una unidad de medida que permitirá conocer si el estudio que se está realizando está siendo fructífero, cuanta mayor cantidad de energía se genere, mejor, aunque existe un límite directamente relacionado con las limitaciones técnicas y físicas que presentan las turbinas eólicas.
  
   \begin{definicion}
  La potencia del sistema con un ángulo de caebceo se define como:
- $$ potencia_0 = torque \text{ } global_0 \cdot \Omega $$ 
+ $$ potencia \text{ } global_0 = torque \text{ } global_0 \cdot \Omega $$ 
  
  Donde,
-  \centering $\Omega$ := velocidad de giro o angular de la pala y $potencia_0$ := Energía del sistema unicamente con un cierto ángulo de cabeceo.
+  \centering $\Omega$ := velocidad de giro o angular de la pala y $potencia \text{ } global_0$ := energía del sistema unicamente con un cierto ángulo de cabeceo.
  \label{def:potencia_giro_inicial}
  \end{definicion}
  
    \begin{definicion}
  La potencia del sistema con un giro inicial y torsión se define como:
- $$ potencia_1 = torque \text{ } global_1 \cdot \Omega $$ 
+ $$ potencia \text{ } global_1 = torque \text{ } global_1 \cdot \Omega $$ 
  
  Donde,
- \centering $potencia_1$ := Energía del sistema con un cierto ángulo de cabeceo y segmentos torsionados.
+ \centering $potencia \text{ } global_1$ := Energía del sistema con un cierto ángulo de cabeceo y segmentos torsionados.
  \label{def:potencia_giro_segmentos}
  \end{definicion}
  
  
- \textcolor{red}{La potencia está en W (Watts) o J/s (Julio/segundo) porque el torque está en N/m (Newton/metro) o J y $\Omega$ es en 1/s o $s^-1$} \\
+Las unidades que se buscan serían, la potencia en $W$ ($Watts$) o $\dfrac{J}{s}$ ($\dfrac{Julio}{segundo}$) porque el torque es en $\dfrac{N}{m}$ ($\dfrac{Newton}{metro}$) o $J$ y $\Omega$ en $\dfrac{1}{s}$ o $s^{-1}$. Si todo el desarrollo arriba es correcto, en primera instancia las unidades deberían ser correctas, en caso de no serlo los valores finales a los que se está intentando llegar serían muy dispares. \\
 
  
  Como se puede observar, se calculó dos veces la potencia, una por cada apartado estudiado. La definición \ref{def:potencia_giro_inicial} corresponde a la sección \ref{section:torque_giro_inicial} que se referencia con un $0$ ya que es la situación inicial y más básica. Mientras que la definición \ref{def:potencia_giro_segmentos} corresponde a la sección \ref{section:torque_giro_torsion} que se ha referenciado con un $1$ ya que nace de la primera.
  
  
- 
 \subsubsection{EXPLICACIÓN DE LA VELOCIDAD ANGULAR}
+
+ 
  
  
 \textcolor{red}{\Large{MEJORES MATERIALES: FIBRA DE VIDRIO REFORZADA CON PLÁSTICO (1.50–2.10) O FIBRA DE CARBONO REFORZADA CON PLÁSTICO( g/cm3	1.8–2.0) y rho = 1700 $kg/m^3$ (Fibra de vidrio-epoxi) }}
@@ -443,7 +520,7 @@ Realizada la definición de cada una de las fórmulas necesarias para el cálcul
  
    \begin{definicion}
 El rendimiento del sistema viene definido por:
- $$ \eta = \dfrac{potencia_1}{potencia_0} $$ 
+ $$ \eta = \dfrac{potencia \text{ } global_1}{potencia \text{ } global_0} $$ 
  
  Donde,
   \centering $\eta$ := eficiencia respecto a la energía obtenida en dos casos estudiados.
