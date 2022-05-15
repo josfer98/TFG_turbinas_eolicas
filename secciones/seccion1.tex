@@ -225,13 +225,13 @@ $z_i$ := variable de apoyo para el cálculo del área de las secciones trapezoid
 
 \begin{definicion}
 Se obtiene el ancho de las bases de los troncos trapezoidales y en consecuencia se calculan las áreas de las bases:
-$$ ancho \text{ } bases_{menores} ancho \text{ } buje - z_i $$
-$$ ancho \text{ } bases_{mayores} = ancho \text{ } buje - b_i $$
+$$ ancho \text{ } bases \text{ } menores_i = ancho \text{ } buje - z_i $$
+$$ ancho \text{ } bases \text{ } mayores_i = ancho \text{ } buje - b_i $$
 
-$$ area \text{ } base_{menor} = ancho \text{ } bases_{menores} \cdot c_{right}_i $$ 
-$$ area \text{ } base_{mayor} = ancho \text{ } bases_{mayores} \cdot c_{left}_i $$
+$$ area \text{ } bases \text{ } menores_i = ancho \text{ } bases \text{ } menores_i \cdot c_{right}_i $$ 
+$$ area \text{ } bases \text{ } mayores_i = ancho \text{ } bases \text{ } mayores_i \cdot c_{left}_i $$
 Donde,
-\centering $ancho bases_{mayores}$ := Ancho de las bases trapezoidales de mayor tamaño con las que se calculará el volumen del tronco o frustum de cada uno de los segmentos,  $ancho bases_{menores}$ := Ancho de las bases trapezoidales de menor tamaño con las que se calculará el volumen del tronco o frustum de cada uno de los segmentos.
+\centering $ancho \text{ } bases \text{ } mayores_i$ := Ancho de las bases trapezoidales de mayor tamaño con las que se calculará el volumen del tronco o frustum de cada uno de los segmentos,  $ancho \text{ } bases \text{ } menores_i$ := Ancho de las bases trapezoidales de menor tamaño con las que se calculará el volumen del tronco o frustum de cada uno de los segmentos, $ area \text{ } base \text{ } mayor_i $ := zonas trapezoidales que sirven de base mayor para el cálculo del frustum de cada segmento y $ area \text{ } base \text{ } menorr_i $ := zonas trapezoidales que sirven de base menor para el cálculo del frustum de cada segmento.
 \label{def:area_bases}
 \end{definicion}
 
@@ -240,16 +240,21 @@ Con todo lo necesario para el cálculo del volumen de la pala del aerogenerador 
 
 
 \begin{definicion}
-
-\colorbox{Orange}{ Falta explicación }
-
-$$ volumen \text{ } frustum_i = \dfrac{L_i}{3} \cdot (area \text{ } base_{mayor} + area \text{ } base_{menor} + \sqrt{area \text{ } base_{mayor} \cdot area \text{ } base_{menor}}) $$ 
+El volumen de nuestra pala de una turbina eólica completa y simplificada es:
+$$ volumen \text{ } frustum_i = \dfrac{L_i}{3} \cdot (area \text{ } bases \text{ } mayores_i + area \text{ } bases \text{ } menores_i + \sqrt{area \text{ } bases \text{ } mayores_i \cdot area \text{ } bases \text{ } menores_i}) $$ 
 $$ volumen \text{ } frustum_{total} = \sum_{i}^{N}volumen \text{ } frustum_i  $$
+
+$$ area \text{ } base_{punta} = ancho \text{ } punta * J_{right} $$
+$$ area \text{ } base_{buje} = ancho \text{ } buje * J_{left} $$
+$$ volumen \text{ } frustum_{completo} = \dfrac{L}{3} \cdot ( area \text{ } base_{punta} + area \text{ } base_{buje} + \sqrt{area \text{ } base_{punta} \cdot area \text{ } base_{buje}} ) $$
+
 Donde,
-\centering \colorbox{Orange}{ Falta definir}
+\centering $ volumen \text{ } frustum_i $ := tamaño de cada uno de los segmentos del tronco de pirámide de la pala del aerogenerador, $ volumen \text{ } frustum_{total} $ := tamaño absoluto de la pala del aerogenerador, $area \text{ } base_{punta}$ := zona trapezoidal de mayor tamaño usada para el cálculo del volumen del frustum, $area \text{ } base_{punta}$ := zona trapezoidal de menor tamaño usada para el cálculo del volumen del frustum y $ volumen \text{ } frustum_{completo} $ := tamaño integro de la pala del aerogenerador.
 \label{def:volumen_tronco_frustum}
 \end{definicion}
 
+
+Teniendo los cálculos del volumen de la pala del aerogenerador se puede pasar a lo siguiente, estudiar los efectos que producen las especificaciones y simplificaciones que se han realizado para la obtención de energía.
 
 
 \subsection{Estudio del torque sin ángulo de cabeceo}
@@ -344,7 +349,7 @@ Donde,
   
   \begin{definicion}
 El momento de giro o torque se define como:
- $$ torque_0 = f normal_i \times brazo$$
+ $$ torque_0 = f \text{ } normal_i \times brazo$$
 Donde,
 \centering $torque_0$ := Momento de fuerza de giro solo con ángulo de cabeceo.
   \label{def:torque_inicial}
@@ -435,16 +440,13 @@ Esto provoca que algunas de las definiciones anteriores se vean alteradas por el
 
 El resto de fórmulas no varían debido a que no dependen del ángulo $\theta_i$, tienen exactamente la misma definición. Pero en el caso del \textit{torque global} si que cambia, ya que la suma de torques nos aportará un conjunto de valores diferentes y que servirán como estudio. \\\\
 
-
-{\Large TERMINAR DE DEFINIRLO, aunque si se le añade el cos, es como si nada por lo pequeño que es el ángulo}
   \begin{definicion}
   El torque termina siendo un producto algebraico.
  $$ torque_1_{i} = f \text{ } normal_i \cdot brazo_i \cdot \cos{\Delta_{\theta_{i}}}$$
- Donde,
- \centering $\cos{\Delta_{\theta_{i}}}$ := 
  \label{def:torque_algebraico_torsion}
  \end{definicion}
  
+ En la definición \ref{def:torque_algebraico_torsion} se introduce un nuevo término, $ \cos{\Delta_{\theta_{i}}} $ este aunque pueda presentar únicamente una pequeña variación en el valor del torque es imprescindible, ya que no incluirlo haría que no se estuviera realizando correctamente el cálculo. Este coseno representa por así llamarlo el área efectiva donde se está aplicando la $ f \text{ } normal $, es decir, el área de la totalidad del segmento de la pala que se vería de esta si se observara con una vista de pájaro como en la Figura \ref{fig:exp_brazo}. \\
 
 \begin{definicion}
  La suma de los torques con un giro inicial se conoce como torque global.
@@ -478,7 +480,7 @@ Donde,
 \subsubsection{Cálculo de la potencia del sistema}
 \label{section:pot_sistema}
  
- Una vez se tiene todo lo necesario para el cálculo del torque, se puede pasar al siguiente escalón que sería la potencia. Esta es una unidad de medida que permitirá conocer si el estudio que se está realizando está siendo fructífero, cuanta mayor cantidad de energía se genere, mejor, aunque existe un límite directamente relacionado con las limitaciones técnicas y físicas que presentan las turbinas eólicas.
+ Una vez se tiene todo lo necesario para el cálculo del torque, se puede pasar al siguiente escalón que sería la potencia. Esta es una unidad de medida que permitirá conocer si el estudio que se está realizando está siendo fructífero, cuanta mayor cantidad de energía se genere, mejor, aunque existe un límite directamente relacionado con las limitaciones técnicas y físicas que presentan las turbinas eólicas. \\
  
   \begin{definicion}
  La potencia del sistema con un ángulo de caebceo se define como:
