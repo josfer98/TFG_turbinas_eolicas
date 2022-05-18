@@ -241,7 +241,10 @@ Con todo lo necesario para el cálculo del volumen de la pala del aerogenerador 
 
 \begin{definicion}
 El volumen de nuestra pala de una turbina eólica completa y simplificada es:
-$$ volumen \text{ } frustum_i = \dfrac{L_i}{3} \cdot (area \text{ } bases \text{ } mayores_i + area \text{ } bases \text{ } menores_i + \sqrt{area \text{ } bases \text{ } mayores_i \cdot area \text{ } bases \text{ } menores_i}) $$ 
+    \begin{align*}
+        volumen \text{ } frustum_i = & \dfrac{L_i}{3} \cdot (area \text{ } bases \text{ } mayores_i + area \text{ } bases \text{ } menores_i + \\
+        & \sqrt{area \text{ } bases \text{ } mayores_i \cdot area \text{ } bases \text{ } menores_i})
+    \end{align*}
 $$ volumen \text{ } frustum_{total} = \sum_{i}^{N}volumen \text{ } frustum_i  $$
 
 $$ area \text{ } base_{punta} = ancho \text{ } punta * J_{right} $$
@@ -268,10 +271,6 @@ Pero, al tomar una pala real, la cual está más redondeada por la parte superio
 Este efecto produce un gradiente de presión y por ello una fuerza de sustentación. Todo ello por la no simetría de las palas del aerogenerador. \\
 
 Debido a este fenómeno, se produce una situación de estudio poco favorable. Es por esto y otros motivos por lo cual se trabaja con una pala simplificada que ayuda al trabajo y posteriores cálculos y por lo que los siguientes apartados son aquellos con mayor peso técnico y explicativo. \\
-%Minuto 30 de la parte 1
-
-% \textcolor{red}{Va a haber giro porque la pala por la parte de arriba está mas redondeada por la parte de arriba que por la de abajo, entonces por Bernouilli tienes mas recorrido por arriba  que por abajo, lo que obliga que la velocidad por arriba sea mayor por tanto la presión sea menor, haciendo que tengamos un gradiente de presión y por ello una fuerza de sustentación. Simplemente porque la pala no es simétrica. Esta no es la situación mas favorable, la más favorable es la de la siguiente sección. \\\\
-% {\Large DEFINIR CON PALABRAS DECENTES, ES LITERALMENTE LA TRANSCRIPCIÓN QUE DIJO}}
 
 
 
@@ -361,7 +360,7 @@ Donde,
  
   \begin{definicion}
   El torque termina siendo un producto algebraico.
- $$ torque_0_{i} = f \text{ } normal_i \cdot brazo_i$$
+ $$ torque_{0_i} = f \text{ } normal_i \cdot brazo_i$$
  \label{def:torque_algebraico_inicial}
  \end{definicion}
  
@@ -442,7 +441,7 @@ El resto de fórmulas no varían debido a que no dependen del ángulo $\theta_i$
 
   \begin{definicion}
   El torque termina siendo un producto algebraico.
- $$ torque_1_{i} = f \text{ } normal_i \cdot brazo_i \cdot \cos{\Delta_{\theta_{i}}}$$
+ $$ torque_{1_i} = f \text{ } normal_i \cdot brazo_i \cdot \cos{\Delta_{\theta_{i}}}$$
  \label{def:torque_algebraico_torsion}
  \end{definicion}
  
@@ -450,7 +449,7 @@ El resto de fórmulas no varían debido a que no dependen del ángulo $\theta_i$
 
 \begin{definicion}
  La suma de los torques con un giro inicial se conoce como torque global.
- $$ torque \text{ } global_1 \text{ } = \sum_{i=1}^{N} torque_1_{i} $$
+ $$ torque \text{ } global_1 \text{ } = \sum_{i=1}^{N} torque_{1_i} $$
 Donde,
 \centering $torque \text{ } global_1$ := Suma de torque de los N segmentos.
  \label{def:torque_global_1}
@@ -509,6 +508,39 @@ Las unidades que se buscan serían, la potencia en $W$ ($Watts$) o $\dfrac{J}{s}
  
 \subsubsection{EXPLICACIÓN DE LA VELOCIDAD ANGULAR}
 
+Reunión 17-05
+Para calcular la v angular se puede recurrir a la cinemática o en función del desplazamiento angular del ángulo que gira en función del tiempo o en función de la aceleración angular.
+
+Si lo hacemos en función de la aceleración angular, obtenemos después la velocidad angular y lo multiplicamos por el torque para obtener potencia.
+
+El sistema acelera para alcanzar una cierta velocidad, como un vehículo. Después de esto no se continua pisando el acelerador. En caso de que no hubiera rozamiento soltaríamos ese acelerador y la velocidad del vehículo sería constante.
+
+Mi vehículo es el rotor aerodinámico, lo tenemos acelerar desde la velocidad de parada hasta la velocidad de giro y una vez se ha alcanzado la velocidad de giro, esa es con la que me quedo y no me tengo que preocupar más.
+
+Yo giro a una velocidad determinada, imaginemos 5 vueltas por minuto, mi rotor dinámico va conectado a un eje y ese eje solo transmite un movimiento de rotación, pero yo lo que debo obtener es corriente eléctrica. Así que conecto el eje a un generador eléctrico. Este se pone a girar, el rotor tiene un imán o bobina y la carcasa tiene imanes y bobinas también y por variación y variación de flujo de campo magnético se genera un potencial y una corriente y con eso se genera potencia eléctrica.
+
+Hay problemas con las frecuencias, porque en Europa son 50hz y en eeuu a 60hz, esto significa que yo tendría que girar 50 veces por segundo, cosa que es imposible, mi rotor se rompería. Dentro del rotor tengo un multiplicador que actúa como caja de cambios de un vehículo. Porque las vueltas que gira un motor no son las mismas que gira una rueda, no tienen transmisión directa. En un vehículo desmultiplicas y en un rotor de un aerogenerador multiplicas, la velocidad renta del rotor la tenemos que multiplicar para obtener velocidad rápida en el generador. 
+
+
+Ahora si cambio la velocidad del rotor tengo que cambiar los engranajes, porque cambio la velocidad y cambio la frecuencia, pero esto no nos interesa, nosotros queremos que la velocidad de giro sea lo mas estable posible. Para que una vez he fijado en la caja de engranajes una relación de multiplicación se mantenga la proporción y así el generador eléctrico siempre gire a 50 revoluciones por segundo y el rotor aerodinámico a 5 revoluciones por minuto.
+
+En resumen: Se va a girar a una velocidad del viento determinado, y si esta cambia también cambiará la velocidad de giro del rotor aerodinámico y entonces en la caja de engranajes tenemos como si fueran los piñones de la rueda de una bici, vamos cambiando el plato único que se tiene en el rotor para con los piñones para obtener diferentes velocidades de giro.
+
+El caso es que tenemos que obtener una velocidad de giro que no va a ser constante pero si un valor determinado, porque si nos varía la velocidad del viento, cambiará también la del giro. Entonces, ¿qué velocidad de giro empleo? Una razonable, un aerogenerador puede dar una vuelta cada 5 segundos como muy rápido, 0.2 vueltas por segundo.
+
+Entonces si funcionamos a 50Hz, la relación de multiplicación sería 50/0.2 = 250. Esta relación va cambiando dependiendo de la velocidad de giro.
+
+Aceleramos para llegar a una velocidad de giro, con el viento, esa zona es un transitorio. Tengo que establecer una relación entre velocidad del viento y la velocidad angular, para eso tengo que transformar la energía cinética de traslación en $1/2 M * U^2$, aprovechamos una fracción de la energía cinética del viento, siendo este mi Cp, coeficiente de potencia. 
+
+El viento me viene, pero qué masa de viento?? Tengo que calcular un equivalente que pasa por un disco cuyo diámetro es la del rotor y el espesor sería el del buje en la zona mas ancha de la pala. 34 * 2 + anchura buje, unos 70m de diámetro. ¿Qué grosor de disco tengo? Aproximadamente 2-3m. Hago una estimación de 70m de diámetro y 2.5 de espesor, entonces $pi/4 * diametro^2 * espesor$ me da el volumen del disco y multiplicado por la densidad del aire me da la masa que circula, esto es M en la anterior fórmula. Esto me da la energía cinética que tiene el viento a la llegada al disco.
+
+Si esto se multiplica por el Cp, obtengo la energía cinética que ha extraído del viento el rotor aerodinámico. Puedo usar un Cp de 0.4, es el que debería tener un rotor de buena calidad. 
+
+Ahora que tengo la energía cinética la tengo que convertir a energía cinética de rotación que sería con 1/2 * I * $omega^2$
+
+Teniendo la energía cinética aprovechada que es 1/2 * Cp * M * $u^2$, lo igualamos a la energía cinética de rotación.
+
+Nos queda omega = sqrt (M * Cp)/I * $u^2$ o algo así, comprobarlo. Tengo todo constante menos la u, saco la constante y la declaro como tal. Si me cambia la velocidad del viento, me cambia omega. No tenemos fabricante podemos elegir 0.4, pero lo cambiamos en base a lo que se quiera hacer o no.
  
  
  
