@@ -68,36 +68,36 @@
 
  contador0 = 1;
  contador1 = 1;
-    figure
-        for DELTA_THETA_SETUP = 0.01:0.02:0.06
-
-            THETA_1 = 1;
-
-            [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA_SETUP);
-
-            [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
-                
-            [v_frustum_i, v_frustum_total] = volumen_pala(L, i, N, L_i, c_right_i, c_left_i);
-                
-            [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
-            
-            F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
-             
-            [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
-            
-            [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
-            
-            [potencia_0, potencia_1] = potencia_y_eficiencia(torque_0, I, torque_1, TIEMPO_ANALISIS, torque_global_0, torque_global_1);
-            
-            [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
-        end
-    
-         hold off;
-         legend show;
-         legend('Location','best')
-         
- contador0 = 1;
- contador1 = 1;
+%    figure
+%         for DELTA_THETA_SETUP = 0.01:0.02:0.06
+% 
+%             THETA_1 = 1;
+% 
+%             [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA_SETUP);
+% 
+%             [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
+%                 
+%             [v_frustum_i, v_frustum_total] = volumen_pala(L, i, N, L_i, c_right_i, c_left_i);
+%                 
+%             [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
+%             
+%             F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
+%              
+%             [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
+%             
+%             [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
+%             
+%             [potencia_0, potencia_1] = potencia_y_eficiencia(torque_0, I, torque_1, TIEMPO_ANALISIS, torque_global_0, torque_global_1);
+%             
+%             [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
+%         end
+%     
+%          hold off;
+%          legend show;
+%          legend('Location','best')
+%          
+%  contador0 = 1;
+%  contador1 = 1;
 
 %% Funciones
 
@@ -272,7 +272,6 @@
         % Velocidad angular
             Omega_0 = TIEMPO_ANALISIS .* alpha_ang_0;
             Omega_1 = TIEMPO_ANALISIS .* alpha_ang_1;
-        % Recordar calcular la otra forma!!!!!!!!!!!!!!!!!!!!!!!
         % Potencia de la pala
             potencia_0 = torque_global_0 .* Omega_0;
             potencia_1 = torque_global_1 .* Omega_1;
