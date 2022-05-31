@@ -251,6 +251,7 @@ $$ area \text{ } base_{punta} = ancho \text{ } punta * J_{right} $$
 $$ area \text{ } base_{buje} = ancho \text{ } buje * J_{left} $$
 $$ volumen \text{ } frustum_{completo} = \dfrac{L}{3} \cdot ( area \text{ } base_{punta} + area \text{ } base_{buje} + \sqrt{area \text{ } base_{punta} \cdot area \text{ } base_{buje}} ) $$
 
+
 Donde,
 \centering $ volumen \text{ } frustum_i $ := tamaño de cada uno de los segmentos del tronco de pirámide de la pala del aerogenerador, $ volumen \text{ } frustum_{total} $ := tamaño absoluto de la pala del aerogenerador, $area \text{ } base_{punta}$ := zona trapezoidal de mayor tamaño usada para el cálculo del volumen del frustum, $area \text{ } base_{punta}$ := zona trapezoidal de menor tamaño usada para el cálculo del volumen del frustum y $ volumen \text{ } frustum_{completo} $ := tamaño integro de la pala del aerogenerador.
 \label{def:volumen_tronco_frustum}
@@ -482,7 +483,7 @@ Donde,
  Una vez se tiene todo lo necesario para el cálculo del torque, se puede pasar al siguiente escalón que sería la potencia. Esta es una unidad de medida que permitirá conocer si el estudio que se está realizando está siendo fructífero, cuanta mayor cantidad de energía se genere, mejor, aunque existe un límite directamente relacionado con las limitaciones técnicas y físicas que presentan las turbinas eólicas. \\
  
   \begin{definicion}
- La potencia del sistema con un ángulo de caebceo se define como:
+ La potencia del sistema con un ángulo de cabeceo se define como:
  $$ potencia \text{ } global_0 = torque \text{ } global_0 \cdot \Omega $$ 
  
  Donde,
@@ -505,8 +506,42 @@ Las unidades que se buscan serían, la potencia en $W$ ($Watts$) o $\dfrac{J}{s}
  
  Como se puede observar, se calculó dos veces la potencia, una por cada apartado estudiado. La definición \ref{def:potencia_giro_inicial} corresponde a la sección \ref{section:torque_giro_inicial} que se referencia con un $0$ ya que es la situación inicial y más básica. Mientras que la definición \ref{def:potencia_giro_segmentos} corresponde a la sección \ref{section:torque_giro_torsion} que se ha referenciado con un $1$ ya que nace de la primera.
  
+\subsection{Momento de inercia general de los segmentos de la pala}
+
+Para poder llegar a la $\Omega$ que se usa en la Sección \ref{section:pot_sistema} es necesario pasar por dos desarrollos siendo este el primero y relacionado con el momento de inercia.\\
+
+Pero, ¿qué es el momento de inercia? Según el Libro de Eugen Goldstein \cite[.~269]{goldstein1987mecanica}, el $momento \text{ } de \text{ } inercia$ respecto a un eje se define diciendo que es la suma, extendida a todas las partículas del cuerpo, del producto de la masa de cada partícula por el cuadrado de su distancia al eje.\\
+
+
+La geometría del cuerpo libre que está realizando la rotación es crucial, es por ello que dependiendo de esta, el cálculo del momento de inercia variará. En el libro Machinery’s
+Handbook, se pueden observar algunos de los momentos de inercia del área de algunos objetos, en concreto triangulares y otros poligonales, estando dentro de estos últimos el de un trapecio y como se pudo observar anteriormente en concreto en la Figura \ref{fig:pala_dividida} cuando se divide la pala en segmentos, cada uno de estos también pasa a ser un trapecio.\\
+
+El hecho de que cada segmento sea a su vez un trapecio es lo que hace que se escoja la fórmula del momento de inercia del área de un trapecio presentada en este libro \cite[p.~242]{oberg2012machinery}. \\
+
+Pero antes de pasar a trabajar con esta fórmula y su desarrollo, se debe entender la física detrás del problema que se tiene con la pala. El momento de inercia generalmente se calcula mediante el conocimiento de la posición del centro de masa de la figura que se está estudiando, suele usarse para figuras complejas que son conformadas por otras mas simples, pero en nuestro caso solo se trata de una figura simple. Pero estas figuras que giran en base a un eje, como menciona la definición del momento de inercia, no siempre lo hacen con respecto al eje perpendicular que atraviesa el centro de masa, en ocasiones el eje de giro se encuentra fuera de la figura, es donde entra el $Teorema \text{ } de \text{ } Huygens-Steiner$ o $Teorema \text{ } del \text{ } eje \text{ } paralelo$ \textcolor{red}{no encuentro una buena referencia para este teorema, supuestamente viene en Introduction to Theoretical Physics, de 1928, pero no encuentro este libro} \\
+
+Este teorema establece que se puede calcular el momento de inercia de un cuerpo rígido en cualquier eje paralelo al que pasa atravesando la figura por el centro de masas. Para esto, es necesario conocer la distancia perpendicular, que se definió anteriormente como $brazo$, entre los ejes paralelos y la masa del cuerpo, aunque en nuestro caso será la masa de cada segmento. \\
+
+
+ \begin{Teorema}
+El teorema de Huygens-Steiner establece lo siguiente:
+
+$$I = I_{cm} + m \cdot D^2$$
+
+ Donde, $I$ := momento de inercia general, $I_{cm}$ := momento de inercia en el centro de masas de un cuerpo rígido, $m$ := masa del cuerpo rígido y $D$ := distancia perpendicular entre los ejes paralelos.
+ \centering 
+ \label{theo:Huygens-Steiner}
+ \end{Teorema}
+
+
+
+
+
+
  
 \subsubsection{EXPLICACIÓN DE LA VELOCIDAD ANGULAR}
+
+\textcolor{red}{apartado 3.2 del libro de wind y cosas que descargué}
 
 Reunión 17-05
 Para calcular la v angular se puede recurrir a la cinemática o en función del desplazamiento angular del ángulo que gira en función del tiempo o en función de la aceleración angular.
@@ -519,7 +554,7 @@ Mi vehículo es el rotor aerodinámico, lo tenemos acelerar desde la velocidad d
 
 Yo giro a una velocidad determinada, imaginemos 5 vueltas por minuto, mi rotor dinámico va conectado a un eje y ese eje solo transmite un movimiento de rotación, pero yo lo que debo obtener es corriente eléctrica. Así que conecto el eje a un generador eléctrico. Este se pone a girar, el rotor tiene un imán o bobina y la carcasa tiene imanes y bobinas también y por variación y variación de flujo de campo magnético se genera un potencial y una corriente y con eso se genera potencia eléctrica.
 
-Hay problemas con las frecuencias, porque en Europa son 50hz y en eeuu a 60hz, esto significa que yo tendría que girar 50 veces por segundo, cosa que es imposible, mi rotor se rompería. Dentro del rotor tengo un multiplicador que actúa como caja de cambios de un vehículo. Porque las vueltas que gira un motor no son las mismas que gira una rueda, no tienen transmisión directa. En un vehículo desmultiplicas y en un rotor de un aerogenerador multiplicas, la velocidad renta del rotor la tenemos que multiplicar para obtener velocidad rápida en el generador. 
+Hay problemas con las frecuencias, porque en Europa son 50hz y en eeuu a 60hz, esto significa que yo tendría que girar 50 veces por segundo, cosa que es imposible, mi rotor se rompería. Dentro del rotor tengo un multiplicador que actúa como caja de cambios de un vehículo. Porque las vueltas que gira un motor no son las mismas que gira una rueda, no tienen transmisión directa. En un vehículo desmultiplicas y en un rotor de un aerogenerador multiplicas, la velocidad lenta del rotor la tenemos que multiplicar para obtener velocidad rápida en el generador. 
 
 
 Ahora si cambio la velocidad del rotor tengo que cambiar los engranajes, porque cambio la velocidad y cambio la frecuencia, pero esto no nos interesa, nosotros queremos que la velocidad de giro sea lo mas estable posible. Para que una vez he fijado en la caja de engranajes una relación de multiplicación se mantenga la proporción y así el generador eléctrico siempre gire a 50 revoluciones por segundo y el rotor aerodinámico a 5 revoluciones por minuto.
@@ -540,7 +575,7 @@ Ahora que tengo la energía cinética la tengo que convertir a energía cinétic
 
 Teniendo la energía cinética aprovechada que es 1/2 * Cp * M * $u^2$, lo igualamos a la energía cinética de rotación.
 
-Nos queda omega = sqrt (M * Cp)/I * $u^2$ o algo así, comprobarlo. Tengo todo constante menos la u, saco la constante y la declaro como tal. Si me cambia la velocidad del viento, me cambia omega. No tenemos fabricante podemos elegir 0.4, pero lo cambiamos en base a lo que se quiera hacer o no.
+Nos queda omega = sqrt (M * Cp)/I * $u^2$ o algo así, comprobarlo. Tengo todo constante menos la u, saco la constante y la declaro como tal. Si me cambia la velocidad del viento, me cambia omega. No tenemos fabricante podemos elegir 0.4, pero lo cambiamos en base a lo que se quiera hacer o no. 
  
  
  
