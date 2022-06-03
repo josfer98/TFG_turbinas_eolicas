@@ -19,8 +19,6 @@
         U_VIENTO = 1:0.5:20;
         % Longitud del vector viento
            M = length(U_VIENTO);
-    % Tiempo de análisis del sistema
-        TIEMPO_ANALISIS = 60; %segundos
     % Densidad del material de la pala
         CFRP = 1410; %kg/m^3
         GFRP = 1500; %kg/m^3
@@ -75,40 +73,40 @@
      legend show;
      legend('Location','best')
 
- % Contadores para la leyenda
-    contador0 = 1;
-    contador1 = 1;
- figure('Name','Variación ángulo de torsión 0 - 0.6')
-    for DELTA_THETA_SETUP = 0.01:0.02:0.06
-
-        THETA_1 = 1;
-
-        [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA_SETUP);
-
-        [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
-            
-        [v_frustum_i, v_frustum_total] = volumen_pala(ANCHO_BUJE, ANCHO_PUNTA, L, i, N, L_i, c_right_i, c_left_i);
-            
-        [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
-        
-        F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
-         
-        [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
-        
-        [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
-
-        omega = velocidad_angular(L, DIAMETRO_GONDOLA, ANCHO_BUJE, RHO, U_VIENTO, CP, I);
-        
-        [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1);
-        
-        [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
-        title('Pot en base a U VIENTO, Variación ángulo de torsión 0 - 0.6');
-    end
-
- % Comandos de la leyenda de la segunda figura
-    hold off;
-    legend show;
-    legend('Location','best')
+%  % Contadores para la leyenda
+%     contador0 = 1;
+%     contador1 = 1;
+%  figure('Name','Variación ángulo de torsión 0 - 0.6')
+%     for DELTA_THETA_SETUP = 0.01:0.02:0.06
+% 
+%         THETA_1 = 1;
+% 
+%         [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA_SETUP);
+% 
+%         [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
+%             
+%         [v_frustum_i, v_frustum_total] = volumen_pala(ANCHO_BUJE, ANCHO_PUNTA, L, i, N, L_i, c_right_i, c_left_i);
+%             
+%         [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
+%         
+%         F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
+%          
+%         [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
+%         
+%         [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
+% 
+%         omega = velocidad_angular(L, DIAMETRO_GONDOLA, ANCHO_BUJE, RHO, U_VIENTO, CP, I);
+%         
+%         [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1);
+%         
+%         [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
+%         title('Pot en base a U VIENTO, Variación ángulo de torsión 0 - 0.6');
+%     end
+% 
+%  % Comandos de la leyenda de la segunda figura
+%     hold off;
+%     legend show;
+%     legend('Location','best')
 
 
  % Contadores para la leyenda
@@ -280,8 +278,8 @@
         F_viento_i = zeros(M,N);
         for j = 1:M
             for j2 = 1:N
-                F_viento_i(j,j2) = (1/2) .* RHO .* s_i(j2) .* U_VIENTO(j);
-            end 
+                F_viento_i(j,j2) = (1/2) .* RHO .* ((pi/4)*150^2) .* (U_VIENTO(j)^2) * 0.3;
+            end
         end
     end
     

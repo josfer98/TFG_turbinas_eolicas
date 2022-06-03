@@ -1,4 +1,4 @@
-% José Antonio Fernández López
+%% José Antonio Fernández López
 % TFG - Generación de energía con una turbina eólica flotante
 %% Variables Globales
 
@@ -19,8 +19,6 @@
         U_VIENTO = 1:0.5:20;
         % Longitud del vector viento
            M = length(U_VIENTO);
-    % Tiempo de análisis del sistema
-        TIEMPO_ANALISIS = 60; %segundos
     % Densidad del material de la pala
         CFRP = 1410; %kg/m^3
         GFRP = 1500; %kg/m^3
@@ -32,79 +30,124 @@
         ANCHO_BUJE = 2; %m
         ANCHO_PUNTA = 0.250; %m
     % Coeficiente de potencia
-        CP = 0.4; %Unidades?????
+        CP = 0.4; %Sin unidades
 
 %% Main
 
- contador0 = 1;
- contador1 = 1;
+ % Contadores para la leyenda
+     contador0 = 1;
+     contador1 = 1;
 
-     figure
-         for THETA_1_SETUP = 0:0.4:3.2
+%  figure('Name','Variación ángulo cabeceo 0 - 3.2')
+%      for THETA_1_SETUP = 0:0.4:3.2
+% 
+%         DELTA_THETA = 0.04;
+% 
+%         [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1_SETUP, DELTA_THETA);
+% 
+%         [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
+%             
+%         [v_frustum_i, v_frustum_total] = volumen_pala(ANCHO_BUJE, ANCHO_PUNTA, L, i, N, L_i, c_right_i, c_left_i);
+%             
+%         [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
+%         
+%         F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
+%          
+%         [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
+%         
+%         [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
+% 
+%         omega = velocidad_angular(L, DIAMETRO_GONDOLA, ANCHO_BUJE, RHO, U_VIENTO, CP, I);
+%         
+%         [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1);
+% 
+%         eta_1(contador0,:) = eta;
+%         
+%         
+%         [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
+%         title('Pot en base a U VIENTO, Variación ángulo cabeceo 0 - 3.2');
+% 
+%      end
+%  % Comandos de la leyenda de la primera figura
+%      hold off;
+%      legend show;
+%      legend('Location','best')
 
-            DELTA_THETA = 0.04;
+%  % Contadores para la leyenda
+%     contador0 = 1;
+%     contador1 = 1;
+%  figure('Name','Variación ángulo de torsión 0 - 0.6')
+%     for DELTA_THETA_SETUP = 0.01:0.02:0.06
+% 
+%         THETA_1 = 1;
+% 
+%         [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA_SETUP);
+% 
+%         [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
+%             
+%         [v_frustum_i, v_frustum_total] = volumen_pala(ANCHO_BUJE, ANCHO_PUNTA, L, i, N, L_i, c_right_i, c_left_i);
+%             
+%         [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
+%         
+%         F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
+%          
+%         [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
+%         
+%         [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
+% 
+%         omega = velocidad_angular(L, DIAMETRO_GONDOLA, ANCHO_BUJE, RHO, U_VIENTO, CP, I);
+%         
+%         [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1);
+%         
+%         [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
+%         title('Pot en base a U VIENTO, Variación ángulo de torsión 0 - 0.6');
+%     end
+% 
+%  % Comandos de la leyenda de la segunda figura
+%     hold off;
+%     legend show;
+%     legend('Location','best')
 
-            [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1_SETUP, DELTA_THETA);
 
-            [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
-                
-            [v_frustum_i, v_frustum_total] = volumen_pala(L, i, N, L_i, c_right_i, c_left_i);
-                
-            [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
+ % Contadores para la leyenda
+    contador0 = 1;
+    contador1 = 1;
+ % Cambiamos la longitud de la pala para ver como afecta
+    L = 37.5;
+    L_i = L/N;
+
+
+ figure('Name','Hacemos que la pala mida la mitad L=37.5')
+    for THETA_1_SETUP = 0:0.4:3.2
+
+        DELTA_THETA = 0.04;
+
+        [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1_SETUP, DELTA_THETA);
+
+        [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
             
-            F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
-             
-            [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
+        [v_frustum_i, v_frustum_total] = volumen_pala(ANCHO_BUJE, ANCHO_PUNTA, L, i, N, L_i, c_right_i, c_left_i);
             
-            [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
-
-            omega = velocidad_angular(L, DIAMETRO_GONDOLA, ANCHO_BUJE, RHO, U_VIENTO, CP, I);
-            
-            [potencia_0, potencia_1] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1);
-            
-            [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
-            
-
-         end
-         hold off;
-         legend show;
-         legend('Location','best')
-
-
- contador0 = 1;
- contador1 = 1;
-    figure
-        for DELTA_THETA_SETUP = 0.01:0.02:0.06
-
-            THETA_1 = 1;
-
-            [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA_SETUP);
-
-            [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
-                
-            [v_frustum_i, v_frustum_total] = volumen_pala(L, i, N, L_i, c_right_i, c_left_i);
-                
-            [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
-            
-            F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
-             
-            [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
-            
-            [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
-
-            omega = velocidad_angular(L, DIAMETRO_GONDOLA, ANCHO_BUJE, RHO, U_VIENTO, CP, I);
-            
-            [potencia_0, potencia_1] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1);
-            
-            [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
-        end
-    
-         hold off;
-         legend show;
-         legend('Location','best')
+        [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
+        
+        F_viento_i = fuerza_viento(N, M, RHO, s_i, U_VIENTO);
          
- contador0 = 1;
- contador1 = 1;
+        [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
+        
+        [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
+
+        omega = velocidad_angular(L, DIAMETRO_GONDOLA, ANCHO_BUJE, RHO, U_VIENTO, CP, I);
+        
+        [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1);
+        
+        [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
+        title('Pot en base a U VIENTO, Hacemos que la pala mida la mitad L=37.5');
+    end
+
+ % Comandos de la leyenda de la segunda figura
+    hold off;
+    legend show;
+    legend('Location','best')
 
  
 
@@ -162,7 +205,7 @@
         brazo_i = (((2*i) -1) .* r_brazo) / (2*N); %m
     end
     
-    function [v_frustum_i, v_frustum_total] = volumen_pala(L, i, N, L_i, c_right_i, c_left_i)
+    function [v_frustum_i, v_frustum_total] = volumen_pala(ANCHO_BUJE, ANCHO_PUNTA, L, i, N, L_i, c_right_i, c_left_i)
     %% Cálculo volumen pala
     
         % Cálculo del volumen del frustum piramidal irregular
@@ -188,8 +231,6 @@
         % papiro de Moscú
             v_frustum_i = (L_i/3) .* (area_base_mayor + area_base_menor + sqrt(area_base_menor .* area_base_mayor));
             v_frustum_total = sum(v_frustum_i); % Kg * m^3
-        % V_frustum = (L/3) * (6 + 0.15 + sqrt(6*0.15)) 
-        %Esto es del volumen completo, pero da 80.45 y lo de arriba 80.73, tengo que revisarlo.
     end
     
     function [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i)
@@ -207,6 +248,9 @@
         
         % Masa de cada segmento de la pala
             S_pala = sum(s_i); % Área de la pala (m)
+
+            % Supuestamente del volumen total de la pala, solo está relleno
+            % cerca de un 20%, el resto es aire.
             masa_pala = DENS_PALA(1) * (v_frustum_total*0.2); %Kg
             m_i = (s_i/S_pala) * masa_pala; %Kg de cada segmento
             
@@ -234,8 +278,8 @@
         F_viento_i = zeros(M,N);
         for j = 1:M
             for j2 = 1:N
-                F_viento_i(j,j2) = (1/2) .* RHO .* s_i(j2) .* U_VIENTO(j);
-            end 
+                F_viento_i(j,j2) = (1/2) .* RHO .* ((pi/4)*75^2) .* U_VIENTO(j)^2;
+            end
         end
     end
     
@@ -299,7 +343,7 @@
         omega = sqrt((CP .* M_aire)./I) .* U_VIENTO.';
 end
     
-    function [potencia_0, potencia_1] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1)
+function [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1)
     %% Desarrollo potencia y eficiencia
         % Potencia de la pala
             potencia_0 = torque_global_0 .* omega;
@@ -310,7 +354,7 @@ end
         
         % Se calcula el % de mejora o empeoramiento mediante la torsión de los
         % segmentos de la pala
-            eta = potencia_1 ./ potencia_0;
+            eta = potencia_1.' ./ potencia_0.';
     end
     
     function  [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1)
@@ -329,7 +373,6 @@ end
     
     plot(x, y0, 'DisplayName', leyenda0); hold on;
     plot(x, y1, 'DisplayName', leyenda1);
-    title('Potencia obtenida en base a la velocidad del viento y el tamaño de la pala');
     xlabel('Velocidad del viento (m/s)');
     ylabel('Potencia (W)');
 
