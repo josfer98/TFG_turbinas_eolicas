@@ -184,7 +184,16 @@ Donde, $cateto \text{ } buje$ := Medida de buje o $J_{left}$ reducida para su ut
 
 Cuando ya se ha definido la geometría de dos dimensiones de la pala del aerogenerador se puede añadir una nueva dimensión para que el análisis sea aún mas completo. Si se limitara a las dos dimensiones, las simplificación sería tal, que se perdería criterio a la hora de analizar los datos obtenidos.
 
-\colorbox{Orange}{ \Huge Aquí va una figura, esta de 3d de la pala} \\\\\\\\
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/pala 3d segmentada enorme.png}
+    \caption{Representación gráfica de la pala segmentada en 3 dimensiones}
+    \label{fig:analisis_volumen}
+    \textit{Fuente: Elaboración propia}
+\end{figure}
+
+
 
 Mediante la observación de la figura \ref{fig:analisis_volumen} se puede averiguar lo siguiente: \\\\\\\\
 
@@ -372,13 +381,15 @@ Donde,
 \label{def:torque_global}
 \end{definicion}
  
- \\\\Ahora se introduce otro concepto, se trata de la \textit{fuerza del viento}. Gracias a este parámetro, se podrá conocer la fuerza normal que se está produciendo en toda la pala mediante la definición \ref{def:fuerza_normal}.
+ \\\\Ahora se introduce otro concepto, se trata de la \textit{fuerza del viento}. Gracias a este parámetro, se podrá conocer la fuerza normal que se está produciendo en todo el rotor mediante la definición \ref{def:fuerza_normal}.
  
  
  \begin{definicion}
- La fuerza del viento para la pala viene dada por:
+ La fuerza del viento para el rotor completo:
  
- $$ F \text{ } viento_i = \dfrac{1}{2} \text{ } \rho \cdot S_i \cdot u^2$$
+ $$ F \text{ } viento_i = \dfrac{1}{2} \text{ } \rho \cdot area \text{ } rotor \cdot u^2 \cdot coeficiente \text{ } sustentación$$
+ $$ area \text{ } rotor = \dfrac{\pi}{4} \cdot diametro \text{ } rotor $$
+ $$ diametro \text{ } rotor = 2 \cdot L^2 $$
 Donde,
  \centering  $\rho = 1.225 \text{ } \dfrac{Kg}{m^3}$ y $u$ := velocidad del viento.
  \label{def:fuerza_viento_inicial}
@@ -513,14 +524,14 @@ Para poder llegar a la $\Omega$ que se usa en la Sección \ref{section:pot_siste
 Pero, ¿qué es el momento de inercia? Según el Libro de Eugen Goldstein \cite[.~269]{goldstein1987mecanica}, el $momento \text{ } de \text{ } inercia$ respecto a un eje se define diciendo que es la suma, extendida a todas las partículas del cuerpo, del producto de la masa de cada partícula por el cuadrado de su distancia al eje.\\
 
 
-La geometría del cuerpo libre que está realizando la rotación es crucial, es por ello que dependiendo de esta, el cálculo del momento de inercia variará. En el libro Machinery’s
-Handbook, se pueden observar algunos de los momentos de inercia del área de algunos objetos, en concreto triangulares y otros poligonales, estando dentro de estos últimos el de un trapecio y como se pudo observar anteriormente en concreto en la Figura \ref{fig:pala_dividida} cuando se divide la pala en segmentos, cada uno de estos también pasa a ser un trapecio.\\
+La geometría del cuerpo libre que está realizando la rotación es crucial, es por ello que dependiendo de esta, el cálculo del momento de inercia variará. En el libro \textbf{Machinery’s
+Handbook}, se pueden observar algunos de los momentos de inercia del área de algunos objetos, en concreto triangulares y otros poligonales, estando dentro de estos últimos el de un trapecio y como se pudo observar anteriormente en concreto en la Figura \ref{fig:pala_dividida} cuando se divide la pala en segmentos, cada uno de estos también pasa a ser un trapecio.\\
 
 El hecho de que cada segmento sea a su vez un trapecio es lo que hace que se escoja la fórmula del momento de inercia del área de un trapecio presentada en este libro \cite[p.~242]{oberg2012machinery}. \\
 
 Pero antes de pasar a trabajar con esta fórmula y su desarrollo, se debe entender la física detrás del problema que se tiene con la pala. El momento de inercia generalmente se calcula mediante el conocimiento de la posición del centro de masa de la figura que se está estudiando, suele usarse para figuras complejas que son conformadas por otras mas simples, pero en nuestro caso solo se trata de una figura simple. Pero estas figuras que giran en base a un eje, como menciona la definición del momento de inercia, no siempre lo hacen con respecto al eje perpendicular que atraviesa el centro de masa, en ocasiones el eje de giro se encuentra fuera de la figura, es donde entra el $Teorema \text{ } de \text{ } Huygens-Steiner$ o $Teorema \text{ } del \text{ } eje \text{ } paralelo$ \textcolor{red}{no encuentro una buena referencia para este teorema, supuestamente viene en Introduction to Theoretical Physics, de 1928, pero no encuentro este libro} \\
 
-Este teorema establece que se puede calcular el momento de inercia de un cuerpo rígido en cualquier eje paralelo al que pasa atravesando la figura por el centro de masas. Para esto, es necesario conocer la distancia perpendicular, que se definió anteriormente como $brazo$, entre los ejes paralelos y la masa del cuerpo, aunque en nuestro caso será la masa de cada segmento. \\
+Este teorema establece que se puede calcular el momento de inercia de un cuerpo rígido en cualquier eje paralelo al que pasa atravesando la figura por el centro de masas. Para esto, es necesario conocer la distancia perpendicular entre los ejes paralelos, que se definió anteriormente como $brazo$ y la masa del cuerpo, aunque en nuestro caso será la masa de cada segmento. \\\\\\
 
 
  \begin{Teorema}
@@ -533,55 +544,125 @@ $$I = I_{cm} + m \cdot D^2$$
  \label{theo:Huygens-Steiner}
  \end{Teorema}
 
+Para poder llegar a calcular el $momento \text{ } de \text{ } inercia \text{ } general$ o $I$ primero se debe obtener el $I_{cm}$ pero, aun no se ha definido como obtener este.\\
 
+En este apartado se comenta que en el libro \textbf{Machinery’s Handbook} aparecen el momento de inercia de un área trapezoidal:
 
+ \begin{definicion}
+El momento de inercia viene dado por la siguiente definición:
 
-
-
+ $$ I_{area} = \dfrac{ L_{i}^3 \cdot (c_{right}^2 + 4 c_{right} \cdot c_{left} + c_{left}^2)}{ 36 (c_{right} + c_{left})} $$ 
  
-\subsubsection{EXPLICACIÓN DE LA VELOCIDAD ANGULAR}
+ Donde, $I_{area}$ := momento de inercia de área de una figura de un espesor mínimo para centrar su cálculo en la forma.
+ \centering 
+ \label{def:momento_inercia_area}
+ \end{definicion}
+ 
+ El "problema" de la Definición \ref{def:momento_inercia_area} es que no se presenta en las unidades que presenta de manera general el momento de inercia, para ello se debe multiplicar este por la \textbf{densidad superficial} de la pala del aerogenerador y así obtener $Kg \cdot m^2$ con los que es posible trabajar y enlazar con el Teorema \ref{theo:Huygens-Steiner} \\
+
+En el cálculo de la \textbf{densidad superficial} son necesarios dos términos que aún no se han acuñado en este trabajo, la masa y la superficie de una pala. Es cierto que se ha calculado la superficie de los segmentos en la Definición \ref{def:area_segmentos}, ahora solo queda sumarlos.
+
+ \begin{definicion}
+La superficie de la pala viene definida por la siguiente expresión, teniendo en cuenta definiciones anteriores:
+
+$$ Superficie \text{ } pala = \sum_{i}^{N}s_i  $$
+
+ Donde, $ Superficie \text{ } pala $ := área de la pala del rotor
+ \label{def:superficie_pala}
+ \end{definicion}
+
+Antes de continuar y definir la masa de la pala, se deben conocer los materiales de los que posiblemente esté compuesta, para este trabajo solo se han tenido en cuenta 3 de los más usados.
+
+ \begin{definicion}
+Los rangos de densidades de materiales usadas son los siguientes:
+
+$$ densidad \text{ } pala =  \left\{\begin{matrix}
+CFRP = 1500-2000 \text{ } \dfrac{Kg}{m^3} \cite{MOHAMMED201969}\\\\
+GFRP = 910-1200 \text{ } \dfrac{Kg}{m^3}  \cite{Ephraim2015}\\\\
+GF \text{ } Epoxy = 1159-1186 \text{ } \dfrac{Kg}{m^3} \cite{Tewari2011}
+\end{matrix}\right$$
+
+%$$ CFRP = 1500-2000 \text{ } \dfrac{Kg}{m^3} \cite{MOHAMMED201969} $$ 
+%$$ GFRP = 910-1200 \text{ } \dfrac{Kg}{m^3}  \cite{Ephraim2015}$$
+%$$ GF \text{ } Epoxy = 1159-1186 \text{ } \dfrac{Kg}{m^3} \cite{Tewari2011} $$
+
+ Donde, $ densidad \text{ } pala $ := densidad de los materiales de los que posiblemente esté compuesta la pala, $ CFRP $ := Carbon fiber reinforced polymer o en castellano; polímero reforzado con fibra de carbono, $ GFRP $ := Glass fiber reinforced polymer o en castellano; polímero reforzado con fibra de vidrio y $GF \text{ } Epoxy $ := Glass fiber reinforced Epoxy o en castellano; Epoxy reforzado con fibra de vidrio.
+ \label{def:materiales_pala}
+ \end{definicion}
+
+Algo que se debe saber antes de pasar a calcular la masa de la pala, es que parte de estas es hueca. Hay estudios como \textbf{Hollow Blades for Small Wind Turbines Operating at High Altitudes} \cite{Pourrajabian2016} realizado en 2016 en el que se compara el uso de palas compactas y huecas en determinado escenario y con diferentes grosores de material. Materiales tales como $GF \text{ } Epoxy$.\\
+
+En este trabajo, las palas serán huecas y se estima que solo un $15-20\%$ de la pala presenta alguno de los materiales que se mencionan en la Definición \ref{def:materiales_pala}. Es por ello que la expresión de la masa es algo diferente. \\
+
+ \begin{definicion}
+La masa de los segmentos de una pala dada su densidad y volumen:
+
+$$ masa \text{ } pala = densidad \text{ } pala \cdot (volumen \text{ } frustum_{total} \cdot (15-20\%) ) $$
+
+$$ masa \text{ } segmento_i = \dfrac{s_i}{superficie \text{ } pala} \cdot masa \text{ } pala $$
+
+ Donde, $ masa \text{ } pala $ := peso de la aleta de la turbina eólica teniendo en cuenta la porción no rellena de la misma y $ masa \text{ } segmento_i $ := peso de los segmentos de la aleta.\\
+ \label{def:masa_pala}
+ \end{definicion}
+ 
+ Mediante las Definiciones \ref{def:superficie_pala} y \ref{def:masa_pala} se puede pasar a calcular la $densidad \text{ } superficial$.\\
+ 
+  \begin{definicion}
+La densidad superficial de una pala de aerogenerador es la siguiente:
+
+$$ densidad \text{ } superficial = \dfrac{masa \text{ } pala}{ superficie \text{ } pala}$$
+
+ Donde, $ densidad \text{ } superficial $ := masa de un material por unidad de superficie. \\
+ \label{def:densidad_superficial}
+ \end{definicion}
+ 
+ 
+Aplicando el Teorema \ref{theo:Huygens-Steiner} se puede proceder al cálculo del momento de inercia general o $I$, ya que como se ha ido detallando a lo largo de este apartado se tiene todo lo necesario para su definición.\\
+
+  \begin{definicion}
+El momento de inercia general viene dado para este estudio mediante la siguiente definición:
+
+$$I_{cm} = I_{area} \cdot densidad \text{ } superficial $$
+$$I = I_{cm} + masa \text{ } segmento_i \cdot brazo_i^2 \hspace{7pt} \dfrac{Kg}{m^3}$$
+
+ \label{def:momento_inercia_general}
+ \end{definicion}
+ 
+Con la Definición \ref{def:momento_inercia_general} concluye el apartado y se puede avanzar al siguiente, el cual es el último con desarrollos físicos sobre el giro del rotor de un aerogenerador.
+ 
+\subsubsection{Velocidad Angular, $\Omega$, en función de la velocidad del viento }
 
 \textcolor{red}{apartado 3.2 del libro de wind y cosas que descargué}
 
-Reunión 17-05
-Para calcular la v angular se puede recurrir a la cinemática o en función del desplazamiento angular del ángulo que gira en función del tiempo o en función de la aceleración angular.
+Este apartado responde a las definiciones de la Sección \ref{section:pot_sistema} en las cuales se usa la variable $\Omega$. Se va a estudiar de donde procede esta, pero para adelantar acontecimientos está directamente relacionada con la energía cinética del sistema formado por el rotor de la turbina eólica.\\
 
-Si lo hacemos en función de la aceleración angular, obtenemos después la velocidad angular y lo multiplicamos por el torque para obtener potencia.
+Lo primero que se debe conocer es ¿qué es la velocidad angular? Para responder a esta pregunta se ha recurrido al libro \textbf{Understanding Physics}. En este se define la velocidad angular, $\Omega$, como "la componente de un vector unidimensional a lo largo del eje de rotación en relación con el sistema de coordenadas elegido para describir el movimiento" \cite[p.~303]{cummings2004understanding}.\\
 
-El sistema acelera para alcanzar una cierta velocidad, como un vehículo. Después de esto no se continua pisando el acelerador. En caso de que no hubiera rozamiento soltaríamos ese acelerador y la velocidad del vehículo sería constante.
+Aplicando la anterior definición al sistema que se está estudiando se puede comprender lo siguiente; el rotor del aerogenerador sería el eje de rotación en base al cual giran las palas de la turbina, además el movimiento de giro es constantemente alrededor del rotor y no cambiante, se aclara esto ya que la rotación angular puede ser en base a un objeto estático o a uno orbital.\\
 
-Mi vehículo es el rotor aerodinámico, lo tenemos acelerar desde la velocidad de parada hasta la velocidad de giro y una vez se ha alcanzado la velocidad de giro, esa es con la que me quedo y no me tengo que preocupar más.
-
-Yo giro a una velocidad determinada, imaginemos 5 vueltas por minuto, mi rotor dinámico va conectado a un eje y ese eje solo transmite un movimiento de rotación, pero yo lo que debo obtener es corriente eléctrica. Así que conecto el eje a un generador eléctrico. Este se pone a girar, el rotor tiene un imán o bobina y la carcasa tiene imanes y bobinas también y por variación y variación de flujo de campo magnético se genera un potencial y una corriente y con eso se genera potencia eléctrica.
-
-Hay problemas con las frecuencias, porque en Europa son 50hz y en eeuu a 60hz, esto significa que yo tendría que girar 50 veces por segundo, cosa que es imposible, mi rotor se rompería. Dentro del rotor tengo un multiplicador que actúa como caja de cambios de un vehículo. Porque las vueltas que gira un motor no son las mismas que gira una rueda, no tienen transmisión directa. En un vehículo desmultiplicas y en un rotor de un aerogenerador multiplicas, la velocidad lenta del rotor la tenemos que multiplicar para obtener velocidad rápida en el generador. 
-
-
-Ahora si cambio la velocidad del rotor tengo que cambiar los engranajes, porque cambio la velocidad y cambio la frecuencia, pero esto no nos interesa, nosotros queremos que la velocidad de giro sea lo mas estable posible. Para que una vez he fijado en la caja de engranajes una relación de multiplicación se mantenga la proporción y así el generador eléctrico siempre gire a 50 revoluciones por segundo y el rotor aerodinámico a 5 revoluciones por minuto.
-
-En resumen: Se va a girar a una velocidad del viento determinado, y si esta cambia también cambiará la velocidad de giro del rotor aerodinámico y entonces en la caja de engranajes tenemos como si fueran los piñones de la rueda de una bici, vamos cambiando el plato único que se tiene en el rotor para con los piñones para obtener diferentes velocidades de giro.
-
-El caso es que tenemos que obtener una velocidad de giro que no va a ser constante pero si un valor determinado, porque si nos varía la velocidad del viento, cambiará también la del giro. Entonces, ¿qué velocidad de giro empleo? Una razonable, un aerogenerador puede dar una vuelta cada 5 segundos como muy rápido, 0.2 vueltas por segundo.
-
-Entonces si funcionamos a 50Hz, la relación de multiplicación sería 50/0.2 = 250. Esta relación va cambiando dependiendo de la velocidad de giro.
-
-Aceleramos para llegar a una velocidad de giro, con el viento, esa zona es un transitorio. Tengo que establecer una relación entre velocidad del viento y la velocidad angular, para eso tengo que transformar la energía cinética de traslación en $1/2 M * U^2$, aprovechamos una fracción de la energía cinética del viento, siendo este mi Cp, coeficiente de potencia. 
-
-El viento me viene, pero qué masa de viento?? Tengo que calcular un equivalente que pasa por un disco cuyo diámetro es la del rotor y el espesor sería el del buje en la zona mas ancha de la pala. 34 * 2 + anchura buje, unos 70m de diámetro. ¿Qué grosor de disco tengo? Aproximadamente 2-3m. Hago una estimación de 70m de diámetro y 2.5 de espesor, entonces $pi/4 * diametro^2 * espesor$ me da el volumen del disco y multiplicado por la densidad del aire me da la masa que circula, esto es M en la anterior fórmula. Esto me da la energía cinética que tiene el viento a la llegada al disco.
-
-Si esto se multiplica por el Cp, obtengo la energía cinética que ha extraído del viento el rotor aerodinámico. Puedo usar un Cp de 0.4, es el que debería tener un rotor de buena calidad. 
-
-Ahora que tengo la energía cinética la tengo que convertir a energía cinética de rotación que sería con 1/2 * I * $omega^2$
-
-Teniendo la energía cinética aprovechada que es 1/2 * Cp * M * $u^2$, lo igualamos a la energía cinética de rotación.
-
-Nos queda omega = sqrt (M * Cp)/I * $u^2$ o algo así, comprobarlo. Tengo todo constante menos la u, saco la constante y la declaro como tal. Si me cambia la velocidad del viento, me cambia omega. No tenemos fabricante podemos elegir 0.4, pero lo cambiamos en base a lo que se quiera hacer o no. 
+Una de las opciones más sencillas que se tiene para el cálculo de la \textit{velocidad angular} es mediante la aceleración angular y la relación que tiene con el \textit{torque} y con el \textit{momento de inercia general}. Pero este no era lo suficientemente preciso y no tenía en cuenta todos los aspectos posibles que sí se han tenido en cuenta mediante la cinemática. \\
  
- 
- 
-\textcolor{red}{\Large{MEJORES MATERIALES: FIBRA DE VIDRIO REFORZADA CON PLÁSTICO (1.50–2.10) O FIBRA DE CARBONO REFORZADA CON PLÁSTICO( g/cm3	1.8–2.0) y rho = 1700 $kg/m^3$ (Fibra de vidrio-epoxi) }}
- 
- 
+Bien es cierto que para que el sistema se encuentre girando a una cierta \textit{velocidad angular} primero se debe producir una cierta \textit{aceleración angular} producida por el viento que encontramos en el ambiente. Después si estos dos factores junto con la turbina encuentran cierto equilibrio con el rozamiento del aire, el peso de las palas y la fuerza necesaria para moverlas, se podría llegar a mantener una velocidad de giro óptima y así extraer la mayor cantidad de energía de cada giro. Pero bien es sabido que las velocidades del viento y sobretodo en zonas marítimas, es de cierta manera irregular.\\
+
+Pero de algún modo lo que se pretende con las turbinas es que sus velocidades sean constantes y poco variables, debido al complejo sistema de engranajes que presenta dentro y que debe ir cambiando para siempre obtener la cantidad óptima de energía que es posible obtener en relación a la velocidad de viento que se presenta delante de la turbina.\\
+
+Ahora que se tienen los conocimientos básicos sobre la velocidad angular y lo necesario para obtenerla, se puede pasar a la definición de los términos que se van a usar para su cálculo.\\
+
+Como se comenta en uno de los párrafos de esta sección, una de las partes fundamentales es el viento que se presenta delante de la turbina y su velocidad, es decir, la masa o flujo de aire que atravesará el disco imaginario que se establece con las dimensiones de la turbina del generador eólico. Y al querer calcular una masa, en este caso del aire se obtendrá mediante la relación del volumen frente a la turbina y la densidad del mismo, esta puede variar dependiendo de las condiciones meteorológicas, pero se han obviado.\\
+
+    \begin{definicion}
+    La masa de aire con la que trabaja el rotor completo se define de la siguiente forma:
+    
+    $$ diametro \text{ } rotor = 2L + diametro \text{ } gondola $$
+    $$ volumen \text{ } rotor = \dfrac{\pi}{4} \cdot diametro \text{ } rotor^2 \cdot J_{left} $$
+    $$ Masa \text{ } aire = volumen \text{ } rotor \cdot \rho $$
+    Donde, blablabla
+    \centering 
+    \label{def:masa_aire}
+    \end{definicion}
+
+
+
  \subsection{Rendimiento de las potencias}
  \label{section:rendimiento}
  
