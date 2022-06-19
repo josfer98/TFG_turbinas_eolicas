@@ -2,13 +2,10 @@
 
 \subsection{Descripción de la pala del aerogenerador y sus parámetros}
 
-En esta sección se va a describir la pala del aerogenerador y los parámetros necesarios para determinar los efectos que produce la torsión en nuestra obtención de energía. En primer lugar definición e idea general de una pala, desarrollo trigonométrico para el cálculo de la línea de cuerda,... \colorbox{orange}{RELLENAR}
+En esta sección se va a describir la pala del aerogenerador y los parámetros necesarios para determinar los efectos que produce la torsión en nuestra obtención de energía. En primer lugar la definición e idea general de la pala de una turbina de un aerogenerador, después el desarrollo trigonométrico para el cálculo de la línea de cuerda y por último la obtención de los brazos de la pala conociendo los centro de masa de los segmentos.\\
 
 
 Se determina que la pala de la turbina eólica es un \textbf{trapecio} cuya representación simplificada se muestra en la Figura \ref{fig:pala_simp}. \\\\
-
-
-
 
 \begin{figure}[H]
     \centering
@@ -22,12 +19,12 @@ Lo siguiente que debe tenerse presente es que se necesita también una represent
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{images/pala simple segmentada.drawio.png}
+    \includegraphics[width=1\textwidth]{images/pala simple segmentada.png}
     \caption{Representación de una pala de turbina eólica dividida en segmentos}
     \label{fig:pala_dividida}
 \end{figure}
 
-Por simplicidad, la pala se dividirá únicamente en $N$ segmentos, en este trabajo se utilizará $N=5$. Aunque se mantenga este valor durante el trabajo se asociará a una variable en caso de que se quieran hacer pruebas mediante simulación en MATLAB más adelante. \\\\
+Por simplicidad, la pala se dividirá únicamente en $N$ segmentos, en este trabajo se utilizará $N=5$. Aunque se mantenga este valor durante el trabajo se asociará a una variable en caso de que se quieran hacer pruebas mediante simulación en MATLAB más adelante. \\
     
 
 Se define la variable $L$ como la longitud de la pala (ver Figura \ref{fig:pala_simp}). Como puede observarse, cada uno de los segmentos de la Figura \ref{fig:pala_dividida} tendrá una longitud de segmento $L_i = \dfrac{L}{N} (m)$ donde $i \in \{1,...,N\}$.\\
@@ -81,73 +78,69 @@ En base a la Figura \ref{fig:pala_calculo_phi} se puede calcular de tres formas 
 \label{def_angulo_phi_3}
 \end{equation}
 
-\colorbox{orange}{HACERLO CON TALES}
+
+Para calcular las \textit{líneas de cuerda} $c$, se aíslan los trapecios más pequeños de los que se han obtenido todos los datos menos el valor de su base menor, que se tendrá que calcular, siendo este equivalente a $c$.\\
+
+Las variables necesarias para el cálculo de las líneas de cuerda son:
+\begin{equation}
+ altura_i = \dfrac{(2i - 1) \cdot L}{2N} \hspace{7pt} (m)
+\label{def_variables_fragmentadas1}
+\end{equation}
+\begin{equation}
+     diagonal_i = \dfrac{(2i - 1) \cdot H_{bf}}{2N} \hspace{7pt} (m)
+\label{def_variables_fragmentadas2}
+\end{equation}
+Donde $altura_i$ es la longitud de la pala fragmentada para el cálculo de la línea de cuerda y $diagonal_i$ es la longitud de la hipotenusa del borde de fuga fragmentada para el cálculo de la línea de cuerda.\\
+
+Por último, una vez definido todo lo necesario, se pasa al cálculo mediante el cual se obtiene el valor de todas y cada una de las $líneas \text{ } de \text{ } cuerda$ de la pala con la que se está trabajando.\\
+
+Primero se obtiene la diferencia mediante Pitágoras entre la base mayor y la menor, definida como $x_i$, después la resta de la base mayor y esta diferencia.
+\begin{equation}
+ x_i = \sqrt{diagonal_i^{2} - altura_i^{2}} \hspace{7pt} (m)
+ \end{equation}
+ \begin{equation}
+ c_i = c_{left_i} - x_i \hspace{7pt} (m)
+\label{def:chord_line}
+\end{equation}
+
+La Figura \ref{fig:sacar_c3} se ilustra un ejemplo en el que  el valor de $i$ es igual a tres, obteniendo así $c_3$. En verde el trapecio y en magenta el triángulo del que restamos el cateto a la base mayor del trapecio.\\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/Trapecio calculo x.png}
+    \caption{Representación gráfica del cálculo de $c_3$} 
+    \label{fig:sacar_c3}
+\end{figure}
 
 
-\\
+Una vez se ha obtenido el valor buscado, $c_i$, se deberá definir todos los laterales de los segmentos de la pala, para así poder operar con ellos y conseguir el área de cada uno. Esto ya fue desarrollado en el artículo \cite{armenta2021predictive}, pero en aquel caso fue usado para comprobar el error que suponía usar un rectángulo en vez de una pala simplificada. En este caso se parte directamente de la pala simplificada para evitar correcciones de errores mas adelante y porque el cálculo que se debe realizar con respecto a la obtención de energía no es tan riguroso como en el Artículo \cite{armenta2021predictive}.\\
 
-% Para calcular las \textit{líneas de cuerda} $c$, se aíslan los trapecios más pequeños de los que se han obtenido todos los datos menos el valor de su base menor que se tendrá que calcular, siendo este equivalente a $c$.\\
+En base a esta representación esquemática, y mediante las relaciones trigonométricas anteriores se obtuvieron:
+\begin{equation}
+ c_{left_i} = c_i + (\dfrac{L_i}{2}) \tan \varPhi \hspace{7pt} (m)
+ \label{def:laterales_segmento_left}
+\end{equation}
+\begin{equation}
+ c_{right_i} = c_i - (\dfrac{L_i}{2}) \tan \varPhi \hspace{7pt} (m)
+\label{def:laterales_segmento_right}
+\end{equation}
 
-% \begin{equation}
-% Variables necesarias para el cálculo de las líneas de cuerda.
+Al igual que se deduce en el artículo \cite{armenta2021predictive}, con los datos obtenidos de los laterales de cada segmento, se puede trabajar con una forma de trapecio y encontrar el área de los segmentos que se definieron en la Figura \ref{fig:pala_dividida}.\\
 
-%  altura_i = \dfrac{(2i - 1) \cdot L}{2N}
-%  diagonal_i = \dfrac{(2i - 1) \cdot H_{bf}}{2N}
+Aparte, con esta definición  de la Figura \ref{fig:pala_desarrollo_chord}, los valores de $c_{left_i}$ y de $c_{right_i}$ serían equivalentes a $c_{left_1}$ y a $c_{right_5}$, respectivamente. Estos son definidos a priori debido a su importancia para caracterizar la pala de manera correcta y con las dimensiones que el usuario desee.\\
 
-% Donde,
-% \centering
-% $altura_i$ := Longitud de la pala fragmentada para el cálculo de la línea de cuerda y $diagonal_i$ := Longitud de la hipotenusa del borde de fuga fragmentada para el cálculo de la línea de cuerda.
-% \label{def_variables_fragmentadas}
-% \end{equation}
+Se determina el área de los segmentos:
+\begin{equation}
+ s_{i} = \dfrac{(c_{left_i} + c_{right_i})}{2N} \cdot L_i \hspace{7pt} (m^2)
+\label{def:area_segmentos}
+\end{equation}
+Donde $s_i$ es el área del segmento.\\
 
-% Por último y una vez definido todo lo necesario, se pasa al cálculo mediante el cual se obtiene el valor de todas y cada una de las $líneas \text{ } de \text{ } cuerda$ de la pala con la que se está trabajando.
+A continuación, se supone que los segmentos están ensartados por una línea imaginaria que ayudará al estudio de la torsión mediante giros de los segmentos alrededor suya. \\
 
-% \begin{equation}
-% Primero se obtiene la diferencia mediante Pitágoras entre la base mayor y la menor, definida como $x_i$, después la resta de la base mayor y esta diferencia.
+Esta línea imaginaria pasará por el centro de masas de todos los segmentos. Delineando rectas en cada segmento desde una esquina a la contraria se genera un punto en el centro del segmento en el que estas rectas se cortan, siendo este punto el llamado centro de masas. Además, si se traza una línea que una el punto central de las rectas $J_{left}$ y $J_{right}$. Esta recta pasará por los centros de masa de cada uno de los segmentos como se puede observar en la Figura \ref{fig:exp_brazo}.\\
 
-%  x_i = \sqrt{diagonal_i^{2} - altura_i^{2}}
-
-%  c_i = c_{left_i} - x_i 
-% \label{def_chord_line}
-% \end{equation}
-
-% La siguiente figura, ilustra el ejemplo en el que para las definiciones \ref{def_variables_fragmentadas} y \ref{def_chord_line} el valor de $i$ es igual a 3. Obteniendo así $c_3$. En verde el trapecio y en magenta el triángulo del que restamos el cateto a la base mayor del trapecio.
-
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.9\textwidth]{images/Trapecio calculo x.png}
-%     \caption{Representación gráfica del cálculo realizado en las definiciones \ref{def_variables_fragmentadas} y \ref{def_chord_line}}
-% \end{figure}
-
-
-% Una vez se ha obtenido el valor buscado $c_i$, se deberá definir todos los laterales de los segmentos de la pala, para así poder operar con ellos en pos de conseguir el área de cada uno de ellos. Esto ya fue desarrollado en el artículo \cite{armenta2021predictive}, pero en aquel caso fue usado para comprobar el error que suponía usar un rectángulo en vez de una pala simplificada. En este caso se parte directamente de la pala simplificada para evitar correcciones de errores mas adelante y porque el cálculo que se debe realizar con respecto a la obtención de energía no es tan profundo y complicado como en el artículo \cite{armenta2021predictive}. Además remarcar que para las deducciones y cálculos anteriores se bebió de este desarrollo.
-
-
-% \begin{equation}
-% En base a esta representación esquemática y mediante relaciones trigonométricas obtuvieron:
-%  c_{left_i} = c_i + (\dfrac{L_i}{2}) \tan \varPhi
-%  c_{right_i} = c_i - (\dfrac{L_i}{2}) \tan \varPhi
-% \label{def:laterales_segmento}
-% \end{equation}
-
-% Al igual que se deduce en el artículo \cite{armenta2021predictive}, con los datos obtenidos de los laterales de cada segmento, se puede trabajar con una forma de trapecio y encontrar el área de los segmentos que se definieron en la Figura \ref{fig:pala_dividida}.\\
-
-% Aparte, con esta definición se ve que en la Figura \ref{fig:pala_desarrollo_chord} los valores de $c_{left_i}$ y de $c_{right_i}$ que se observan, realmente serían equivalentes a $c_{left_1}$ y a $c_{right_5}$, respectivamente. Estos son definidos a priori debido a su importancia para caracterizar la pala de manera correcta y con las dimensiones que el usuario desee.
-
-% \begin{equation}
-% Se determina el área de los segmentos:
-%  s_{i} = \dfrac{(c_{left_i} + c_{right_i})}{2N} \cdot L_i 
-% Donde,
-% \centering $s_i$ := Área del segmento.
-% \label{def:area_segmentos}
-% \end{equation}
-
-
-A continuación se supone que los segmentos están ensartados por una línea imaginaria que ayudará al estudio de la torsión mediante giros de los segmentos alrededor suya. \\
-
-Esta línea imaginaria pasará por el centro de masas de todos los segmentos. Delineando rectas en cada segmento desde una esquina a la contraria se genera un punto en el centro del segmento en el que estas rectas se cortan, siendo este punto el llamado centro de masas. Además, si se traza una línea que una el punto central de las rectas $J_{left}$ y $J_{right}$, esta recta pasará por los centros de masa de cada uno de los segmentos.\\
-
-Cuando se ha obtenido esta recta imaginaria, se puede determinar lo que se denotará como $brazo$ que se corresponde con la longitud desde el punto central del buje $J_{left}$ hasta la línea de cuerda $c_{i}$ del segmento $i$, siendo este punto además el centro de masas del segmento $i$.
+Cuando se ha obtenido esta recta imaginaria, se puede determinar lo que se denotará como $brazo$ que se corresponde con la longitud desde el punto central del buje $J_{left}$ hasta la línea de cuerda $c_{i}$ del segmento $i$, siendo este punto además el centro de masas del segmento $i$.\\
 
 
     \begin{figure}[H]
@@ -155,12 +148,12 @@ Cuando se ha obtenido esta recta imaginaria, se puede determinar lo que se denot
     \includegraphics[width=1\textwidth]{images/explicación brazo.png}
     \caption{Representación de los brazos de la pala}
     \label{fig:exp_brazo}
-    
 \end{figure}
 
 El brazo viene definido por la resta de las mitades de los lados de la pala. Una vez se tiene la recta que pasa por los centros de masa se determina el valor de cada uno de los brazos.
+
 \begin{equation}
-cateto \text{ } buje = \dfrac{J_{left}}{2} - \dfrac{J_{right}}{2} \hspace{7pt} (m)
+brazo_i = \dfrac{(2i -1) \cdot R \text{ } brazo}{2N} \hspace{7pt} (m)
 \end{equation}
 
 \begin{equation}
@@ -168,9 +161,11 @@ R \text{ } brazo = \sqrt{cateto \text{ } buje^{2} + L^{2}} \hspace{7pt} (m)
 \end{equation}
 
 \begin{equation}
-brazo_i = \dfrac{(2i -1) \cdot R \text{ } brazo}{2N} \hspace{7pt} (m)
+cateto \text{ } buje = \dfrac{J_{left}}{2} - \dfrac{J_{right}}{2} \hspace{7pt} (m)
 \end{equation}
-Donde, $cateto \text{ } buje$ := Medida de buje o $J_{left}$ reducida para su utilización en la obtención del brazo, $R \text{ } brazo$ := Recta completa del brazo antes de dividirla dependiendo del segmento y $brazo_i$ := Distancia entre el centro de $J_{Left}$ y el centro de masas del segmento correspondiente.
+
+
+Donde $cateto \text{ } buje$ es la medida de buje o $J_{left}$ reducida para su utilización en la obtención del brazo, $R \text{ } brazo$ es la recta completa del brazo antes de dividirla dependiendo del segmento y $brazo_i$ es la distancia entre el centro de $J_{Left}$ y el centro de masas del segmento correspondiente.
 
 \subsection{Análisis del volumen de la pala}
 \label{section:volumen_pala}
@@ -184,20 +179,31 @@ Una vez definida la geometría en dos dimensiones de la pala del aerogenerador s
     \label{fig:analisis_volumen}
     \end{figure}
 
+Mediante la observación de la figura \ref{fig:analisis_volumen} se puede obtener la siguiente figura que se usará de análisis para obtener las dimensiones del ancho que se acaba de establecer como tercera dimensión:
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/ancho pala r decrecimiento.png}
+    \caption{Representación del ancho de la pala dividida en segmentos}
+    \label{fig:ancho_pala_segmentado}
+    \end{figure}
 
 
-Mediante la observación de la figura \ref{fig:analisis_volumen} se puede averiguar lo siguiente: \\\\\\\\
 
-\colorbox{Orange}{ \Huge Aquí va un desarrollo con otra figura, la del ancho}
 
+
+
+
+\newpage
+De la Figura \ref{fig:ancho_pala_segmentado} e imitando el proceso deductivo realizado en la obtención de la Ecuación \ref{def_hipotenusa_pala} se deduce:
 \begin{equation}
-Donde, recta \text{ } decrecimiento_i = \dfrac{( i \cdot \sqrt{L^2 + (ancho \text{ } punta - ancho \text{ } buje)^2)}}{N} \hspace{7pt} (m)
+recta \text{ } decrecimiento_i = \dfrac{( i \cdot \sqrt{L^2 + (ancho \text{ } punta - ancho \text{ } buje)^2)}}{N} \hspace{7pt} (m)
 \end{equation}
 
-Siendo, $ancho \text{ } buje$ y $ancho  \text{ } punta$ $\in \mathbb{Q+}$, $ancho \text{ } buje > ancho \text{ } punta$, $recta \text{ } decrecimiento_i $ := línea de disminución de la parte superior ancho de la pala dividida para cada segmento,  $ancho \text{ } punta$ := amplitud de la pala del aerogenerador en la zona más estrecha o punta y $ancho \text{ } buje$ := amplitud de la pala del aerogenerador en la zona más ancha o buje.\\
+Siendo, $ancho \text{ } buje$ y $ancho  \text{ } punta$ $\in \mathbb{Q+}$, $ancho \text{ } buje > ancho \text{ } punta$, $recta \text{ } decrecimiento_i $ es la línea de disminución de la parte superior ancho de la pala dividida para cada segmento,  $ancho \text{ } punta$ es la amplitud de la pala del aerogenerador en la zona más estrecha o punta y $ancho \text{ } buje$ es la amplitud de la pala del aerogenerador en la zona más ancha o buje.\\
 
 
-Tal y como se presentó en la Figura \ref{fig:pala_calculo_phi}, la variable $x_i$ sirvió de apoyo para calcular las reducciones de tamaño de las líneas de cuerda al ir restando el resultado a la variable $c_left_{i}$. Esto mismo ocurre para el ancho de la pala. En esta ocasión además, se necesitará una segunda variable.\\
+Tal y como se presentó en la Figura \ref{fig:pala_calculo_phi}, la variable $x_i$ sirvió de apoyo para calcular las reducciones de tamaño de las líneas de cuerda al ir restando el resultado a la variable $c_{left_i}$. Esto mismo ocurre para el ancho de la pala. En esta ocasión además, se necesitará una segunda variable.\\
 
 
 Las variables de apoyo son las siguientes:
@@ -211,24 +217,24 @@ z_i  \hspace{30pt} Sí \hspace{7pt}  i > 1
 \end{matrix}\right
 \end{equation}
 
-Donde, $z_i$ := variable de apoyo para el cálculo del área de las secciones trapezoides correspondientes al corte de los segmentos, en este caso de las bases menores,  $b_i$ := segunda variable de apoyo pero en este caso sirve para las bases mayores.\\
+Donde $z_i$ es la variable de apoyo para el cálculo del área de las secciones trapezoides correspondientes al corte de los segmentos, en este caso de las bases menores y  $b_i$ es la segunda variable de apoyo pero destinada a las bases mayores.\\
 
 
 Se obtiene el ancho de las bases de los troncos trapezoidales y se calculan las áreas de las bases:
 \begin{equation}
- ancho \text{ } bases \text{ } menores_i = ancho \text{ } buje - z_i \hspace{7pt} (m)
+ ancho \text{ } base \text{ } menor_i = ancho \text{ } buje - z_i \hspace{7pt} (m)
  \end{equation}
  \begin{equation}
- ancho \text{ } bases \text{ } mayores_i = ancho \text{ } buje - b_i \hspace{7pt} (m)
+ ancho \text{ } base \text{ } mayor_i = ancho \text{ } buje - b_i \hspace{7pt} (m)
 \end{equation}
 \begin{equation}
- area \text{ } bases \text{ } menores_i = ancho \text{ } bases \text{ } menores_i \cdot {c_{right}}_i \hspace{7pt} (m^2)
+ area \text{ } base \text{ } menor_i = ancho \text{ } base \text{ } menor_i \cdot {c_{right}}_i \hspace{7pt} (m^2)
  \end{equation}
 \begin{equation}
- area \text{ } bases \text{ } mayores_i = ancho \text{ } bases \text{ } mayores_i \cdot {c_{left}}_i \hspace{7pt} (m^2)
+ area \text{ } base \text{ } mayor_i = ancho \text{ } base \text{ } mayor_i \cdot {c_{left}}_i \hspace{7pt} (m^2)
 \end{equation}
 
-Donde, $ancho \text{ } bases \text{ } mayores_i$ := Ancho de las bases trapezoidales de mayor tamaño con las que se calculará el volumen del tronco o frustum de cada uno de los segmentos,  $ancho \text{ } bases \text{ } menores_i$ := Ancho de las bases trapezoidales de menor tamaño con las que se calculará el volumen del tronco o frustum de cada uno de los segmentos, $ area \text{ } base \text{ } mayor_i $ := zonas trapezoidales que sirven de base mayor para el cálculo del frustum de cada segmento y $ area \text{ } base \text{ } menorr_i $ := zonas trapezoidales que sirven de base menor para el cálculo del frustum de cada segmento.\\
+Donde $ancho \text{ } base \text{ } mayor_i$ es el ancho de las bases trapezoidales de mayor tamaño con las que se calculará el volumen del tronco o frustum de cada uno de los segmentos,  $ancho \text{ } base \text{ } menor_i$ es el ancho de las bases trapezoidales de menor tamaño con las que se calculará el volumen del tronco o frustum de cada uno de los segmentos, $ area \text{ } base \text{ } mayor_i $ se refiere a las zonas trapezoidales que sirven de base mayor para el cálculo del frustum de cada segmento y $ area \text{ } base \text{ } menor_i $ se refiere a las zonas trapezoidales que sirven de base menor para el cálculo del frustum de cada segmento.\\
 
 
 Con todo lo necesario para el cálculo del volumen de la pala del aerogenerador se procede a ello. Se va a realizar de dos maneras; completo y segmentado. El segmentado es necesario debido al desarrollo que se ha ido realizando y que se va a seguir durante todo el trabajo, y el completo se usará para comparación y demostración junto al segmentado para comprobar la precisión de los cálculos.\\
@@ -236,8 +242,8 @@ Con todo lo necesario para el cálculo del volumen de la pala del aerogenerador 
 El volumen de la pala de una turbina eólica es definido mediante las siguientes ecuaciones:
 \begin{equation}
     \begin{split}
-        volumen \text{ } frustum_i = & \dfrac{L_i}{3} \cdot (area \text{ } bases \text{ } mayores_i + area \text{ } bases \text{ } menores_i \\
-        & + \sqrt{area \text{ } bases \text{ } mayores_i \cdot area \text{ } bases \text{ } menores_i}) \hspace{7pt} (m^3)
+        volumen \text{ } frustum_i = & \dfrac{L_i}{3} \cdot (area \text{ } base \text{ } mayor_i + area \text{ } base \text{ } menor_i \\
+        & + \sqrt{area \text{ } base \text{ } mayor_i \cdot area \text{ } base \text{ } menor_i}) \hspace{7pt} (m^3)
     \end{split}
 \end{equation}
 
@@ -260,7 +266,7 @@ El volumen de la pala de una turbina eólica es definido mediante las siguientes
     \end{split}
  \end{equation}
 
-Donde, $ volumen \text{ } frustum_i $ := tamaño de cada uno de los segmentos del tronco de pirámide de la pala del aerogenerador, $ volumen \text{ } frustum_{total} $ := tamaño absoluto de la pala del aerogenerador, $area \text{ } base_{punta}$ := zona trapezoidal de mayor tamaño usada para el cálculo del volumen del frustum, $area \text{ } base_{punta}$ := zona trapezoidal de menor tamaño usada para el cálculo del volumen del frustum y $ volumen \text{ } frustum_{completo} $ := tamaño integro de la pala del aerogenerador.\\
+Donde $ volumen \text{ } frustum_i $ es el tamaño de cada uno de los segmentos del tronco de pirámide de la pala del aerogenerador, $ volumen \text{ } frustum_{total} $ es el tamaño absoluto de la pala del aerogenerador, $area \text{ } base_{punta}$ es la zona trapezoidal de mayor tamaño usada para el cálculo del volumen del frustum, $area \text{ } base_{punta}$ es la zona trapezoidal de menor tamaño usada para el cálculo del volumen del frustum y $ volumen \text{ } frustum_{completo} $ es el tamaño integro de la pala del aerogenerador.\\
 
 
 Teniendo los cálculos del volumen de la pala del aerogenerador se pueden estudiar a continuación los efectos que producen las simplificaciones que se han realizado para la obtención de energía.
@@ -268,9 +274,8 @@ Teniendo los cálculos del volumen de la pala del aerogenerador se pueden estudi
 
 \subsection{Estudio del torque sin ángulo de cabeceo}
 \label{section:torque_pala_horizontal}
-%Tomando una pala con una forma real se puede observar que se produce cierto giro de las palas del aerogenerador. En esta situación no se presenta cabeceo, es decir, el viento tiene un ángulo de ataque paralelo con la pala de la turbina eólica. \\
 
-Tomando una pala con forma real, en una situación en la que no se presenta cabeceo, en la que está incidiendo un viento con ángulo de ataque paralelo a la pala se puede observar un giro de las palas del aerogenerador.
+Tomando una pala con forma real, en una situación en la que no se presenta cabeceo, en la que está incidiendo un viento con ángulo de ataque paralelo a la pala se puede observar un giro de las palas del aerogenerador.\\
 
 Al estar la pala real más redondeada por la parte superior y teniendo mayor volumen que la parte inferior y mediante el principio de Bernoulli la parte superior presenta un mayor recorrido que la inferior, y con ello una velocidad de viento mayor y por tanto una menor presión. \\
 
@@ -278,8 +283,9 @@ Este efecto produce un gradiente de presión y por ello una fuerza de sustentaci
 
     \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{images/Cross secction pala articulo.png}
-    \caption{Corte transversal de una pala (Ver Artículo \cite{Zheng2014})}
+    \includegraphics[width=0.8\textwidth]{images/Cross secction pala articulo.png}
+    \caption{Corte transversal de una pala}
+    Fuente: \cite{Zheng2014}
     \label{fig:corte_transversal_pala}
     \end{figure}
 
@@ -316,7 +322,7 @@ El vector fuerza normal es perpendicular al ángulo de ataque del viento, mientr
    f \text{ } normal_i = F \text{ } viento_i \cdot \sin{\theta_1} \hspace{7pt} (N)
  \label{def:fuerza_normal}
  \end{equation}
- Donde, $F \text{ } viento$ := Fuerza generada por el viento en cada segmento de la pala y $f \text{ } normal$ := Fuerza perpendicular al viento, generada por el choque de este con la pala de la turbina eólica.\\
+ Donde $F \text{ } viento$ es la fuerza generada por el viento en cada segmento de la pala y $f \text{ } normal$ es la fuerza perpendicular al viento, generada por el choque de este con la pala de la turbina eólica.\\
 
 
 La componente paralela a la pala, que se ha definido como tangencial se obviará debido a que no genera momento de torsión o torque.\\
@@ -326,7 +332,7 @@ El momento de giro o torque se define como:
   torque_0 = f \text{ } normal_i \times brazo \hspace{7pt} (N \cdot m)
   \label{def:torque_inicial}
  \end{equation}
- Donde, $torque_0$ := Momento de fuerza de giro solo con ángulo de cabeceo.\\
+ Donde $torque_0$ := Momento de fuerza de giro solo con ángulo de cabeceo.\\
 
 
 El $torque_0$ es el producto vectorial entre la $fuerza  \text{ }perpendicular \text{ } o \text{ } normal$ y el $brazo$. Pero estas dos variables son perpendiculares la una a la otra, es por ello que esa expresión es el producto algebraico de las variables, dando lugar a:
@@ -339,7 +345,7 @@ El $torque_0$ es el producto vectorial entre la $fuerza  \text{ }perpendicular \
  
  La suma de los torques es torque global.
  \begin{equation}
-  torque \text{ } global_0 \text{ } = \sum_{i=1}^{N} torque_0_{i} \hspace{7pt} (N \cdot m)
+  torque \text{ } global_0 \text{ } = \sum_{i=1}^{N} torque_{0_i} \hspace{7pt} (N \cdot m)
 \label{def:torque_global}
 \end{equation}
  
@@ -349,14 +355,16 @@ La fuerza del viento para el rotor completo es:
   F \text{ } viento_i = \dfrac{1}{2} \text{ } \rho \cdot area \text{ } rotor \cdot u^2 \cdot coeficiente \text{ } sustentación \hspace{7pt} (N)
    \end{equation}
    
+    Donde $\rho = 1.225 \text{ } \dfrac{Kg}{m^3}$, $u$ es la velocidad del viento, $area \text{ } rotor$ es la superficie del círculo que dibuja el giro de las palas y $coeficiente \text{ } sustentación$ es el número usado en la modelación y sus dependencias complejas de forma, inclinación y algunas condiciones de flujo en la sustentación \cite{Hall2021}.
+    
   \begin{equation}
   area \text{ } rotor = \dfrac{\pi}{4} \cdot diametro \text{ } rotor^2 \hspace{7pt} (m^2) 
   \end{equation}
-  
+  Donde $diametro \text{ } rotor $ es la superficie abarcada por la pala en caso de realizar un giro completo
   \begin{equation}
   diametro \text{ } rotor = 2 \cdot L \hspace{7pt} (m)
  \end{equation}
- Donde, $\rho := 1.225 \text{ } \dfrac{Kg}{m^3}$, $u$ := velocidad del viento, $diametro \text{ } rotor $ := superficie abarcada por la pala en caso de realizar un giro completo, $area \text{ } rotor$ := superficie del círculo que dibuja el giro de las palas y $coeficiente \text{ } sustentación$ := número usado en la modelación y sus dependencias complejas de forma, inclinación y algunas condiciones de flujo en la sustentación (Ver Página web \cite{Hall2021}).
+
  
  
  %El coeficiente de sustentación es un número que los aerodinámicos usan para modelar todas las dependencias complejas de forma, inclinación y algunas condiciones de flujo en la sustentación. Esta ecuación es simplemente un reordenamiento de la ecuación de sustentación donde resolvemos el coeficiente de sustentación en términos de las otras variables. El coeficiente de sustentación Cl es igual a la sustentación L dividida por la cantidad: densidad r por la mitad de la velocidad V al cuadrado por el área del ala A.
@@ -376,7 +384,7 @@ Dados un ángulo inicial de giro $\theta_1 $ y una variación de giro constante 
 \theta_i = \theta_{i-1} + \Delta_\theta \hspace{7pt} (^{\circ})
 \label{def:theta_cte}
 \end{equation}
-Donde, $i \in segmento \wedge (i > 1)$\\
+Donde $i \in segmento \wedge (i > 1)$\\
 
 
 Como se menciona, la variación $\Delta_\theta$ puede que no sea constante y entonces:
@@ -384,7 +392,7 @@ Como se menciona, la variación $\Delta_\theta$ puede que no sea constante y ent
 \theta_i = \theta_{i-1} + \Delta_{\theta_{i}}  \hspace{7pt} (^{\circ})
 \label{def:theta_nocte}
 \end{equation}
-Donde, $i \in segmento \wedge (i > 1)$\\
+Donde $i \in segmento \wedge (i > 1)$\\
 
 La fuerza normal se define como:
 \begin{equation}
@@ -399,14 +407,14 @@ El resto de fórmulas no varían debido a que no dependen del ángulo $\theta_i$
  \label{def:torque_algebraico_torsion}
  \end{equation}
  
-Donde, $ \cos{\Delta_{\theta_{i}}} $ puede presentar una pequeña variación en el valor del torque. Este coseno representa el área efectiva donde se está aplicando la $ f \text{ } normal $, es decir, el área de la totalidad del segmento de la pala si fuera observada desde arriba en un plano XY. Esto se debe a que cuanto más se torsione el segmento, menos parte será visible.\\
+Donde $ \cos{\Delta_{\theta_{i}}} $ puede presentar una pequeña variación en el valor del torque. Este coseno representa el área efectiva donde se está aplicando la $ f \text{ } normal $, es decir, el área de la totalidad del segmento de la pala si fuera observada desde arriba en un plano XY. Esto se debe a que cuanto más se torsione el segmento, menos parte será visible.\\
 
 Por último, la suma de los torques con un giro inicial es entonces:
 \begin{equation}
   torque \text{ } global_1 \text{ } = \sum_{i=1}^{N} torque_{1_i} \hspace{7pt} (N \cdot m)
  \label{def:torque_global_1}
 \end{equation}
-Donde, $torque \text{ } global_1$ := Suma de torque de los N segmentos.
+Donde $torque \text{ } global_1$ es la suma de torque de los N segmentos.
 
 
 
@@ -439,14 +447,14 @@ Donde, $torque \text{ } global_1$ := Suma de torque de los N segmentos.
   potencia \text{ } global_0 = torque \text{ } global_0 \cdot \Omega  
  \label{def:potencia_giro_inicial}
  \end{equation}
-  Donde, $\Omega$ := velocidad de giro o angular de la pala y $potencia \text{ } global_0$ := energía del sistema.\\
+  Donde $\Omega$ := velocidad de giro o angular de la pala y $potencia \text{ } global_0$ := energía del sistema.\\
  
   La potencia del sistema con un giro inicial y torsión se define como:
    \begin{equation}
   potencia \text{ } global_1 = torque \text{ } global_1 \cdot \Omega  
  \label{def:potencia_giro_segmentos}
  \end{equation}
-  Donde, $potencia \text{ } global_1$ := Energía del sistema con un cierto ángulo de cabeceo y segmentos torsionados.\\
+  Donde $potencia \text{ } global_1$ := Energía del sistema con un cierto ángulo de cabeceo y segmentos torsionados.\\
  
 Las unidades que se buscan serían, la potencia en $W$ ($Watts$) o $\dfrac{J}{s}$ ($\dfrac{Julio}{segundo}$) porque el torque es en $\dfrac{N}{m}$ ($\dfrac{Newton}{metro}$) o $J$ y $\Omega$ en $\dfrac{1}{s}$ o $s^{-1}$.
 
@@ -465,6 +473,7 @@ La geometría del cuerpo libre que está realizando la rotación es crucial, por
     \centering
     \includegraphics[width=0.3\textwidth]{images/trapecio libro machinery.png}
     \caption{Sección trapezoidal}
+    Fuente: \cite[p.~242]{oberg2012machinery}
     \label{fig:momento_inercia_libro}
 \end{figure}
 
@@ -486,43 +495,42 @@ El teorema de Huygens-Steiner establece lo siguiente:
     I = I_{cm} + m \cdot D^2 \hspace{7pt} (Kg \cdot m^2)
  \label{eq:Huygens-Steiner}
  \end{equation}
- Donde, $I$ := momento de inercia general, $I_{cm}$ := momento de inercia en el centro de masas de un cuerpo rígido, $m$ := masa del cuerpo rígido y $D$ := distancia perpendicular entre los ejes paralelos.\\
- 
+ Donde $I$ es el momento de inercia general, $I_{cm}$ es el momento de inercia en el centro de masas de un cuerpo rígido, $m$ es la masa del cuerpo rígido y $D$ es la distancia perpendicular entre los ejes paralelos.\\\\
  
 
 Si se combina la Ecuación \ref{eq:Huygens-Steiner} junto con las variables definidas para el estudio de la pala el momento de inercia vendrá dado por la siguiente definición:
  \begin{equation}
-  I_{area} = \dfrac{ L_{i}^3 \cdot (c_{right}^2 + 4 c_{right} \cdot c_{left} + c_{left}^2)}{ 36 (c_{right} + c_{left})} \hspace{7pt} (m^4)
+  I_{area_i} = \dfrac{ L_{i}^3 \cdot (c_{right}^2 + 4 c_{right} \cdot c_{left} + c_{left}^2)}{ 36 (c_{right} + c_{left})} \hspace{7pt} (m^4)
  \label{def:momento_inercia_area}
  \end{equation}
- Donde, $I_{area}$ := momento de inercia de área de una figura de un espesor mínimo para centrar su cálculo en la forma.\\
+ Donde $I_{area}$ es el momento de inercia de área de una figura de un espesor mínimo para centrar su cálculo en la forma.\\
  
- La anterior ecuación se debe multiplicar por la \textbf{densidad superficial} de la pala del aerogenerador ya que esta representa el momento de inercia de un área, en este caso un trapecio, y se necesita esta densidad para obtener el momento de inercia general.
+ La anterior ecuación se debe multiplicar por la \textbf{densidad superficial} de la pala del aerogenerador ya que esta representa el momento de inercia de un área, en este caso un trapecio, y se necesita esta densidad para obtener el momento de inercia general.\\
 
 En el cálculo de la \textbf{densidad superficial} son necesarios dos términos que aún no se han acuñado en este trabajo, la masa y la superficie de una pala. Es cierto que se ha calculado la superficie de los segmentos en la Definición \ref{def:area_segmentos}, ahora solo queda sumarlos.\\
 
 
 La superficie de la pala es:
  \begin{equation}
- Superficie \text{ } pala = \sum_{i}^{N}s_i \hspace{7pt} (m^2)  
+ superficie \text{ } pala = \sum_{i}^{N}s_i \hspace{7pt} (m^2)  
  \label{def:superficie_pala}
  \end{equation}
-  Donde, $ Superficie \text{ } pala $ := área de la pala del rotor.\\
+  Donde $ superficie \text{ } pala $ es el área de la pala del rotor.\\
 
 En este trabajo solo se han tenido en cuenta los tres materiales mas usados en la construcción de palas de un aerogenerador.\\
 
-Los rangos de densidades de materiales usadas son los siguientes:
+Los rangos de densidades de materiales \cite{MOHAMMED201969} \cite{Tewari2011} \cite{Ephraim2015} utilizadas son los siguientes:
  \begin{equation}
  densidad \text{ } pala =  \left\{\begin{matrix}
-CFRP = 1500-2000 \hspace{7pt} \left(\dfrac{Kg}{m^3}\right\right)) \cite{MOHAMMED201969}\\\\
-GFRP = 910-1200 \hspace{7pt} \left(\dfrac{Kg}{m^3}\right)\right)  \cite{Ephraim2015}\\\\
-GF \text{ } Epoxy = 1159-1186 \hspace{7pt} \left(\dfrac{Kg}{m^3}\right) \cite{Tewari2011}
+CFRP = 1500-2000 \hspace{7pt} \left(\dfrac{Kg}{m^3}\right) \\\\
+GFRP = 910-1200 \hspace{7pt} \left(\dfrac{Kg}{m^3}\right)  \\\\
+GF \text{ } Epoxy = 1159-1186 \hspace{7pt} \left(\dfrac{Kg}{m^3}\right) 
 \end{matrix}\right
 \label{def:materiales_pala}
 \end{equation}
- Donde, $ densidad \text{ } pala $ := densidad de los materiales de los que posiblemente esté compuesta la pala, $ CFRP $ := Carbon fiber reinforced polymer o en castellano; polímero reforzado con fibra de carbono, $ GFRP $ := Glass fiber reinforced polymer o en castellano; polímero reforzado con fibra de vidrio y $GF \text{ } Epoxy $ := Glass fiber reinforced Epoxy o en castellano; Epoxy reforzado con fibra de vidrio.\\
+ Donde $ densidad \text{ } pala $ es la densidad de los materiales de los que posiblemente esté compuesta la pala, $ CFRP $ sin abreviatura carbon fiber reinforced polymer o en castellano; polímero reforzado con fibra de carbono, $ GFRP $ sin abreviatura glass fiber reinforced polymer o en castellano; polímero reforzado con fibra de vidrio y $GF \text{ } Epoxy $ sin abreviatura glass fiber reinforced Epoxy o en castellano; Epoxy reforzado con fibra de vidrio.\\
 
-Parte de la pala es hueca. Hay estudios como \textbf{Hollow Blades for Small Wind Turbines Operating at High Altitudes} \cite{Pourrajabian2016}, realizado en 2016, en el que se compara el uso de palas compactas y huecas en determinado escenario y con diferentes grosores de material. \\
+Parte de la pala es hueca. Existen estudios \cite{Pourrajabian2016} en los cuales se compara el uso de palas compactas y huecas en determinado escenario y con diferentes grosores de material. \\
 
 En este trabajo, las palas serán huecas y se estima que solo entre un $15-20\%$ de la pala presenta alguno de los materiales que se mencionan. Por ello la expresión de la masa es la siguiente. \\
 
@@ -534,29 +542,29 @@ La masa de los segmentos de una pala dada su densidad y volumen:
  masa \text{ } segmento_i = \dfrac{s_i}{superficie \text{ } pala} \cdot masa \text{ } pala \hspace{7pt} (Kg)
  \label{def:masa_pala} 
  \end{equation}
-  Donde, $ masa \text{ } pala $ := peso de la aleta de la turbina eólica teniendo en cuenta la porción no rellena de la misma y $ masa \text{ } segmento_i $ := peso de los segmentos de la aleta.\\
+  Donde $ masa \text{ } pala $ es el peso de la aleta de la turbina eólica teniendo en cuenta la porción no rellena de la misma y $ masa \text{ } segmento_i $ es el peso de los segmentos de la aleta.\\
  
 Se puede pasar a calcular la $densidad \text{ } superficial$ como:
   \begin{equation}
  densidad \text{ } superficial = \dfrac{masa \text{ } pala}{ superficie \text{ } pala} \hspace{7pt} \left(\dfrac{Kg}{m^2}\right)
  \label{def:densidad_superficial}
  \end{equation}
- Donde, $ densidad \text{ } superficial $ := masa de un material por unidad de superficie. \\
+ Donde $ densidad \text{ } superficial $ generalmente se define como masa de un material por unidad de superficie. \\
  
-Se puede obtener el momento de inercia general o $I$, como:
+Se puede obtener el momento de inercia general o $I_i$ mediante el Teorema \ref{eq:Huygens-Steiner}, como:
   \begin{equation}
-I_{cm} = I_{area} \cdot densidad \text{ } superficial \hspace{7pt} (Kg \cdot m^2)
+I_{cm_i} = I_{area_i} \cdot densidad \text{ } superficial \hspace{7pt} (Kg \cdot m^2)
  \label{def:momento_inercia_cm}
  \end{equation}
  \begin{equation}
-I = I_{cm} + masa \text{ } segmento_i \cdot brazo_i^2 \hspace{7pt} (Kg \cdot m^2)
+I_i = I_{cm_i} + masa \text{ } segmento_i \cdot brazo_i^2 \hspace{7pt} (Kg \cdot m^2)
  \label{def:momento_inercia_general}
  \end{equation}
 
  
 \subsection{Velocidad Angular, $\Omega$, en función de la velocidad del viento }
 
-En primer lugar, la velocidad angular, $\Omega$, (Ver Libro \cite[p.~303]{cummings2004understanding}) es "la componente de un vector unidimensional a lo largo del eje de rotación en relación con el sistema de coordenadas elegido para describir el movimiento".\\
+En primer lugar, la velocidad angular $\Omega$ se define como ``la componente de un vector unidimensional a lo largo del eje de rotación en relación con el sistema de coordenadas elegido para describir el movimiento'' \cite[p.~303]{cummings2004understanding}.\\
 
 Aplicando la anterior definición al sistema que se está estudiando se se tiene que el rotor del aerogenerador sería el eje de rotación en base al cual giran las palas de la turbina. Además el movimiento de giro es constante alrededor del rotor.\\
 
@@ -569,37 +577,40 @@ Una de las partes fundamentales es el viento que se presenta delante de la turbi
 
 La masa de aire con la que trabaja el rotor es:
 \begin{equation}
-     diametro \text{ } rotor = 2L + diametro \text{ } gondola \hspace{7pt} (m)
+    masa \text{ } aire = volumen \text{ } rotor \cdot \rho \hspace{7pt} (Kg)
+\label{def:masa_aire}
 \end{equation}
 \begin{equation}
     volumen \text{ } rotor = \dfrac{\pi}{4} \cdot diametro \text{ } rotor^2 \cdot J_{left} \hspace{7pt} (m^3) 
 \end{equation}
 \begin{equation}
-    masa \text{ } aire = volumen \text{ } rotor \cdot \rho \hspace{7pt} (Kg)
-\label{def:masa_aire}
+     diametro \text{ } rotor = 2L + diametro \text{ } gondola \hspace{7pt} (m)
 \end{equation}
-Donde, \textit{diametro rotor} := ancho total del rotor sumando palas y góndola, \textit{diametro gondola} := ancho de la góndola del rotor, \textit{volumen rotor} := tamaño de la figura dibujada (cilindro) por el rotor completo cuando las palas giran y \textit{masa aire} := peso del aire comprendido dentro del volumen del rotor.\\
+Donde \textit{diametro rotor} es el ancho total del rotor sumando palas y góndola, \textit{diametro gondola} es el ancho de la góndola del rotor, \textit{volumen rotor} es el tamaño de la figura dibujada (cilindro) por el rotor completo cuando las palas giran y \textit{masa aire} es el peso del aire comprendido dentro del volumen que define el rotor.\\
 
 La energía cinética producida por la masa de aire que comprende el rotor y la velocidad del viento en ese momento es:
 \begin{equation}
-    energía \text{ } cinética = \dfrac{1}{2} \cdot masa \text{ } aire \cdot u^2 \hspace{7pt} (J)
+    E_c = \dfrac{1}{2} \cdot masa \text{ } aire \cdot u^2 \hspace{7pt} (J)
 \end{equation}
-Donde, 
-    
-        $e cinetica = 1/2 * M aire * U VIENTO^2$
-        
-    Involucramos el coeficiente de potencia con la energía cinética
-    
-         e cinetica aprovechada = $e cinetica * CP$
-         
-    Ahora necesitamos la energía cinética de rotación
-    
-         e cinetica rotacion =$ 1/2 * I * omega^2$
+Donde $E_c$ es la energía generada por el movimiento de las palas del rotor.\\
 
-    Se compara y despeja con la energía cinética aprovechada para obtener la velocidad angular omega
-    
-        $omega = sqrt((CP .* M aire)./I) .* U VIENTO.'$
+A continuación se introduce un término que limita la energía cinética que se puede obtener en un aerogenerador, se trata del \textit{coeficiente de potencia} $CP$. Al introducir este término en la ecuación anterior, se pasa de tener una energía cinética simple a una aprovechada o de rotación.\\
 
+\begin{equation}
+    E_c \text{ } aprovechada = E_c \cdot CP \hspace{7pt} (J)
+\end{equation}
+Donde $E_c \text{ } aprovechada$ es la energía máxima generada por el movimiento de las palas del rotor teniendo en cuenta las limitaciones técnicas del aerogenerador.\\
+
+Se presenta la segunda manera de obtener la energía cinética de rotación:
+\begin{equation}
+    E_c  \text{ } rotacion = \dfrac{1}{2} \cdot I_i \cdot \Omega^2  \hspace{7pt} (J)
+\end{equation}
+Donde $E_c \text{ } rotacion$ es la energía que se produce mediante el giro producido por el momento de inercia general y la velocidad angular de los segmentos de la pala. \\
+
+Se comparan las dos energías cinéticas y se obtiene la velocidad angular para cada segmento de la pala:
+\begin{equation}
+    \Omega_i = \sqrt{\dfrac{CP \cdot M_{aire}}{I_i}} \cdot u  \hspace{7pt} (\dfrac{rad}{s})
+\end{equation}
 
 
  \subsection{Potencia de la turbina}
@@ -612,7 +623,7 @@ El rendimiento del sistema viene definido por:
   \eta = \dfrac{potencia \text{ } global_1}{potencia \text{ } global_0}  
  \label{def:rendimiento_potencias}
  \end{equation}
-  Donde, $\eta$ := eficiencia respecto a la energía obtenida en dos casos estudiados.\\
+  Donde $\eta$ := eficiencia respecto a la energía obtenida en dos casos estudiados.\\
  
  Una vez definido el rendimiento, se calcula en base a los resultados obtenidos mediante asignación de valores a variables estándar se pueden dar 3 escenarios:
  
@@ -632,12 +643,4 @@ El rendimiento del sistema viene definido por:
         \end{itemize}
 \end{enumerate}
 
-Cabe recalcar que se deberán hacer numerosas pruebas con diferentes configuraciones de valores .... (SEGUIR)
- 
-\section{Primeras pruebas en MATLAB}
-
-Desarrollado todo el fundamento teórico detrás del estudio que se está realizando y con el que se está tratando de conocer si mediante torsión de las palas de una turbina eólica se obtiene más energía, menos o la misma que si no se torsionasen, se debe avanzar y comenzar a hacer cálculos empíricos. \\
-
-Estos cálculos y representaciones se realizarán mediante MATLAB, de la manera más ordenada y arbitraria posible. Con esto se busca la manera más simple de poder modificar las variables más sencillas que envuelven a los cálculos, para así poder cambiarlas a placer. \\
-
-Algunas variables como, $L$ y $\Theta_1$ deben ser establecidas por el propio estudiante, dando así un mayor juego a la amplitud de resultados posibles. \\
+Cabe recalcar que se deberán hacer numerosas pruebas con diferentes configuraciones de valores de las principales variables que definen la pala y los aspectos físicos que afectan a la generación de energía.
