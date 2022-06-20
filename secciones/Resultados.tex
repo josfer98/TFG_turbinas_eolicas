@@ -46,7 +46,22 @@ A continuación se detalla un acortamiento de la misma ya que no todos sus datos
 
 \subsection{¿Cuál es la torsión óptima?}
 
-Previo a obtener resultados usando aerogeneradores con características reales como el tamaño de las aspas, se procede a probar un caso estándar en el que se presenta un ángulo de cabeceo establecido y estándar, por ejemplo 2$^{\circ}$.
+\colorbox{orange}{¿Cuánto es lo máximo que se torsiona una pala en la vida real?}
+
+Previo a obtener resultados usando aerogeneradores con características reales como el tamaño de las aspas, se procede a probar un caso estándar en el que se presentan las siguientes variables globales:
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[H]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+L (m) & D. góndola (m) & CP  & Á. Cabeceo  $\theta_1$ ($^{\circ}$) & $J_{left}$ (m) & $J_{right}$ (m) & Dens. pala (Kg/m^3) & Ancho buje (m) & Ancho punta (m) \\ \hline
+75    & 4              & 0.4 & 2          & 3           & 0.6          & 1176                                 & 2              & 0.25            \\ \hline
+\end{tabular}%
+}
+\end{table}
 
 En un primer momento se pensó hacer un ejemplo en el que sin ángulo de cabeceo se demostrase la importancia de la torsión con respecto a la obtención de energía. Pero como se comentó en el Desarrollo teórico, es necesario contar con una pala realista para que se genere una fuerza de sustentación y así generar energía. \\
 
@@ -54,9 +69,11 @@ Además, estableciendo un ángulo de cabeceo estático también es posible demos
 
 Se procede a estudiar un primer ejemplo, este está generado para velocidades de viento en la escala de Beaufort de entre 0 y 8 de fuerza:
 
+
+\colorbox{orange}{Con los datos anteriores me salen casi 40MW para vientos de 20m/s, es esto correcto?}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{images/0-8beau torsion.png}
+    \includegraphics[width=0.9\textwidth]{images/0-8beau torsion.png}
     \caption{Potencia obtenida con viento de entre 0 y 8 de fuerza según la escala Beaufort}
      \label{fig:0-8beaufort_torsion_ejemplo_inicial}
 \end{figure}
@@ -70,9 +87,43 @@ Observando la Figura \ref{fig:0-8beaufort_torsion_ejemplo_inicial} se puede visl
      \label{fig:0-5beaufort_torsion_ejemplo_inicial}
 \end{figure}
 
-A simple vista pueden llegar a parecer la misma imagen, pero como se comentó, la Figura \ref{fig:0-5beaufort_torsion_ejemplo_inicial} es solo un zoom de la Figura \ref{fig:0-8beaufort_torsion_ejemplo_inicial}. Al aplicar el zoom se puede observar que las dos figuras presentan una forma casi idéntica, es por ello que se puede pensar que por mucho zoom que se realice, la diferencia entre ambas parece constante.\\
+A simple vista pueden llegar a parecer la misma imagen, pero como se comentó, la Figura \ref{fig:0-5beaufort_torsion_ejemplo_inicial} es solo un zoom de la Figura \ref{fig:0-8beaufort_torsion_ejemplo_inicial}. Se puede observar que las dos figuras presentan una forma casi idéntica, es por ello que se puede pensar que por mucho zoom que se realice, la diferencia entre ambas parece constante.\\
 
-Se realiza el análisis de la eficiencia basándonos en las anteriores figuras para comprobar si la hipótesis planteada resulta ser correcta.\\
+Se realiza el análisis de la eficiencia basándonos en las anteriores figuras para comprobar si la hipótesis planteada resulta ser correcta. En este análisis y debido al volumen de datos que se manejan mediante MATLAB se decide obtener la eficiencia $\eta$ solo para los valores medios de la velocidad del viento presentada por Beaufort. Estos presentan la suficiente dispersión como para ser significativos.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c|cccccccc|}
+\cline{2-9}
+\multicolumn{1}{l|}{} &
+  \multicolumn{8}{c|}{Ángulo de cabeceo $\theta_1$ = 2$^{\circ}$ y Ángulo de torsión $\Delta_\theta$ = 0.1$^{\circ}$} \\ \hline
+\multicolumn{1}{|c|}{Velocidad viento (m/s)} &
+  \multicolumn{1}{c|}{0.8} &
+  \multicolumn{1}{c|}{2.4} &
+  \multicolumn{1}{c|}{4.3} &
+  \multicolumn{1}{c|}{6.7} &
+  \multicolumn{1}{c|}{9.3} &
+  \multicolumn{1}{c|}{12.3} &
+  \multicolumn{1}{c|}{15.5} &
+  18.9 \\ \hline
+\multicolumn{1}{|c|}{Eficiencia, $\eta$} &
+  \multicolumn{1}{c|}{1.0139} &
+  \multicolumn{1}{c|}{1.0139} &
+  \multicolumn{1}{c|}{1.0139} &
+  \multicolumn{1}{c|}{1.0139} &
+  \multicolumn{1}{c|}{1.0139} &
+  \multicolumn{1}{c|}{1.0139} &
+  \multicolumn{1}{c|}{1.0139} &
+  1.0139 \\ \hline
+\end{tabular}
+    \caption{Eficiencia del rotor en función de la velocidad del viento}
+     \label{tabla:eficiencia_primer_intento}
+\end{table}
+
+La suposición era correcta, la relación entre las potencias es constante. Esto puede llegar descolocar de cierta manera uno de los pensamientos iniciales cuando se comenzó este trabajo, ya que se pensaba o se podía imaginar que a mayor cantidad de viento la torsión tendría mas efecto sobre el rotor y las palas. Pero en base a una sola prueba no se puede pensar que se está en lo cierto. \\
+
+A continuación se probarán ángulos de torsión $\Delta_\theta$ entre 0.02 y 0.04$^{\circ}$  manteniendo el ángulo de cabeceo $\theta_1$.
+
 
 \subsection{Resultados usando el Aerogenerador SWT-6.0-154\cite{Siemens2022} de Siemens}
 
