@@ -1,3 +1,4 @@
+
 %% José Antonio Fernández López
 % TFG - Generación de energía con una turbina eólica flotante
 %% Variables Globales
@@ -16,14 +17,14 @@
     % Diametro de la góndola del rotor
         DIAMETRO_GONDOLA = 4; % m
     % Velocidades del viento
-        U_VIENTO = 1:0.5:20;
+        U_VIENTO = 3.4:0.01:5.4;
         % Longitud del vector viento
            M = length(U_VIENTO);
     % Densidad del material de la pala
-        CFRP = 1410; %kg/m^3
-        GFRP = 1500; %kg/m^3
-        GFEPOXI = 1700; %kg/m^3
-        DENS_PALA = [CFRP GFRP GFEPOXI];
+        CFRP = 1750; %kg/m^3 1.5-2 es el rango bueno
+        GFRP = 1050; %kg/m^3 0.91-1.2 es el rango bueno
+        GFEPOXY = 1176; %kg/m^3 1159, 1184 y 1186 son los datos, 1176 la mean
+        DENS_PALA = [CFRP GFRP GFEPOXY];
     % Densidad del aire
         RHO = 1.225; %Kg/m^3
     % Ancho de la pala en el buje y en la punta
@@ -34,17 +35,56 @@
 
 %% Main
 
+%  % Contadores para la leyenda
+%      contador0 = 1;
+%      contador1 = 1;
+%
+%  figure('Name','Variación ángulo cabeceo 0 - 3.2')
+%      for THETA_1_SETUP = 0
+% 
+%         theta_CL = THETA_1_SETUP;
+%         DELTA_THETA = 0.04;
+% 
+%         [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1_SETUP, DELTA_THETA);
+% 
+%         [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
+%             
+%         [v_frustum_i, v_frustum_total] = volumen_pala(ANCHO_BUJE, ANCHO_PUNTA, L, i, N, L_i, c_right_i, c_left_i);
+%             
+%         [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
+%         
+%         F_viento_i = fuerza_viento(theta_CL, N, M, RHO, L, U_VIENTO);
+%          
+%         [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
+%         
+%         [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
+% 
+%         omega = velocidad_angular(L, DIAMETRO_GONDOLA, BUJE, RHO, U_VIENTO, CP, I);
+%         
+%         [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1);
+% 
+%         %eta_1(contador0,:) = eta;
+%         
+%         
+%         [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
+%         title('Pot en base a U VIENTO, Variación ángulo cabeceo 0 - 3.2');
+% 
+%      end
+%  % Comandos de la leyenda de la primera figura
+%      hold off;
+%      legend show;
+%      legend('Location','best')
+
  % Contadores para la leyenda
-     contador0 = 1;
-     contador1 = 1;
-
- figure('Name','Variación ángulo cabeceo 0 - 3.2')
-     for THETA_1_SETUP = 0:0.4:3.2
-
-        theta_CL = THETA_1_SETUP;
-        DELTA_THETA = 0.04;
-
-        [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1_SETUP, DELTA_THETA);
+    contador0 = 1;
+    contador1 = 1;
+ figure('Name','Ángulo cabeceo = 2° y ángulo torsión = 0.01°')
+    for DELTA_THETA_SETUP = 0.01:0.01:0.04
+        
+        THETA_1 = 2;
+        theta_CL = THETA_1;
+        
+        [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA_SETUP);
 
         [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
             
@@ -61,29 +101,50 @@
         omega = velocidad_angular(L, DIAMETRO_GONDOLA, BUJE, RHO, U_VIENTO, CP, I);
         
         [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1);
-
-        eta_1(contador0,:) = eta;
         
-        
-        [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
-        title('Pot en base a U VIENTO, Variación ángulo cabeceo 0 - 3.2');
+        [contador0, contador1] = plot_torsion(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
+        title('Pot en base a U VIENTO, Ángulo cabeceo = 2° y ángulo torsión = 0.01°');
 
-     end
- % Comandos de la leyenda de la primera figura
-     hold off;
-     legend show;
-     legend('Location','best')
+    end
+ % Comandos de la leyenda de la segunda figura
+    hold off;
+    legend show;
+    legend('Location','best')
+% Para ver si hay algún valor distinto en la eficiencia
+%     cuenta=1;
+% for prueba=min(U_VIENTO):0.1:max(U_VIENTO)
+%     if eta(cuenta) == 1.014
+%          disp(cuenta)
+%     end
+%     cuenta = cuenta + 1;
+% end
+
+% Para obtener la eficiencia cuando U_VIENTO tiene determinado valor
+% contar = 1;
+% for valor_viento=min(U_VIENTO):0.1:max(U_VIENTO)
+%          if (valor_viento == 0.8 || valor_viento == 2.4 || valor_viento == 4.3 || valor_viento == 6.7 || ...
+%              valor_viento == 9.3 || valor_viento == 12.3 || valor_viento == 15.5 || valor_viento == 18.9)
+%             disp(eta(contar))
+%          end
+%     contar = contar + 1;
+% end
+
+
 
 %  % Contadores para la leyenda
 %     contador0 = 1;
 %     contador1 = 1;
-%  figure('Name','Variación ángulo de torsión 0 - 0.6')
-%     for DELTA_THETA_SETUP = 0.01:0.02:0.06
-%         
-%         THETA_1 = 1;
-%         theta_CL = THETA_1;
-%         
-%         [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA_SETUP);
+%  % Cambiamos la longitud de la pala para ver como afecta
+%     L = 37.5;
+%     L_i = L/N;
+% 
+% 
+%  figure('Name','Hacemos que la pala mida la mitad L=37.5')
+%     for THETA_1_SETUP = 0:0.4:3.2
+%         theta_CL = THETA_1_SETUP;
+%         DELTA_THETA = 0.04;
+% 
+%         [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1_SETUP, DELTA_THETA);
 % 
 %         [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
 %             
@@ -91,7 +152,7 @@
 %             
 %         [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
 %         
-%         F_viento_i = fuerza_viento(N, M, RHO, L, U_VIENTO);
+%         F_viento_i = fuerza_viento(theta_CL, N, M, RHO, L, U_VIENTO);
 %          
 %         [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
 %         
@@ -102,54 +163,15 @@
 %         [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1);
 %         
 %         [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
-%         title('Pot en base a U VIENTO, Variación ángulo de torsión 0 - 0.6');
+%         title('Pot en base a U VIENTO, Hacemos que la pala mida la mitad L=37.5');
+%
+%         %eta_3(contador0,:) = eta;        
 %     end
 % 
 %  % Comandos de la leyenda de la segunda figura
 %     hold off;
 %     legend show;
 %     legend('Location','best')
-
-
- % Contadores para la leyenda
-    contador0 = 1;
-    contador1 = 1;
- % Cambiamos la longitud de la pala para ver como afecta
-    L = 37.5;
-    L_i = L/N;
-
-
- figure('Name','Hacemos que la pala mida la mitad L=37.5')
-    for THETA_1_SETUP = 0:0.4:3.2
-        theta_CL = THETA_1_SETUP;
-        DELTA_THETA = 0.04;
-
-        [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1_SETUP, DELTA_THETA);
-
-        [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
-            
-        [v_frustum_i, v_frustum_total] = volumen_pala(ANCHO_BUJE, ANCHO_PUNTA, L, i, N, L_i, c_right_i, c_left_i);
-            
-        [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
-        
-        F_viento_i = fuerza_viento(theta_CL, N, M, RHO, L, U_VIENTO);
-         
-        [torque_0, torque_global_0] = torque_cabeceo(F_viento_i, THETA_1, brazo_i);
-        
-        [torque_1, torque_global_1] = torque_torsion(F_viento_i, theta_i, M, N, brazo_i, DELTA_THETA);
-
-        omega = velocidad_angular(L, DIAMETRO_GONDOLA, BUJE, RHO, U_VIENTO, CP, I);
-        
-        [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1);
-        
-        [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
-        title('Pot en base a U VIENTO, Hacemos que la pala mida la mitad L=37.5');
-    end
-
- % Comandos de la leyenda de la segunda figura
-    hold off;
-    legend show;
-    legend('Location','best')
 
  
 
@@ -239,12 +261,12 @@
     %%  Momento inercia general de los segmentos de la pala
         
             % Masa de cada segmento de la pala
-            S_pala = sum(s_i); % Área de la pala (m)
+            s_pala = sum(s_i); % Área de la pala (m)
 
             % Supuestamente del volumen total de la pala, solo está relleno
             % cerca de un 20%, el resto es aire.
             masa_pala = DENS_PALA(1) * (v_frustum_total*0.2); %Kg
-            m_i = (s_i/S_pala) * masa_pala; %Kg de cada segmento
+            m_i = (s_i/s_pala) * masa_pala; %Kg de cada segmento
     
         % Una vez se obtiene el volumen de la figura, se puede calcular el espesor,
         % https://journals.pan.pl/Content/109465/PDF/AME_125441.pdf
@@ -253,17 +275,17 @@
             %espesor_medio = sum( (espesor_i .* L_i) ./ L ); %m
 
         % Se obtiene la densidad superficial de la pala
-            dens_superficial = m_i./s_i;
+            dens_superficial_media = ((masa_pala/s_pala)*L_i)/L;
         
         % Inercia del área de un trapecio
             I_area = (L_i^3).*((c_right_i.^2) + (4.*c_right_i.*c_left_i) + (c_left_i.^2)) ./ (36 .* (c_right_i + c_left_i));
-            I_general = dens_superficial .* I_area;
+            I_cm = dens_superficial_media * I_area;
            
         % Teorema de Steiner    
             steiner_theorem = m_i .* (brazo_i.^2);
         
         % Momento de inercia general
-            I = I_general + steiner_theorem;
+            I = I_cm + steiner_theorem;
         
     end
         
@@ -276,7 +298,7 @@
 
         F_viento_i = zeros(N,1);
         for j = 1:M
-            F_viento_i(j) = (1/2) .* RHO .* ((pi/4)*((2*L)^2)) .* (U_VIENTO(j).^2) * C_L;
+            F_viento_i(j) = (1/2) .* RHO .* ((pi/4)*((2*L).^2)) .* (U_VIENTO(j).^2) * C_L;
         end
         
 
@@ -356,24 +378,57 @@ function [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_glo
             eta = potencia_1.' ./ potencia_0.';
     end
     
-    function  [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1)
+    function  [contador0, contador1] = plot_torsion(U_VIENTO, potencia_0, potencia_1, contador0, contador1)
 %% Representaciones
 
 %Potencia obtenida dependiendo de la velocidad del viento
     x = U_VIENTO;
-    y0 = potencia_0.';
-    y1 = potencia_1.';
+    y0 = potencia_0.'/1e6;
+    y1 = potencia_1.'/1e6;
     % Necesito hacer un contador externo para la leyenda ya que el show de la
     % leyenda está fuera del propio bucle de potencias que se están mostrando.
     % Si no se hace esto, MATLAB ignora la extra entries de la leyenda y solo
     % muestra la primera.
-    leyenda0 = ['Potencia SIN torsión ', num2str(contador0)]; contador0 = 1 + contador0;
+
+    %leyenda0 = ['Potencia SIN torsión ', num2str(contador0)]; contador0 = 1 + contador0;
     leyenda1 = ['Potencia CON torsión ', num2str(contador1)]; contador1 = 1 + contador1;
+    leyenda0 = ['Potencia SIN torsión '];
     
+    % Para que solo haga plot 1 vez de la potencia sin torsión
+    if contador1 == 2
     plot(x, y0, 'DisplayName', leyenda0); hold on;
-    plot(x, y1, 'DisplayName', leyenda1);
+    end
+
+    
+    hold on;plot(x, y1, 'DisplayName', leyenda1);
+    
     xlabel('Velocidad del viento (m/s)');
-    ylabel('Potencia (W)');
+    ylabel('Potencia (MW)');
+    xlim([min(U_VIENTO) max(U_VIENTO)])
 
     end
 
+        function  [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1)
+%% Representaciones
+
+%Potencia obtenida dependiendo de la velocidad del viento
+    x = U_VIENTO;
+    y0 = potencia_0.'/1e6;
+    y1 = potencia_1.'/1e6;
+    % Necesito hacer un contador externo para la leyenda ya que el show de la
+    % leyenda está fuera del propio bucle de potencias que se están mostrando.
+    % Si no se hace esto, MATLAB ignora la extra entries de la leyenda y solo
+    % muestra la primera.
+
+    leyenda0 = ['Potencia SIN torsión ', num2str(contador0)]; contador0 = 1 + contador0;
+    leyenda1 = ['Potencia CON torsión ', num2str(contador1)]; contador1 = 1 + contador1;
+    
+   
+    plot(x, y0, 'DisplayName', leyenda0);
+    hold on;plot(x, y1, 'DisplayName', leyenda1);
+    
+    xlabel('Velocidad del viento (m/s)');
+    ylabel('Potencia (MW)');
+    xlim([min(U_VIENTO) max(U_VIENTO)])
+
+    end
