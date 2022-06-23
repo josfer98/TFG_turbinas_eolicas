@@ -1,4 +1,9 @@
-\section{Primeras pruebas en MATLAB}
+\section{Simulación y validación}
+
+\textcolor{orange}{\huge Las simulaciones debes explicar en qué condiciones las haces, para saber si están bien, y deben coincidir con los resultados del desarrollo anterior (potencia, etc).\\
+la torsión óptima es 4 pero la máxima es como 16\\
+Explicar las simulaciones como la de la página 82 del trabajo de matilde}
+
 
 Desarrollado todo el fundamento teórico detrás del estudio que se está realizando y con el que se está tratando de conocer si mediante torsión de las palas de una turbina eólica se obtiene más energía, menos o la misma que si no se torsionasen, se debe avanzar y comenzar a hacer cálculos empíricos. \\
 
@@ -122,16 +127,32 @@ Se realiza el análisis de la eficiencia basándonos en las anteriores figuras p
 
 La suposición era correcta, la relación entre las potencias es constante. Esto puede llegar descolocar de cierta manera uno de los pensamientos iniciales cuando se comenzó este trabajo, ya que se pensaba o se podía imaginar que a mayor cantidad de viento la torsión tendría mas efecto sobre el rotor y las palas. Pero en base a una sola prueba no se puede pensar que se está en lo cierto. \\
 
+\colorbox{orange}{La potencia crece con la torsión y así lo hace la potencia}
+
+\colorbox{orange}{cuanto mas torsiono mas potencia sale, como explico las limitaciones de la vida real?}
+
+\colorbox{orange}{Os dejo la prueba para que lo veaís}
+
 A continuación se probarán ángulos de torsión $\Delta_\theta$ entre 0.02 y 0.04$^{\circ}$  manteniendo el ángulo de cabeceo $\theta_1$.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/3beau torsion 001 to 004.png}
+    \caption{Potencia obtenida con viento de fuerza 3 para $\Delta_\theta$ entre 0.02 y 0.04$^{\circ}$ }
+     \label{fig:0-3beaufort_torsion}
+\end{figure}
 
-\subsection{Resultados usando el Aerogenerador SWT-6.0-154\cite{Siemens2022} de Siemens}
-
-En este caso y utilizando un aerogenerador del que se conocen ciertas variables y factores que se han tenido en cuenta en este trabajo, se procede a obtener la potencia.\\
-
-Se trata de un aerogenerador de grande dimensiones, es por ello que el \textit{CP} usado debe ser un valor entre 0.3 y 0.4, este valor lo establece el diseño del aerogenerador y al estar trabajando con un sistema inmaculado y en condiciones perfectas se usará 0.4 como valor.\\
+El viento en la Figura \ref{fig:0-3beaufort_torsion} se encuentra dentro de los límites de Fuerza 3, para que se pueda vislumbrar la diferencia entre las diferentes potencias.
 
 
 
+% \subsection{Resultados usando el Aerogenerador SWT-6.0-154\cite{Siemens2022} de Siemens}
 
-En la anterior figura se puede observar la potencia que obtiene la pala que se ha definido si se le presentasen vientos vivos de entre 8 y 10 m/s y una torsión de 0.04$^{\circ}$ por segmento, lo cual puede parecer una variación baja teniendo en cuenta la longitud de la pala, pero no es así.\\
+% En este caso y utilizando un aerogenerador del que se conocen ciertas variables y factores que se han tenido en cuenta en este trabajo, se procede a obtener la potencia.\\
+
+% Se trata de un aerogenerador de grande dimensiones, es por ello que el \textit{CP} usado debe ser un valor entre 0.3 y 0.4, este valor lo establece el diseño del aerogenerador y al estar trabajando con un sistema inmaculado y en condiciones perfectas se usará 0.4 como valor.\\
+
+
+
+
+% En la anterior figura se puede observar la potencia que obtiene la pala que se ha definido si se le presentasen vientos vivos de entre 8 y 10 m/s y una torsión de 0.04$^{\circ}$ por segmento, lo cual puede parecer una variación baja teniendo en cuenta la longitud de la pala, pero no es así.\\

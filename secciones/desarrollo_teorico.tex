@@ -1,6 +1,8 @@
-\section{Desarrollo teórico de la fuerza de torsión en una pala de una turbina eólica}
+\section{ Desarrollo del cálculo de la fuerza de torsión en las palas de una turbina}
 
 \subsection{Descripción de la pala del aerogenerador y sus parámetros}
+
+\textcolor{orange}{\huge El punto 2.1 debería ser lo que es una turbina, sus partes (torre, góndola, rotor con palas, etc), quizás una imagen, y decir que vas a trabajar con palas, etc. Es decir, una introducción de lo que vas a desarrollar, fuerza de torsión en qué sistema y en qué parte, etc.}
 
 En esta sección se va a describir la pala del aerogenerador y los parámetros necesarios para determinar los efectos que produce la torsión en nuestra obtención de energía. En primer lugar la definición e idea general de la pala de una turbina de un aerogenerador, después el desarrollo trigonométrico para el cálculo de la línea de cuerda y por último la obtención de los brazos de la pala conociendo los centro de masa de los segmentos.\\
 
@@ -113,7 +115,7 @@ La Figura \ref{fig:sacar_c3} se ilustra un ejemplo en el que  el valor de $i$ es
 \end{figure}
 
 
-Una vez se ha obtenido el valor buscado, $c_i$, se deberá definir todos los laterales de los segmentos de la pala, para así poder operar con ellos y conseguir el área de cada uno. Esto ya fue desarrollado en el artículo \cite{armenta2021predictive}, pero en aquel caso fue usado para comprobar el error que suponía usar un rectángulo en vez de una pala simplificada. En este caso se parte directamente de la pala simplificada para evitar correcciones de errores mas adelante y porque el cálculo que se debe realizar con respecto a la obtención de energía no es tan riguroso como en el Artículo \cite{armenta2021predictive}.\\
+Una vez se ha obtenido el valor buscado, $c_i$, se deberá definir todos los laterales de los segmentos de la pala, para así poder operar con ellos y conseguir el área de cada uno. Esto ya fue desarrollado en el artículo \cite{armenta2021predictive}, pero en aquel caso fue usado para comprobar el error que suponía usar un rectángulo en vez de una pala simplificada. En este caso se parte directamente de la pala simplificada para evitar correcciones de errores mas adelante y porque el cálculo que se debe realizar con respecto a la obtención de energía como en el Artículo \cite{armenta2021predictive}.\\
 
 En base a esta representación esquemática, y mediante las relaciones trigonométricas anteriores se obtuvieron:
 \begin{equation}
@@ -273,7 +275,7 @@ Teniendo los cálculos del volumen de la pala del aerogenerador se pueden estudi
 
 
 \subsection{Estudio del torque sin ángulo de cabeceo}
-\label{section:torque_pala_horizontal}
+\label{section:no_cabeceo}
 
 Tomando una pala con forma real, en una situación en la que no se presenta cabeceo, en la que está incidiendo un viento con ángulo de ataque paralelo a la pala se puede observar un giro de las palas del aerogenerador.\\
 
@@ -290,7 +292,7 @@ Este efecto produce un gradiente de presión y por ello una fuerza de sustentaci
     \end{figure}
 
 
-Debido a este fenómeno se va a trabajar con una pala simplificada (ver la Figura \ref{fig:analisis_volumen}) que simplificará cálculos. \\
+% Debido a este fenómeno se va a trabajar con una pala simplificada (ver la Figura \ref{fig:analisis_volumen}) que simplificará cálculos. \\
 
 
 
@@ -303,7 +305,7 @@ El ángulo $ \theta_1 $ es el \textit{ángulo de cabeceo} que sufrirán todos y 
 En esta sección se estudiará qué ocurre en término de fuerzas, torque y momento cuando se gira toda la pala únicamente el ángulo de cabeceo $ \theta_1 $. \\
 
 
-Al inclinar odos los segmentos un ángulo $ \theta_1 $ se genera la situación en la que el viento incide en el centro del segmento con el mismo ángulo con el que se inclina la pala (ver Figura \ref{fig:dibujo_angulo_ataque}). \\
+Al inclinar odos los segmentos un ángulo $ \theta_1 $ se genera la situación en la que el viento incide en el centro del segmento con el mismo ángulo con el que se inclina la pala (ver Figura \ref{fig:dibujo_fuerzas}). \\
 
 \begin{figure}[H]
     \centering
@@ -313,13 +315,11 @@ Al inclinar odos los segmentos un ángulo $ \theta_1 $ se genera la situación e
     \label{fig:dibujo_fuerzas}
 \end{figure}
 
-La fuerza del viento que incide en la pala se puede descomponer en dos, la tangencial y la normal. \\
-
-El vector fuerza normal es perpendicular al ángulo de ataque del viento, mientras que el vector fuerza tangencial recorre de manera paralela la línea central de la pala.
+La fuerza del viento que incide en la pala se puede descomponer en dos, la tangencial y la normal. El vector fuerza normal es perpendicular al ángulo de ataque del viento, mientras que el vector fuerza tangencial recorre de manera paralela la línea central de la pala.\\
 
  La fuerza normal viene definida por la siguiente expresión:
  \begin{equation}
-   f \text{ } normal_i = F \text{ } viento_i \cdot \sin{\theta_1} \hspace{7pt} (N)
+   f \text{ } normal = F \text{ } viento \cdot \sin{\theta_1} \hspace{7pt} (N)
  \label{def:fuerza_normal}
  \end{equation}
  Donde $F \text{ } viento$ es la fuerza generada por el viento en cada segmento de la pala y $f \text{ } normal$ es la fuerza perpendicular al viento, generada por el choque de este con la pala de la turbina eólica.\\
@@ -329,7 +329,7 @@ La componente paralela a la pala, que se ha definido como tangencial se obviará
   
 El momento de giro o torque se define como:
   \begin{equation}
-  torque_0 = f \text{ } normal_i \times brazo \hspace{7pt} (N \cdot m)
+  torque_0 = f \text{ } normal \times brazo \hspace{7pt} (N \cdot m)
   \label{def:torque_inicial}
  \end{equation}
  Donde $torque_0$ := Momento de fuerza de giro solo con ángulo de cabeceo.\\
@@ -352,7 +352,7 @@ El $torque_0$ es el producto vectorial entre la $fuerza  \text{ }perpendicular \
  
 La fuerza del viento para el rotor completo es:
  \begin{equation}
-  F \text{ } viento_i = \dfrac{1}{2} \text{ } \rho \cdot area \text{ } rotor \cdot u^2 \cdot coeficiente \text{ } sustentación \hspace{7pt} (N)
+  F \text{ } viento = \dfrac{1}{2} \text{ } \rho \cdot area \text{ } rotor \cdot u^2 \cdot coeficiente \text{ } sustentación \hspace{7pt} (N)
    \end{equation}
    
     Donde $\rho = 1.225 \text{ } \dfrac{Kg}{m^3}$, $u$ es la velocidad del viento, $area \text{ } rotor$ es la superficie del círculo que dibuja el giro de las palas y $coeficiente \text{ } sustentación$ es el número usado en la modelación y sus dependencias complejas de forma, inclinación y algunas condiciones de flujo en la sustentación \cite{Hall2021}.
@@ -365,11 +365,17 @@ La fuerza del viento para el rotor completo es:
   diametro \text{ } rotor = 2 \cdot L \hspace{7pt} (m)
  \end{equation}
 
+ En la Sección \ref{section:no_cabeceo} se menciona la existencia de una fuerza de sustentación que genera torque cuando el viento incide de manera paralela sobre la pala del aerogenerador.\\
  
+ Cuando se introduce un ángulo de cabeceo y debido a la forma de la sección de la pala, Figura \ref{fig:dibujo_fuerzas}, es posible incluir la variable conocida como \textit{coeficiente sustentación}. Este se produce debido a las fuerzas de empuje del viento y su valor es obtenido mediante la siguiente representación:
  
- %El coeficiente de sustentación es un número que los aerodinámicos usan para modelar todas las dependencias complejas de forma, inclinación y algunas condiciones de flujo en la sustentación. Esta ecuación es simplemente un reordenamiento de la ecuación de sustentación donde resolvemos el coeficiente de sustentación en términos de las otras variables. El coeficiente de sustentación Cl es igual a la sustentación L dividida por la cantidad: densidad r por la mitad de la velocidad V al cuadrado por el área del ala A.
-
-
+ \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/imagen del coeficiente sustentacion.PNG}
+    \caption{Curva de sustentación medida para un aerogenerador que tiene una superficie sustenadora con un espesor de entre 18\% y 25\% }
+    Fuente: Artículo \cite{TIMMER2013109}, Figura 4.13
+    \label{fig:plot_coef_sustentacion}
+\end{figure}
 
 
 
@@ -396,7 +402,7 @@ Donde $i \in segmento \wedge (i > 1)$\\
 
 La fuerza normal se define como:
 \begin{equation}
-   f \text{ } normal_i = F \text{ } viento_i \cdot \sin{\theta_i} \hspace{7pt} (N)
+   f \text{ } normal_i = F \text{ } viento \cdot \sin{\theta_i} \hspace{7pt} (N)
   \label{def:fuerza_normal_torsion}
  \end{equation}
 
@@ -438,6 +444,8 @@ Donde $torque \text{ } global_1$ es la suma de torque de los N segmentos.
 
 \subsection{Cálculo de la potencia del sistema}
 \label{section:pot_sistema}
+ 
+ \textcolor{orange}{\huge La potencia depende de la turbina con la que estés trabajando, y del tamaño de las palas.}
  
  Una vez se tiene todo lo necesario para el cálculo del torque, se puede pasar al cálculo de la potencia. Esta es la variable más importante, cuanta mayor cantidad de energía se genere, mejor, aunque existe un límite directamente relacionado con las limitaciones técnicas y físicas que presentan las turbinas eólicas. \\
  
@@ -598,7 +606,30 @@ La energía cinética producida por la masa de aire que comprende el rotor y la 
 \end{equation}
 Donde $E_c$ es la energía generada por el movimiento de las palas del rotor.\\
 
-A continuación se introduce un término que limita la energía cinética que se puede obtener en un aerogenerador, se trata del \textit{coeficiente de potencia} $CP$. Al introducir este término en la ecuación anterior, se pasa de tener una energía cinética simple a una aprovechada o de rotación.\\
+
+A continuación se introduce un término que limita la energía cinética que se puede obtener en un aerogenerador, se trata del \textit{coeficiente de potencia} $CP$.\\
+
+El valor máximo de esta variable adimensional es 0.593, este valor se conoce como Límite de Betz. Albert Betz establece que el límite máximo de aprovechamiento de energía cinética que se puede obtener de la energía del viento es el 59.3\%. Este realizó un experimento en el cual define un tubo de corriente con condiciones ideales dentro del cual se encuentran las palas de la turbina eólica, estas al girar obtienen energía, pero también generan bloqueos y turbulencias con el viento que las atraviesa. Estas dos hacen que que el tubo de corriente se ensanche y se pierda velocidad del viento en la estela de la turbina \cite{NEILL201883}.\\
+
+
+En la figura, la flecha indica la dirección del viento y también se observa la expansión de la estela.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/Figura articulo Modelling Smart Wind Turbine Blades.PNG}
+    \caption{Tubo de corriente producido por un aerogenerador}
+    Fuente: Tesis \cite{Vinit2015}, Figura 2.1
+    \label{fig:Tubo_corriente_betz}
+\end{figure}
+
+
+La derivada de la potencia extraída entre la potencia del viento en el tubo de flujo que se definió da como resultado el \textit{límite de Betz}.\\
+
+
+Al introducir este término en la ecuación anterior, se pasa de tener una energía cinética simple a una aprovechada o de rotación.\\
+
+
+
 
 \begin{equation}
     E_c \text{ } aprovechada = E_c \cdot CP \hspace{7pt} (J)
@@ -617,7 +648,7 @@ Se comparan las dos energías cinéticas y se obtiene la velocidad angular para 
 \end{equation}
 
 
- \subsection{Potencia de la turbina}
+ \subsection{Rendimiento de la turbina}
  \label{section:rendimiento}
  
 La comparación de potencias da como resultado un rendimiento, este permite determinar si la torsión de la pala genera una variación en la potencia obtenida.\\
