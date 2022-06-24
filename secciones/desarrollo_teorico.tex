@@ -1,5 +1,5 @@
 \section{ Desarrollo del cálculo de la fuerza de torsión en las palas de una turbina}
-
+\label{section:2_desarollo_cálculo}
 \subsection{Descripción de la pala del aerogenerador y sus parámetros}
 
 \textcolor{orange}{\huge El punto 2.1 debería ser lo que es una turbina, sus partes (torre, góndola, rotor con palas, etc), quizás una imagen, y decir que vas a trabajar con palas, etc. Es decir, una introducción de lo que vas a desarrollar, fuerza de torsión en qué sistema y en qué parte, etc.}
@@ -371,12 +371,13 @@ La fuerza del viento para el rotor completo es:
  
  \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{images/imagen del coeficiente sustentacion.PNG}
-    \caption{Curva de sustentación medida para un aerogenerador que tiene una superficie sustenadora con un espesor de entre 18\% y 25\% }
-    Fuente: Artículo \cite{TIMMER2013109}, Figura 4.13
+    \includegraphics[width=0.8\textwidth]{images/imagen del coeficiente sustentacion.PNG}
+    \caption{Sketch del coeficiente de sustentación en función del ángulo de ataque}
+    Fuente: \cite{johann2016}, Figura 2
     \label{fig:plot_coef_sustentacion}
 \end{figure}
 
+Aunque la Figura \ref{fig:plot_coef_sustentacion} se trate de un Sketch se trata de uno bastante próximo a la realidad. En numerosos trabajos se estudia la superficie aerodinámica, en inglés airfoil, de los NACA en sus diferentes variaciones y esta representación es bastante próxima a ellos por lo cual nos valdremos de sus valores para calcular aproximaciones mediante nuestra rotor.
 
 
  
@@ -513,9 +514,9 @@ Si se combina la Ecuación \ref{eq:Huygens-Steiner} junto con las variables defi
  \end{equation}
  Donde $I_{area}$ es el momento de inercia de área de una figura de un espesor mínimo para centrar su cálculo en la forma.\\
  
- La anterior ecuación se debe multiplicar por la \textbf{densidad superficial} de la pala del aerogenerador ya que esta representa el momento de inercia de un área, en este caso un trapecio, y se necesita esta densidad para obtener el momento de inercia general.\\
+ La anterior ecuación se debe multiplicar por el \textbf{$c_i$} y la \textbf{densidad volumétrica} de la pala del aerogenerador ya que esta representa el momento de inercia de un área, en este caso un trapecio, y se necesita esta densidad para obtener el momento de inercia general.\\
 
-En el cálculo de la \textbf{densidad superficial} son necesarios dos términos que aún no se han acuñado en este trabajo, la masa y la superficie de una pala. Es cierto que se ha calculado la superficie de los segmentos en la Definición \ref{def:area_segmentos}, ahora solo queda sumarlos.\\
+En el cálculo de la \textbf{densidad volumétrica} son necesarios dos términos que aún no se han acuñado en este trabajo, la masa y la superficie de una pala. Es cierto que se ha calculado la superficie de los segmentos en la Definición \ref{def:area_segmentos}, ahora solo queda sumarlos.\\
 
 
 La superficie de la pala es:
@@ -540,11 +541,11 @@ GF \text{ } Epoxy = 1159-1186 \hspace{7pt} \left(\dfrac{Kg}{m^3}\right)
 
 Parte de la pala es hueca. Existen estudios \cite{Pourrajabian2016} en los cuales se compara el uso de palas compactas y huecas en determinado escenario y con diferentes grosores de material. \\
 
-En este trabajo, las palas serán huecas y se estima que solo entre un $15-20\%$ de la pala presenta alguno de los materiales que se mencionan. Por ello la expresión de la masa es la siguiente. \\
+En este trabajo, las palas serán huecas y se estima que solo entre un $18-25\%$ de la pala presenta alguno de los materiales que se mencionan. Por ello la expresión de la masa es la siguiente. \\
 
 La masa de los segmentos de una pala dada su densidad y volumen:
  \begin{equation}
- masa \text{ } pala = densidad \text{ } pala \cdot (volumen \text{ } frustum_{total} \cdot (15-20\%) ) \hspace{7pt} (Kg)
+ masa \text{ } pala = densidad \text{ } pala \cdot (volumen \text{ } frustum_{total} \cdot (18-25\%) ) \hspace{7pt} (Kg)
  \end{equation}
  \begin{equation}
  masa \text{ } segmento_i = \dfrac{s_i}{superficie \text{ } pala} \cdot masa \text{ } pala \hspace{7pt} (Kg)
@@ -555,17 +556,15 @@ La masa de los segmentos de una pala dada su densidad y volumen:
  
 Se puede pasar a calcular la $densidad \text{ } superficial$ como:
   \begin{equation}
- densidad \text{ } superficial = \dfrac{masa \text{ } pala}{ superficie \text{ } pala} \hspace{7pt} \left(\dfrac{Kg}{m^2}\right)
+ densidad \text{ } volumetrica = \dfrac{masa \text{ } pala}{volumen frustum_{total} } \hspace{7pt} \left(\dfrac{Kg}{m^3}\right)
  \label{def:densidad_superficial}
  \end{equation}
- Donde $ densidad \text{ } superficial $ generalmente se define como masa de un material por unidad de superficie. \\
+ Donde $ densidad \text{ } volumetrica $ generalmente se define como masa de un material por unidad de volumen. \\
  
- 
-  \colorbox{orange}{¿Es correcto multiplicarlo por la densidad superficial? Con carlos hablé de thickness, pero está en metros}
  
 Se puede obtener el momento de inercia general o $I_i$ mediante el Teorema \ref{eq:Huygens-Steiner}, como:
   \begin{equation}
-I_{cm_i} = I_{area_i} \cdot densidad \text{ } superficial \hspace{7pt} (Kg \cdot m^2)
+I_{cm_i} = I_{area_i} \cdot densidad \text{ } volumetrica \cdot c_i \hspace{7pt} (Kg \cdot m^2)
  \label{def:momento_inercia_cm}
  \end{equation}
  \begin{equation}
@@ -623,13 +622,22 @@ En la figura, la flecha indica la dirección del viento y también se observa la
 \end{figure}
 
 
-La derivada de la potencia extraída entre la potencia del viento en el tubo de flujo que se definió da como resultado el \textit{límite de Betz}.\\
+La derivada de la potencia extraída entre la potencia del viento en el tubo de flujo que se definió da como resultado el \textit{límite de Betz}, este es solo usado en condiciones ideales y para una velocidad óptima constante. \\
+
+Si se quiera analizar correctamente el \textit{CP} en base a la velocidad del viento se debe obtener la relación entre la potencia extraída y la potencia del viento para todas y cada una de las velocidades. Pero este cálculo tiene en cuenta factores eléctricos, mecánicos y la eficiencia de la turbina que en este trabajo se han obviado debido a su complejidad y lo mucho que profundizan en la obtención de energía de la manera más óptima. \\
+
+En la siguiente figura se puede observar la relación entre la \textit{velocidad del viento} y el \textit{coeficiente de potencia} que se va a usar a lo largo del trabajo:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/CP de una turbina de 6MW.PNG}
+    \caption{Coeficiente de potencia de una turbina de 6MW}
+    Fuente: Libro \cite{NEILL201883}, Figura 4.8
+    \label{fig:coef_potencias_6MW}
+\end{figure}
 
 
-Al introducir este término en la ecuación anterior, se pasa de tener una energía cinética simple a una aprovechada o de rotación.\\
-
-
-
+Al introducir este término en la ecuación anterior, se pasa de tener una energía cinética simple a una aprovechada o de rotación.
 
 \begin{equation}
     E_c \text{ } aprovechada = E_c \cdot CP \hspace{7pt} (J)

@@ -23,50 +23,27 @@ A continuación se detalla un acortamiento de la misma ya que no todos sus datos
      \label{tabla:escala_beaufort}
 \end{figure}
 
-% Please add the following required packages to your document preamble:
-% \usepackage{multirow}
-% \begin{table}[H]
-% \centering
-% \begin{tabular}{|c|c|cc|}
-% \hline
-% \multirow{2}{*}{Force} & \multirow{2}{*}{Description} & \multicolumn{2}{c|}{Equivalent speed at 10 metres above sea level (m/s)} \\ \cline{3-4} 
-%   &                 & \multicolumn{1}{c|}{Mean} & Limits        \\ \hline
-% 0  & Calm            & \multicolumn{1}{c|}{0}    & 0.0 to 0.2    \\ \hline
-% 1  & Light air       & \multicolumn{1}{c|}{0.8}  & 0.3 to 1.5    \\ \hline
-% 2  & Light Breeze    & \multicolumn{1}{c|}{2.4}  & 1.6 to 3.3    \\ \hline
-% 3  & Gentle breeze   & \multicolumn{1}{c|}{4.3}  & 3.4 to 5.4    \\ \hline
-% 4  & Moderate breeze & \multicolumn{1}{c|}{6.7}  & 5.5 to 7.9    \\ \hline
-% 5  & Fresh breeze    & \multicolumn{1}{c|}{9.3}  & 8.0 to 10.7   \\ \hline
-% 6  & Strong breeze   & \multicolumn{1}{c|}{12.3} & 10.8 to 13.8  \\ \hline
-% 7  & Near gale       & \multicolumn{1}{c|}{15.5} & 13.9 to 17.1  \\ \hline
-% 8  & Gale            & \multicolumn{1}{c|}{18.9} & 17 to 20.7    \\ \hline
-% 9  & Strong gale     & \multicolumn{1}{c|}{22.6} & 20.8 to 24.4  \\ \hline
-% 10 & Storm           & \multicolumn{1}{c|}{26.4} & 24.5 to 28.4  \\ \hline
-% 11 & Violent storm   & \multicolumn{1}{c|}{30.5} & 28.5 to 32.6  \\ \hline
-% 12 & Hurricane       & \multicolumn{1}{c|}{-}    & 32.7 and over \\ \hline
-% \end{tabular}
-%     \caption{Escala Beaufort}
-% \end{table}
-
-
 \subsection{¿Cuál es la torsión óptima?}
 
-\colorbox{orange}{¿Cuánto es lo máximo que se torsiona una pala en la vida real?}
+Se procede a probar un caso estándar en el que se presentan las siguientes variables globales y algunos aspectos que se comentados a lo largo de la Sección \ref{section:2_desarollo_cálculo}: 
 
-Previo a obtener resultados usando aerogeneradores con características reales como el tamaño de las aspas, se procede a probar un caso estándar en el que se presentan las siguientes variables globales:
+\begin{itemize}
+  \item Número de palas = 1
+  \item Longitud de la pala $L$ = 75 (m)
+  \item Densidad de la pala = 1176 $(Kg/m^3)$
+  \item Grosor de la pala = 20\%
+  \item Diámetro de la góndola = 4 (m)
+  \item CP, obtenido mediante la Figura \ref{fig:coef_potencias_6MW}
+  \item Ángulo de cabeceo $\theta_1$ = 2 ($^{\circ}$)
+  \item $J_{left}$ = 3 (m)
+  \item $J_{right}$ = 0.6 (m)
+  \item Ancho Buje = 2 (m)
+  \item Ancho Buje = 0.25 (m)
 
-% Please add the following required packages to your document preamble:
-% \usepackage{graphicx}
-\begin{table}[H]
-\centering
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
-\hline
-L (m) & D. góndola (m) & CP  & Á. Cabeceo  $\theta_1$ ($^{\circ}$) & $J_{left}$ (m) & $J_{right}$ (m) & Dens. pala (Kg/m^3) & Ancho buje (m) & Ancho punta (m) \\ \hline
-75    & 4              & 0.4 & 2          & 3           & 0.6          & 1176                                 & 2              & 0.25            \\ \hline
-\end{tabular}%
-}
-\end{table}
+
+\end{itemize}
+
+
 
 En un primer momento se pensó hacer un ejemplo en el que sin ángulo de cabeceo se demostrase la importancia de la torsión con respecto a la obtención de energía. Pero como se comentó en el Desarrollo teórico, es necesario contar con una pala realista para que se genere una fuerza de sustentación y así generar energía. \\
 
@@ -74,8 +51,6 @@ Además, estableciendo un ángulo de cabeceo estático también es posible demos
 
 Se procede a estudiar un primer ejemplo, este está generado para velocidades de viento en la escala de Beaufort de entre 0 y 8 de fuerza:
 
-
-\colorbox{orange}{Con los datos anteriores me salen casi 40MW para vientos de 20m/s, es esto correcto?}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{images/0-8beau torsion.png}
