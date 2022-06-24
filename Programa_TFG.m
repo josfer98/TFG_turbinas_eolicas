@@ -17,7 +17,7 @@
     % Diametro de la góndola del rotor
         DIAMETRO_GONDOLA = 4; % m
     % Velocidades del viento
-        U_VIENTO = 3.4:0.01:5.4;
+        U_VIENTO = 1:1:22;
         % Longitud del vector viento
            M = length(U_VIENTO);
     % Densidad del material de la pala
@@ -30,10 +30,12 @@
     % Ancho de la pala en el buje y en la punta
         ANCHO_BUJE = 2; %m
         ANCHO_PUNTA = 0.250; %m
-    % Coeficiente de potencia
-        CP = 0.4; %Sin unidades
 
 %% Main
+
+    % Llamamos a la función que obtiene el CP mediante regresión polinómica
+        CP = coeficiente_potencia;
+
 
 %  % Contadores para la leyenda
 %      contador0 = 1;
@@ -47,11 +49,11 @@
 % 
 %         [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1_SETUP, DELTA_THETA);
 % 
-%         [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
+%         [c_left_i, c_right_i, s_i, brazo_i, c_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
 %             
 %         [v_frustum_i, v_frustum_total] = volumen_pala(ANCHO_BUJE, ANCHO_PUNTA, L, i, N, L_i, c_right_i, c_left_i);
 %             
-%         [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
+%         [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, c_i, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
 %         
 %         F_viento_i = fuerza_viento(theta_CL, N, M, RHO, L, U_VIENTO);
 %          
@@ -75,9 +77,11 @@
 %      legend show;
 %      legend('Location','best')
 
+
+
  % Contadores para la leyenda
-    contador0 = 1;
-    contador1 = 1;
+    contador0 = 0.01;
+    contador1 = 0.01;
  figure('Name','Ángulo cabeceo = 2° y ángulo torsión = 0.01°')
     for DELTA_THETA_SETUP = 0.01:0.01:0.04
         
@@ -86,11 +90,11 @@
         
         [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1, DELTA_THETA_SETUP);
 
-        [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
+        [c_left_i, c_right_i, s_i, brazo_i, c_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
             
         [v_frustum_i, v_frustum_total] = volumen_pala(ANCHO_BUJE, ANCHO_PUNTA, L, i, N, L_i, c_right_i, c_left_i);
             
-        [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
+        [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, c_i, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
         
         F_viento_i = fuerza_viento(theta_CL, N, M, RHO, L, U_VIENTO);
          
@@ -102,8 +106,8 @@
         
         [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1);
         
-        [contador0, contador1] = plot_torsion(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
-        title('Pot en base a U VIENTO, Ángulo cabeceo = 2° y ángulo torsión = 0.01°');
+        [contador0, contador1] = plot_torsion(U_VIENTO, potencia_0, potencia_1, contador0, contador1,CP);
+        title('Pot en base a U VIENTO, Ángulo cabeceo = 2° y ángulo torsión = 0.01 - 0.04°');
 
     end
  % Comandos de la leyenda de la segunda figura
@@ -129,6 +133,13 @@
 %     contar = contar + 1;
 % end
 
+% %Prueba para comprobar el CP de mi rotor, se usa uno genérico
+% p_rotor = (1/2)*RHO*0.59*pi*(L^2) * 30.^3;
+% diametro_rotor = (L * 2) + DIAMETRO_GONDOLA;
+% grosor_rotor = BUJE; %m, el grosor depende de la parte mas ancha de la pala
+% volumen_rotor = (pi/4) * (diametro_rotor^2) * grosor_rotor;
+% p_wind = (1/2)*RHO* volumen_rotor .* 30^3;
+% cp = p_rotor ./ p_wind
 
 
 %  % Contadores para la leyenda
@@ -146,11 +157,11 @@
 % 
 %         [theta_i, THETA_1, DELTA_THETA] = setup_torsion(N, THETA_1_SETUP, DELTA_THETA);
 % 
-%         [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
+%         [c_left_i, c_right_i, s_i, brazo_i, c_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i);
 %             
 %         [v_frustum_i, v_frustum_total] = volumen_pala(ANCHO_BUJE, ANCHO_PUNTA, L, i, N, L_i, c_right_i, c_left_i);
 %             
-%         [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
+%         [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, c_i, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i);
 %         
 %         F_viento_i = fuerza_viento(theta_CL, N, M, RHO, L, U_VIENTO);
 %          
@@ -197,7 +208,7 @@
     
     end
     
-    function [c_left_i, c_right_i, s_i, brazo_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i)
+    function [c_left_i, c_right_i, s_i, brazo_i, c_i] = medidas_geometricas(BUJE, PUNTA, L, i, N, L_i)
     %% Cálculos de las medidas geométricas de una pala
     
     % Se calcula la hipotenusa de borde de fuga
@@ -257,7 +268,7 @@
             v_frustum_total = sum(v_frustum_i); % Kg * m^3
     end
     
-    function [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, L, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i)
+    function [I, masa_pala] = momento_inercia(v_frustum_i, s_i, L_i, c_i, c_right_i, c_left_i, DENS_PALA, v_frustum_total, brazo_i)
     %%  Momento inercia general de los segmentos de la pala
         
             % Masa de cada segmento de la pala
@@ -265,36 +276,54 @@
 
             % Supuestamente del volumen total de la pala, solo está relleno
             % cerca de un 20%, el resto es aire.
-            masa_pala = DENS_PALA(1) * (v_frustum_total*0.2); %Kg
+            masa_pala = DENS_PALA(3) * (v_frustum_total*0.2); %Kg
             m_i = (s_i/s_pala) * masa_pala; %Kg de cada segmento
     
-        % Una vez se obtiene el volumen de la figura, se puede calcular el espesor,
-        % https://journals.pan.pl/Content/109465/PDF/AME_125441.pdf
-            %espesor_i = (v_frustum_i) ./ s_i; %m
-            %espesor_i = (m_i./s_i)./(m_i./v_frustum_i);
-            %espesor_medio = sum( (espesor_i .* L_i) ./ L ); %m
+            %Ahora se halla la densidad volumétrica
+                dens_volumetrica = m_i./(v_frustum_i*0.2);
+            % Con la dens volumétrica se puede obtener la superficial que
+            % se busca
+                dens_superficial = dens_volumetrica .* c_i;
 
-        % Se obtiene la densidad superficial de la pala
-            dens_superficial_media = ((masa_pala/s_pala)*L_i)/L;
-        
-        % Inercia del área de un trapecio
-            I_area = (L_i^3).*((c_right_i.^2) + (4.*c_right_i.*c_left_i) + (c_left_i.^2)) ./ (36 .* (c_right_i + c_left_i));
-            I_cm = dens_superficial_media * I_area;
-           
-        % Teorema de Steiner    
-            steiner_theorem = m_i .* (brazo_i.^2);
-        
-        % Momento de inercia general
-            I = I_cm + steiner_theorem;
+            % Inercia del área de un trapecio
+                I_area = (L_i^3).*((c_right_i.^2) + (4.*c_right_i.*c_left_i) + (c_left_i.^2)) ./ (36 .* (c_right_i + c_left_i));
+                I_cm = dens_superficial .* I_area;
+               
+            % Teorema de Steiner    
+                steiner_theorem = m_i .* (brazo_i.^2);
+            
+            % Momento de inercia general
+                I = I_cm + steiner_theorem;
         
     end
         
     function F_viento_i = fuerza_viento(theta_CL, N, M, RHO, L, U_VIENTO)
     %% Fuerza del viento para distintas velocidades
 
-        % Coeficiente de sustentación
-            %C_L = 0.3; % Reynolds
-            C_L = 0.45/5 * theta_CL;
+        % Coeficiente de sustentación, mediante réplica de la curva
+        % genérica
+            if theta_CL >= 180
+                theta_CL = theta_CL - 180;
+            end
+
+            if theta_CL <= 12 
+                C_L = ((1.1/12) * (theta_CL)) + 0.3; % Reynolds
+            elseif theta_CL <= 17 
+                C_L = ((1.18-1.4)/(17-12) * (theta_CL - 12)) + 1.4; % Reynolds
+            elseif theta_CL <= 45
+                C_L = ((1.79-1.18)/(45-17) * (theta_CL - 17)) + 1.18; % Reynolds
+            elseif theta_CL <= 90
+                C_L = ((-1.79)/(90-45) * (theta_CL - 45)) + 1.79; % Reynolds
+            elseif theta_CL <= 135
+                C_L = ((-0.9)/(135-90) * (theta_CL - 90)); % Reynolds
+            elseif theta_CL <= 180-17
+                C_L = ((-1.18+1.79)/(163-135) * (theta_CL - 135)) - 1.79; % Reynolds
+            elseif theta_CL <= 180-12
+                C_L = ((-1.79+1.18)/(168-163) * (theta_CL - 163)) - 1.18; % Reynolds
+            elseif theta_CL <= 180
+                C_L = ((0+1.4)/(180-168) * (theta_CL - 168)) - 1.4; % Reynolds            
+            end
+
 
         F_viento_i = zeros(N,1);
         for j = 1:M
@@ -338,6 +367,8 @@
 
     function omega = velocidad_angular(L, DIAMETRO_GONDOLA, BUJE, RHO, U_VIENTO, CP, I)
 %% velocidad_angular
+
+
     % Se va a calular la energía cinética generada en la pala, para ello se
     % define el disco que definen las palas al realizar una vuelta completa en el que se mide la masa de aire que llega al rotor
     % Diámetro del rotor completo
@@ -361,10 +392,11 @@
 
     % Se compara y despeja con la energía cinética aprovechada para obtener
     % la velocidad angular omega
-        omega = sqrt((CP .* M_aire)./I) .* U_VIENTO.';
+        omega = sqrt(M_aire./I) .* U_VIENTO.';
+        omega = sqrt(CP.') .* omega;
 end
     
-function [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1)
+    function [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1)
     %% Desarrollo potencia y eficiencia
         % Potencia de la pala
             potencia_0 = torque_global_0 .* omega;
@@ -378,24 +410,24 @@ function [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_glo
             eta = potencia_1.' ./ potencia_0.';
     end
     
-    function  [contador0, contador1] = plot_torsion(U_VIENTO, potencia_0, potencia_1, contador0, contador1)
+    function  [contador0, contador1] = plot_torsion(U_VIENTO, potencia_0, potencia_1, contador0, contador1, CP)
 %% Representaciones
 
 %Potencia obtenida dependiendo de la velocidad del viento
     x = U_VIENTO;
-    y0 = potencia_0.'/1e6;
-    y1 = potencia_1.'/1e6;
+    y0 = CP.*potencia_0.'/1e6;
+    y1 = CP.*potencia_1.'/1e6;
     % Necesito hacer un contador externo para la leyenda ya que el show de la
     % leyenda está fuera del propio bucle de potencias que se están mostrando.
     % Si no se hace esto, MATLAB ignora la extra entries de la leyenda y solo
     % muestra la primera.
 
     %leyenda0 = ['Potencia SIN torsión ', num2str(contador0)]; contador0 = 1 + contador0;
-    leyenda1 = ['Potencia CON torsión ', num2str(contador1)]; contador1 = 1 + contador1;
+    leyenda1 = ['Potencia CON torsión ', num2str(contador1),'°']; contador1 = 0.01 + contador1;
     leyenda0 = ['Potencia SIN torsión '];
     
     % Para que solo haga plot 1 vez de la potencia sin torsión
-    if contador1 == 2
+    if contador1 == 0.02
     plot(x, y0, 'DisplayName', leyenda0); hold on;
     end
 
@@ -408,7 +440,7 @@ function [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_glo
 
     end
 
-        function  [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1)
+    function  [contador0, contador1] = plots(U_VIENTO, potencia_0, potencia_1, contador0, contador1)
 %% Representaciones
 
 %Potencia obtenida dependiendo de la velocidad del viento
@@ -432,3 +464,27 @@ function [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_glo
     xlim([min(U_VIENTO) max(U_VIENTO)])
 
     end
+
+    function CP = coeficiente_potencia
+%% Coeficiente de potencia
+% Se necesita el coeficient de potencia en base a la función del
+% viento, lo obtenemos de uno genérico.
+y = [0.01	0.01	0.01	0.02	0.05	0.28	0.4	0.48	0.48	0.45	0.4	0.35	0.3	0.23	0.19	0.15	0.12	0.1	0.09	0.08	0.07	0.06];
+x = 0:1:21;
+p = polyfit(x,y,14);
+
+CP = zeros (1,21);
+var_aux = 0;
+for vel_viento = 1:1:22
+    if var_aux < 3 || var_aux == 21
+        CP(1,vel_viento) = 0;
+    else
+        CP(1,vel_viento) = p(1)  .* (vel_viento.^14) + p(2)  .* (vel_viento.^13) + p(3)  .* (vel_viento.^12)...
+            + p(4)  .* (vel_viento.^11) + p(5)  .* (vel_viento.^10) + p(6)  .* (vel_viento.^9)...
+            + p(7)  .* (vel_viento.^8)  + p(8)  .* (vel_viento.^7)  + p(9)  .* (vel_viento.^6)...
+            + p(10) .* (vel_viento.^5)  + p(11) .* (vel_viento.^4)  + p(12) .* (vel_viento.^3)...
+            + p(13) .* (vel_viento.^2)  + p(14) .* (vel_viento)     + p(15);
+    end
+    var_aux = var_aux + 1;
+end
+end
