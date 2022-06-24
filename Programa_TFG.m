@@ -17,7 +17,7 @@
     % Diametro de la góndola del rotor
         DIAMETRO_GONDOLA = 4; % m
     % Velocidades del viento
-        U_VIENTO = 1:1:22;
+        U_VIENTO = 0:1:26;
         % Longitud del vector viento
            M = length(U_VIENTO);
     % Densidad del material de la pala
@@ -77,13 +77,11 @@
 %      legend show;
 %      legend('Location','best')
 
-
-
  % Contadores para la leyenda
     contador0 = 0.01;
     contador1 = 0.01;
  figure('Name','Ángulo cabeceo = 2° y ángulo torsión = 0.01°')
-    for DELTA_THETA_SETUP = 0.01:0.01:0.04
+    for DELTA_THETA_SETUP = 0.01
         
         THETA_1 = 2;
         theta_CL = THETA_1;
@@ -104,9 +102,9 @@
 
         omega = velocidad_angular(L, DIAMETRO_GONDOLA, BUJE, RHO, U_VIENTO, CP, I);
         
-        [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1);
+        [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1, CP);
         
-        [contador0, contador1] = plot_torsion(U_VIENTO, potencia_0, potencia_1, contador0, contador1,CP);
+        [contador0, contador1] = plot_torsion(U_VIENTO, potencia_0, potencia_1, contador0, contador1);
         title('Pot en base a U VIENTO, Ángulo cabeceo = 2° y ángulo torsión = 0.01 - 0.04°');
 
     end
@@ -132,6 +130,7 @@
 %          end
 %     contar = contar + 1;
 % end
+
 
 % %Prueba para comprobar el CP de mi rotor, se usa uno genérico
 % p_rotor = (1/2)*RHO*0.59*pi*(L^2) * 30.^3;
@@ -262,8 +261,7 @@
             area_base_menor = ancho_bases_menores .* c_right_i; % m^2
             area_base_mayor = ancho_bases_mayores .* c_left_i; % m^2
         
-        % Se calcula el volumen del tronco de pirámide mediante las fórmulas del
-        % papiro de Moscú
+        % Se calcula el volumen del tronco de pirámide
             v_frustum_i = (L_i/3) .* (area_base_mayor + area_base_menor + sqrt(area_base_menor .* area_base_mayor));
             v_frustum_total = sum(v_frustum_i); % Kg * m^3
     end
@@ -280,10 +278,10 @@
             m_i = (s_i/s_pala) * masa_pala; %Kg de cada segmento
     
             %Ahora se halla la densidad volumétrica
-                dens_volumetrica = m_i./(v_frustum_i*0.2);
+                dens_volumetrica_i = m_i./(v_frustum_i*0.2);
             % Con la dens volumétrica se puede obtener la superficial que
             % se busca
-                dens_superficial = dens_volumetrica .* c_i;
+                dens_superficial = dens_volumetrica_i .* c_i;
 
             % Inercia del área de un trapecio
                 I_area = (L_i^3).*((c_right_i.^2) + (4.*c_right_i.*c_left_i) + (c_left_i.^2)) ./ (36 .* (c_right_i + c_left_i));
@@ -396,27 +394,30 @@
         omega = sqrt(CP.') .* omega;
 end
     
-    function [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1)
+    function [potencia_0, potencia_1, eta] = potencia_y_eficiencia(omega, torque_global_0, torque_global_1, CP)
     %% Desarrollo potencia y eficiencia
         % Potencia de la pala
-            potencia_0 = torque_global_0 .* omega;
-            potencia_1 = torque_global_1 .* omega;
+            potencia_0 = (torque_global_0 .* CP.') .* omega;
+            potencia_1 = (torque_global_1 .* CP.') .* omega;
+
+            %potencia_0 = (torque_global_0) .* omega;
+            %potencia_1 = (torque_global_1) .* omega;
             
             potencia_0 = sum(potencia_0,2);
             potencia_1 = sum(potencia_1,2);
-        
+            
         % Se calcula el % de mejora o empeoramiento mediante la torsión de los
         % segmentos de la pala
             eta = potencia_1.' ./ potencia_0.';
     end
     
-    function  [contador0, contador1] = plot_torsion(U_VIENTO, potencia_0, potencia_1, contador0, contador1, CP)
+    function  [contador0, contador1] = plot_torsion(U_VIENTO, potencia_0, potencia_1, contador0, contador1)
 %% Representaciones
 
 %Potencia obtenida dependiendo de la velocidad del viento
     x = U_VIENTO;
-    y0 = CP.*potencia_0.'/1e6;
-    y1 = CP.*potencia_1.'/1e6;
+    y0 = potencia_0.'/1e6;
+    y1 = potencia_1.'/1e6;
     % Necesito hacer un contador externo para la leyenda ya que el show de la
     % leyenda está fuera del propio bucle de potencias que se están mostrando.
     % Si no se hace esto, MATLAB ignora la extra entries de la leyenda y solo
@@ -428,11 +429,11 @@ end
     
     % Para que solo haga plot 1 vez de la potencia sin torsión
     if contador1 == 0.02
-    plot(x, y0, 'DisplayName', leyenda0); hold on;
+    plot(x, y0, 'DisplayName', leyenda0,'LineStyle','-'); hold on;
     end
 
     
-    hold on;plot(x, y1, 'DisplayName', leyenda1);
+    hold on;plot(x, y1, 'DisplayName', leyenda1,'LineStyle','--');
     
     xlabel('Velocidad del viento (m/s)');
     ylabel('Potencia (MW)');
@@ -469,22 +470,25 @@ end
 %% Coeficiente de potencia
 % Se necesita el coeficient de potencia en base a la función del
 % viento, lo obtenemos de uno genérico.
-y = [0.01	0.01	0.01	0.02	0.05	0.28	0.4	0.48	0.48	0.45	0.4	0.35	0.3	0.23	0.19	0.15	0.12	0.1	0.09	0.08	0.07	0.06];
-x = 0:1:21;
-p = polyfit(x,y,14);
-
-CP = zeros (1,21);
-var_aux = 0;
-for vel_viento = 1:1:22
-    if var_aux < 3 || var_aux == 21
-        CP(1,vel_viento) = 0;
-    else
-        CP(1,vel_viento) = p(1)  .* (vel_viento.^14) + p(2)  .* (vel_viento.^13) + p(3)  .* (vel_viento.^12)...
-            + p(4)  .* (vel_viento.^11) + p(5)  .* (vel_viento.^10) + p(6)  .* (vel_viento.^9)...
-            + p(7)  .* (vel_viento.^8)  + p(8)  .* (vel_viento.^7)  + p(9)  .* (vel_viento.^6)...
-            + p(10) .* (vel_viento.^5)  + p(11) .* (vel_viento.^4)  + p(12) .* (vel_viento.^3)...
-            + p(13) .* (vel_viento.^2)  + p(14) .* (vel_viento)     + p(15);
+    y = [0.01	0.01	0.01	0.02	0.05	0.28	0.4	0.48	0.48	0.45	0.4	0.35	0.3	0.23	0.19	0.15	0.12	0.1	0.09	0.08	0.07	0.06  0.05	0.04	0.035	0.03	0.027];
+    x = 0:1:26;
+    
+    % Se realiza una regresión polinomial para obtener la curva del CP en
+    % base a uno genérico usado en los NACA
+    p = polyfit(x,y,14);
+    
+    CP = zeros (1,26);
+    var_aux = 0;
+    for vel_viento = 1:1:27
+        if var_aux < 3 || var_aux == 26
+            CP(1,vel_viento) = 0;
+        else
+            CP(1,vel_viento) = p(1)  .* (vel_viento.^14) + p(2)  .* (vel_viento.^13) + p(3)  .* (vel_viento.^12)...
+                + p(4)  .* (vel_viento.^11) + p(5)  .* (vel_viento.^10) + p(6)  .* (vel_viento.^9)...
+                + p(7)  .* (vel_viento.^8)  + p(8)  .* (vel_viento.^7)  + p(9)  .* (vel_viento.^6)...
+                + p(10) .* (vel_viento.^5)  + p(11) .* (vel_viento.^4)  + p(12) .* (vel_viento.^3)...
+                + p(13) .* (vel_viento.^2)  + p(14) .* (vel_viento)     + p(15);
+        end
+        var_aux = var_aux + 1;
     end
-    var_aux = var_aux + 1;
-end
 end
