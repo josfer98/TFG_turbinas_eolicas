@@ -2,9 +2,7 @@
 \label{section:2_desarollo_cálculo}
 \subsection{Descripción de la pala del aerogenerador y sus parámetros}
 
-\textcolor{orange}{\huge El punto 2.1 debería ser lo que es una turbina, sus partes (torre, góndola, rotor con palas, etc), quizás una imagen, y decir que vas a trabajar con palas, etc. Es decir, una introducción de lo que vas a desarrollar, fuerza de torsión en qué sistema y en qué parte, etc.}
-
-En esta sección se va a describir la pala del aerogenerador y los parámetros necesarios para determinar los efectos que produce la torsión en nuestra obtención de energía. En primer lugar la definición e idea general de la pala de una turbina de un aerogenerador, después el desarrollo trigonométrico para el cálculo de la línea de cuerda y por último la obtención de los brazos de la pala conociendo los centro de masa de los segmentos.\\
+En esta segunda sección se va a describir la simplificación de la pala del aerogenerador y los parámetros necesarios para determinar los efectos que produce la torsión en nuestra obtención de energía. En primer lugar la definición e idea general de la pala de una turbina de un aerogenerador, después el desarrollo trigonométrico para el cálculo de la línea de cuerda y por último la obtención de los brazos de la pala conociendo los centro de masa de los segmentos.\\
 
 
 Se determina que la pala de la turbina eólica es un \textbf{trapecio} cuya representación simplificada se muestra en la Figura \ref{fig:pala_simp}. \\\\
@@ -167,7 +165,7 @@ cateto \text{ } buje = \dfrac{J_{left}}{2} - \dfrac{J_{right}}{2} \hspace{7pt} (
 \end{equation}
 
 
-Donde $cateto \text{ } buje$ es la medida de buje o $J_{left}$ reducida para su utilización en la obtención del brazo, $R \text{ } brazo$ es la recta completa del brazo antes de dividirla dependiendo del segmento y $brazo_i$ es la distancia entre el centro de $J_{Left}$ y el centro de masas del segmento correspondiente.
+Donde $cateto \text{ } buje$ es la medida de buje o $J_{left}$ reducida para su utilización en la obtención del brazo, $R \text{ } brazo$ es la recta completa del brazo antes de dividirla dependiendo del segmento y $brazo_i$ es la distancia o radio entre el centro de $J_{Left}$ y el centro de masas del segmento correspondiente.
 
 \subsection{Análisis del volumen de la pala}
 \label{section:volumen_pala}
@@ -286,7 +284,7 @@ Este efecto produce un gradiente de presión y por ello una fuerza de sustentaci
     \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/Cross secction pala articulo.png}
-    \caption{Corte transversal de una pala}
+    \caption{Corte transversal o airfoil de una pala}
     Fuente: \cite{Zheng2014}
     \label{fig:corte_transversal_pala}
     \end{figure}
@@ -445,8 +443,7 @@ Donde $torque \text{ } global_1$ es la suma de torque de los N segmentos.
 
 \subsection{Cálculo de la potencia del sistema}
 \label{section:pot_sistema}
- 
- \textcolor{orange}{\huge La potencia depende de la turbina con la que estés trabajando, y del tamaño de las palas.}
+
  
  Una vez se tiene todo lo necesario para el cálculo del torque, se puede pasar al cálculo de la potencia. Esta es la variable más importante, cuanta mayor cantidad de energía se genere, mejor, aunque existe un límite directamente relacionado con las limitaciones técnicas y físicas que presentan las turbinas eólicas. \\
  
